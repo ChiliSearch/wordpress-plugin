@@ -38,7 +38,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-define('SEARCHILI_VERSION', '0.1.0');
+define('SEARCHILI_VERSION', '1.0.0');
 define('SEARCHILI_ADMIN_ASSET_DIR', '/wp-content/plugins/searchili/assets/');
 define('SEARCHILI_PHP_MINIMUM', '5.6.0');
 define(
