@@ -13,7 +13,7 @@
  * Plugin Name:       SearChili
  * Plugin URI:        https://searchi.li
  * Description:       SearChili is an instant site search engine for your website.
- * Version:           0.1.0
+ * Version:           1.0.0
  * Author:            Ali Jafari
  * Author URI:        https://searchi.li
  * License:           GPL v3
