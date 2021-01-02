@@ -39,7 +39,7 @@ if (!defined('ABSPATH')) {
 }
 
 define('SEARCHILI_VERSION', '1.0.0');
-define('SEARCHILI_ADMIN_ASSET_DIR', '/wp-content/plugins/searchili/assets/');
+define('SEARCHILI_DIR', dirname(__FILE__));
 define('SEARCHILI_PHP_MINIMUM', '5.6.0');
 define(
     'SEARCHILI_URL',
@@ -392,16 +392,16 @@ final class SearChili
     public function admin_searchili_indexing_options_page()
     {
         wp_enqueue_style('searchili-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_ADMIN_ASSET_DIR . 'css/material-dashboard.css', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_ADMIN_ASSET_DIR . 'css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
+        wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_URL . 'assets/css/material-dashboard.css', [], SEARCHILI_VERSION);
+        wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_URL . 'assets/css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
         return require_once 'templates/admin_index.php';
     }
 
     public function admin_searchili_options_page()
     {
         wp_enqueue_style('searchili-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_ADMIN_ASSET_DIR . 'css/material-dashboard.css', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_ADMIN_ASSET_DIR . 'css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
+        wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_URL . 'assets/css/material-dashboard.css', [], SEARCHILI_VERSION);
+        wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_URL . 'assets/css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
 
         list($getSiteInfoResponseCode, $siteInfo) = $this->send_request('GET', 'site');
         if ($getSiteInfoResponseCode === 401) {
