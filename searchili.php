@@ -15,7 +15,7 @@
  * Description:       SearChili is an instant site search engine for your website.
  * Version:           1.0.0
  * Author:            Ali Jafari
- * Author URI:        https://searchi.li
+ * Author URI:        https://jafari.li
  * License:           GPL v3
  * Text Domain:       searchili
  * Domain Path:       /languages

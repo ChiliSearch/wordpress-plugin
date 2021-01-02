@@ -1,6 +1,6 @@
 ﻿=== SearChili WordPress Plugin ===
 Plugin URI: https://searchi.li
-Author URI: https://searchi.li
+Author URI: https://jafari.li
 Contributors: jafarili
 Tags: search, site search, custom search, better search, autocomplete search, typeahead, search-as-you-type, SAYT, search experience, ajax search
 Requires at least: 3.9
