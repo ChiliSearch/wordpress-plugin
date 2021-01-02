@@ -11,7 +11,7 @@
                         <i class="material-icons">storage</i>
                     </div>
                     <p class="card-category">Used Space</p>
-                    <h3 class="card-title"><?= $siteInfo->usedSpace ?></h3>
+                    <h3 class="card-title"><?= esc_html($siteInfo->usedSpace) ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -28,7 +28,7 @@
                         <i class="material-icons">check_circle</i>
                     </div>
                     <p class="card-category">Number of requests</p>
-                    <h3 class="card-title"><?= $siteInfo->thisMonthRequestCount ?></h3>
+                    <h3 class="card-title"><?= esc_html($siteInfo->thisMonthRequestCount) ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -44,7 +44,7 @@
                         <i class="material-icons">dns</i>
                     </div>
                     <p class="card-category">Number of contents</p>
-                    <h3 class="card-title"><?= $siteInfo->entitiesCount ?></h3>
+                    <h3 class="card-title"><?= esc_html($siteInfo->entitiesCount) ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -67,7 +67,7 @@
                         <table class="form-table">
                             <tbody>
                             <tr>
-                                <th scope="row"><label for="search_page_id"><?php _e('Search result page', 'searchili'); ?></label></th>
+                                <th scope="row"><label for="search_page_id"><?php __('Search result page', 'searchili'); ?></label></th>
                                 <td>
                                     <label>
                                         <select name="search_page_id" id="search_page_id" class="regular-text">

@@ -166,21 +166,25 @@ final class SearChili
 
 	public function admin_ajax_check_save_api_credentials() {
         if (empty($_POST['api_secret'])) {
-            wp_send_json(['status' => false, 'message' => 'API Secret is not entered!']);
+            wp_send_json(['status' => false, 'message' => __( 'API Secret is not entered!', 'searchili' )]);
+        }
+        $apiSecret = sanitize_key(trim($_POST['api_secret']));
+        if (strlen($apiSecret) !== 36) {
+            wp_send_json(['status' => false, 'message' => __( 'API Secret is 32 characters!', 'searchili' )]);
         }
         $this->settings = $this->get_settings(true);
-        $this->settings['site_api_secret'] = trim($_POST['api_secret']);
+        $this->settings['site_api_secret'] = $apiSecret;
         list($getSiteInfoResponseCode, $getSiteInfoResult) = $this->send_request('GET', 'site');
         if ($getSiteInfoResponseCode == 200 && !empty($getSiteInfoResult->apiKey)) {
-            $this->settings['site_api_key'] = trim($getSiteInfoResult->apiKey);
+            $this->settings['site_api_key'] = sanitize_key(trim($getSiteInfoResult->apiKey));
             $this->settings['get_started_api_finished'] = 'passed';
             update_option('searchili_settings', $this->settings);
             wp_send_json(['status' => true, 'apiKey' => $getSiteInfoResult->apiKey]);
         }
         if ($getSiteInfoResponseCode == 401) {
-            wp_send_json(['status' => false, 'message' => 'API Secret is not valid!']);
+            wp_send_json(['status' => false, 'message' => __( 'API Secret is not valid!', 'searchili' )]);
         }
-        wp_send_json(['status' => false, 'message' => 'Request failed. Try again.']);
+        wp_send_json(['status' => false, 'message' => __( 'Request failed. Try again.', 'searchili' )]);
     }
 
 	public function wp_ajax_admin_ajax_index_config() {
@@ -198,20 +202,31 @@ final class SearChili
     }
 
 	public function wp_ajax_admin_ajax_config_update() {
-        if ($_POST['search_page_size'] < 1 || $_POST['search_page_size'] > 20) {
-            wp_send_json(['status' => false, 'message' => 'Search page size must be between 1 to 20']);
+        if (empty($_POST['search_page_size']) || $_POST['search_page_size'] != (int)$_POST['search_page_size'] || $_POST['search_page_size'] < 1 || $_POST['search_page_size'] > 20) {
+            wp_send_json(['status' => false, 'message' => __( 'Search page size must be between 1 to 20', 'searchili' )]);
         }
-        if ($_POST['sayt_page_size'] < 1 || $_POST['sayt_page_size'] > 10) {
-            wp_send_json(['status' => false, 'message' => 'SAYT size must be between 1 to 10']);
+        if (empty($_POST['sayt_page_size']) || $_POST['sayt_page_size'] != (int)$_POST['sayt_page_size'] || $_POST['sayt_page_size'] < 1 || $_POST['sayt_page_size'] > 10) {
+            wp_send_json(['status' => false, 'message' => __( 'SAYT size must be between 1 to 10', 'searchili' )]);
         }
         if (empty($_POST['search_input_selector'])) {
-            wp_send_json(['status' => false, 'message' => 'Search input selector can not be empty.']);
+            wp_send_json(['status' => false, 'message' => __( 'Search input selector can not be empty.', 'searchili' )]);
+        }
+        if (empty($_POST['search_page_id'])) {
+            wp_send_json(['status' => false, 'message' => __( 'Search result page is not selected.', 'searchili' )]);
+        }
+        $searchPageId = (int)sanitize_key(trim($_POST['search_page_id']));
+        $possibleSearchPageIDs = array_map(function ($page) {
+            return $page->ID;
+        }, get_pages(['post_type' => 'page', 'post_status' => 'publish']));
+        $possibleSearchPageIDs[] = -1;
+        if (!in_array($searchPageId, $possibleSearchPageIDs)) {
+            wp_send_json(['status' => false, 'message' => __( 'Search result page is not valid.', 'searchili' )]);
         }
         $this->settings = $this->get_settings(true);
-        $this->settings['search_page_size'] = (int)$_POST['search_page_size'];
-        $this->settings['sayt_page_size'] = (int)$_POST['sayt_page_size'];
-        $this->settings['search_input_selector'] = stripslashes($_POST['search_input_selector']);
-        $this->settings['search_page_id'] = (int)$_POST['search_page_id'];
+        $this->settings['search_page_size'] = (int)sanitize_key(trim($_POST['search_page_size']));
+        $this->settings['sayt_page_size'] = (int)sanitize_key(trim($_POST['sayt_page_size']));
+        $this->settings['search_input_selector'] = sanitize_text_field(stripslashes($_POST['search_input_selector']));
+        $this->settings['search_page_id'] = $searchPageId;
         update_option('searchili_settings', $this->settings);
         wp_send_json(['status' => true]);
     }
@@ -260,27 +275,32 @@ final class SearChili
 
 	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
         if (empty($_POST['entityId'])) {
-            wp_send_json(['status' => false, 'message' => 'EntityID is not entered!']);
+            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'searchili' )]);
         }
-        list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'entity/' . $_POST['entityId']);
+        $entityId = (int)sanitize_key(trim($_POST['entityId']));
+        list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'entity/' . $entityId);
         if ($deleteResponseCode == 200 && !empty($deleteResult->status) && $deleteResult->status === 'deleted') {
             wp_send_json(['status' => true]);
         }
         $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
-        wp_send_json(['status' => false, 'message' => $message]);
+        wp_send_json(['status' => false, 'message' => esc_html__( $message, 'searchili' )]);
     }
 
 	public function wp_ajax_admin_ajax_index_missing_content() {
         if (empty($_POST['entityId'])) {
-            wp_send_json(['status' => false, 'message' => 'EntityID is not entered!']);
+            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'searchili' )]);
         }
-        $post = get_post($_POST['entityId'], ARRAY_A);
+        $entityId = (int)sanitize_key(trim($_POST['entityId']));
+        $post = get_post($entityId, ARRAY_A);
+        if (empty($post)) {
+            wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'searchili' )]);
+        }
         $postData = [
             'id' => (string)$post['ID'],
-            'title' => !empty($post['post_title']) ? $post['post_title'] : '',
+            'title' => !empty($post['post_title']) ? esc_html($post['post_title']) : '',
             'link' => get_permalink($post['ID']),
-            'excerpt' => !empty($post['post_excerpt']) ? $post['post_excerpt'] : null,
-            'body' => !empty($post['post_content']) ? $post['post_content'] : null,
+            'excerpt' => !empty($post['post_excerpt']) ? esc_html($post['post_excerpt']) : null,
+            'body' => !empty($post['post_content']) ? esc_html($post['post_content']) : null,
             'image' => !empty($thumbnail = get_the_post_thumbnail_url($post['ID'])) ? $thumbnail : null,
             'categories' => array_map(function ($catId) {
                 $category = get_category($catId);
@@ -296,7 +316,7 @@ final class SearChili
             wp_send_json(['status' => true]);
         }
         $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
-        wp_send_json(['status' => false, 'message' => $message, 'postData' => $postData]);
+        wp_send_json(['status' => false, 'message' => esc_html__( $message, 'searchili' )]);
     }
 
 	public function activation()

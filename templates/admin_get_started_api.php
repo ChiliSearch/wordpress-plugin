@@ -13,7 +13,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="bmd-label-floating" for="site_api_key">API Key</label>
-                                    <input type="text" class="form-control" name="site_api_key" id="site_api_key" value="<?= !empty($this->settings['site_api_key']) ? $this->settings['site_api_key'] : '' ?>">
+                                    <input type="text" class="form-control" name="site_api_key" id="site_api_key" value="<?= !empty($this->settings['site_api_key']) ? esc_html($this->settings['site_api_key']) : '' ?>">
                                 </div>
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="bmd-label-floating" for="site_api_secret">API Secret</label>
-                                    <input type="password" class="form-control" name="site_api_secret" id="site_api_secret" value="<?= !empty($this->settings['site_api_secret']) ? $this->settings['site_api_secret'] : '' ?>">
+                                    <input type="password" class="form-control" name="site_api_secret" id="site_api_secret" value="<?= !empty($this->settings['site_api_secret']) ? esc_html($this->settings['site_api_secret']) : '' ?>">
                                 </div>
                             </div>
                         </div>
