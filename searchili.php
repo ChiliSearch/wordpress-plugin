@@ -291,28 +291,17 @@ final class SearChili
             wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'searchili' )]);
         }
         $entityId = (int)sanitize_key(trim($_POST['entityId']));
-        $post = get_post($entityId, ARRAY_A);
+        $post = get_post($entityId);
         if (empty($post)) {
             wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'searchili' )]);
         }
-        $postData = [
-            'id' => (string)$post['ID'],
-            'title' => !empty($post['post_title']) ? esc_html($post['post_title']) : '',
-            'link' => get_permalink($post['ID']),
-            'excerpt' => !empty($post['post_excerpt']) ? esc_html($post['post_excerpt']) : null,
-            'body' => !empty($post['post_content']) ? esc_html($post['post_content']) : null,
-            'image' => !empty($thumbnail = get_the_post_thumbnail_url($post['ID'])) ? $thumbnail : null,
-            'categories' => array_map(function ($catId) {
-                $category = get_category($catId);
-                return !empty($category->name) ? $category->name : null;
-            }, wp_get_post_categories($post['ID'])),
-            'tags' => array_map(function ($term) {
-                return !empty($term->name) ? $term->name : null;
-            }, wp_get_post_tags($post['ID'])),
-            'publishedAt' => !empty($post['post_date_gmt']) ? $post['post_date_gmt'] : null,
-        ];
-        list($putEntityResponseCode, $putEntityResult) = $this->send_request('PUT', 'entity/' . $post['ID'], $postData);
-        if ($putEntityResponseCode === 201) {
+
+        list($putEntityResponseCode, $putEntityResult) = $this->send_request(
+            'PUT',
+            'entity/' . $post->ID,
+            self::transformPostToEntity($post)
+        );
+        if ($putEntityResponseCode >= 200 && $putEntityResponseCode <= 299) {
             wp_send_json(['status' => true]);
         }
         $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
@@ -463,28 +452,16 @@ final class SearChili
             $active_post_types[] = 'page';
         }
         if (!in_array($post->post_type, $active_post_types)) {
-            return;
+            return true;
         }
         try {
             if ($post->post_status === 'publish') {
-                $postData = [
-                    'id' => intval($postId),
-                    'title' => !empty($post->post_title) ? $post->post_title : '',
-                    'link' => !empty($post->guid) ? $post->guid : '',
-                    'excerpt' => !empty($post->post_excerpt) ? $post->post_excerpt : null,
-                    'body' => !empty($post->post_content) ? $post->post_content : null,
-                    'image' => !empty($thumbnail = get_the_post_thumbnail_url($postId)) ? $thumbnail : null,
-                    'categories' => array_map(function ($catId) {
-                        $category = get_category($catId);
-                        return !empty($category->name) ? $category->name : null;
-                    }, wp_get_post_categories($postId)),
-                    'tags' => array_map(function ($term) {
-                        return !empty($term->name) ? $term->name : null;
-                    }, wp_get_post_tags($postId)),
-                    'published_at' => !empty($post->post_date_gmt) ? $post->post_date_gmt : null,
-                ];
-                list($putEntityResponseCode) = $this->send_request('PUT', 'entity/' . $postId, $postData);
-                if ($putEntityResponseCode == 204) {
+                list($putEntityResponseCode) = $this->send_request(
+                    'PUT',
+                    'entity/' . $postId,
+                    self::transformPostToEntity($post)
+                );
+                if ($putEntityResponseCode >= 200 && $putEntityResponseCode <= 299) {
                     return true;
                 }
             } else {
@@ -495,6 +472,26 @@ final class SearChili
             }
         } catch (\Exception $exception) {}
         return false;
+    }
+
+    public static function transformPostToEntity($post)
+    {
+        return [
+            'id' => (string)$post->ID,
+            'title' => !empty($post->post_title) ? $post->post_title : '',
+            'link' => get_permalink($post->ID),
+            'excerpt' => !empty($post->post_excerpt) ? $post->post_excerpt : null,
+            'body' => !empty($post->post_content) ? $post->post_content : null,
+            'image' => !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null,
+            'categories' => array_map(function ($catId) {
+                $category = get_category($catId);
+                return !empty($category->name) ? $category->name : null;
+            }, wp_get_post_categories($post->ID)),
+            'tags' => array_map(function ($term) {
+                return !empty($term->name) ? $term->name : null;
+            }, wp_get_post_tags($post->ID)),
+            'publishedAt' => !empty($post->post_date_gmt) ? $post->post_date_gmt : null,
+        ];
     }
 
     private function get_http_code($response_headers)
