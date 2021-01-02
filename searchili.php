@@ -332,10 +332,9 @@ final class SearChili
         $apiKey = $this->get_site_api_key();
         $searchInputSelector = addslashes(!empty($this->settings['search_input_selector']) ? $this->settings['search_input_selector'] : 'input[name="s"]');
 	    $searchPageSize = !empty($this->settings['search_page_size']) ? intval($this->settings['search_page_size']) : 15;
-	    // TODO set in JS
 	    $saytPageSize = !empty($this->settings['sayt_page_size']) ? intval($this->settings['sayt_page_size']) : 5;
 
-        wp_add_inline_script( 'searchili-settings-js', "SearChili.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", searchInputSelector: \"{$searchInputSelector}\"})");
+        wp_add_inline_script( 'searchili-settings-js', "SearChili.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", saytPageSize: \"{$saytPageSize}\", searchInputSelector: \"{$searchInputSelector}\"})");
     }
 
     public function get_or_create_search_page()
