@@ -362,28 +362,28 @@ final class SearChili
         return isset($this->settings['site_api_secret']) ? $this->settings['site_api_secret'] : '';
     }
 
-    private function send_request($method, $endpoint, $data = '')
+    private function send_request($method, $endpoint, $data = [])
     {
-        $result = @file_get_contents(
-            self::SEARCHILI_BOB_BASE_URI . $endpoint,
-            false,
-            stream_context_create([
-                'http' => [
-                    'ignore_errors' => 1,
-                    'header'  => "Accept: application/json\r\nContent-type: application/x-www-form-urlencoded\r\nAuthorization: Bearer " . $this->get_site_api_secret(),
-                    'method'  => $method,
-                    'content' => http_build_query($data),
-                ],
-            ])
-        );
-        if (!empty($http_response_header)) {
-            $response_headers = $http_response_header;
-        } else {
-            $response_headers = [];
+        $args = [
+            'method' => $method,
+            'timeout' => '10',
+            'redirection' => '5',
+            'blocking' => true,
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-type' => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Bearer ' . $this->get_site_api_secret(),
+            ],
+        ];
+        if (!empty($data)) {
+            $args['body'] = $data;
         }
-        $responseCode = $this->get_http_code($response_headers);
+        $response = @wp_remote_request( self::SEARCHILI_BOB_BASE_URI . $endpoint, $args );
+        $responseCode = (int)wp_remote_retrieve_response_code( $response );
+        $result = $body = wp_remote_retrieve_body( $response );
         $result = !empty($result) ? json_decode($result) : null;
-        return [$responseCode, $result, $response_headers];
+        $responseHeaders = wp_remote_retrieve_headers( $response );
+        return [$responseCode, $result, $responseHeaders];
     }
 
     public function default_search_page()
@@ -491,15 +491,6 @@ final class SearChili
             }, wp_get_post_tags($post->ID)),
             'publishedAt' => !empty($post->post_date_gmt) ? $post->post_date_gmt : null,
         ];
-    }
-
-    private function get_http_code($response_headers)
-    {
-        if(isset($response_headers[0])) {
-            $parts = explode(' ',$response_headers[0]);
-            return isset($parts[1]) ? intval($parts[1]) : 0;
-        }
-        return 0;
     }
 }
 
