@@ -1,8 +1,3 @@
-<?php
-/** @var stdClass $siteInfo */
-
-
-?>
 <style>
     .timeline {
         list-style: none;

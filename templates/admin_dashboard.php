@@ -1,7 +1,3 @@
-<?php
-/** @var stdClass $siteInfo */
-
-?>
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -11,7 +7,7 @@
                         <i class="material-icons">storage</i>
                     </div>
                     <p class="card-category">Used Space</p>
-                    <h3 class="card-title"><?= esc_html($siteInfo->usedSpace) ?></h3>
+                    <h3 class="card-title"><?= isset($siteInfo->usedSpace) ? esc_html($siteInfo->usedSpace) : 'N/A' ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -28,7 +24,7 @@
                         <i class="material-icons">check_circle</i>
                     </div>
                     <p class="card-category">Number of requests</p>
-                    <h3 class="card-title"><?= esc_html($siteInfo->thisMonthRequestCount) ?></h3>
+                    <h3 class="card-title"><?= isset($siteInfo->thisMonthRequestCount) ? esc_html($siteInfo->thisMonthRequestCount) : 'N/A' ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -44,7 +40,7 @@
                         <i class="material-icons">dns</i>
                     </div>
                     <p class="card-category">Number of contents</p>
-                    <h3 class="card-title"><?= esc_html($siteInfo->entitiesCount) ?></h3>
+                    <h3 class="card-title"><?= isset($siteInfo->thisMonthRequestCount) ? esc_html($siteInfo->entitiesCount) : 'N/A' ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">

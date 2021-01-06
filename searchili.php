@@ -416,10 +416,6 @@ final class SearChili
             $this->settings = $this->get_settings(true);
             unset($this->settings['site_api_secret'], $this->settings['get_started_config_finished']);
             update_option('searchili_settings', $this->settings);
-        } elseif ($getSiteInfoResponseCode >= 500) {
-            wp_die('SearChili is unavailable. Sorry for that, please try again later.');
-        } elseif ($getSiteInfoResponseCode !== 200) {
-            wp_die("Failed to get data from SearChili. error code: $getSiteInfoResponseCode");
         }
         if (!empty($siteInfo->apiKey) && $siteInfo->apiKey != $this->get_site_api_key()) {
             $this->settings = $this->get_settings(true);
