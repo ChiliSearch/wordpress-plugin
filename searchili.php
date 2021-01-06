@@ -188,14 +188,14 @@ final class SearChili
     }
 
 	public function wp_ajax_admin_ajax_index_config() {
-        $_POST['index_entities_posts'] = isset($_POST['index_entities_posts']) ? json_decode($_POST['index_entities_posts']) : false;
-        $_POST['index_entities_pages'] = isset($_POST['index_entities_pages']) ? json_decode($_POST['index_entities_pages']) : false;
-        if (empty($_POST['index_entities_posts']) && empty($_POST['index_entities_pages'])) {
+        $index_entities_posts = isset($_POST['index_entities_posts']) && $_POST['index_entities_posts'] == 'true';
+        $index_entities_pages = isset($_POST['index_entities_pages']) && $_POST['index_entities_pages'] == 'true';
+        if (empty($index_entities_posts) && empty($index_entities_pages)) {
             wp_send_json(['status' => false, 'message' => 'At least one of the options must be chosen.']);
         }
         $this->settings = $this->get_settings(true);
-        $this->settings['index_entities_posts'] = !empty($_POST['index_entities_posts']);
-        $this->settings['index_entities_pages'] = !empty($_POST['index_entities_pages']);
+        $this->settings['index_entities_posts'] = $index_entities_posts;
+        $this->settings['index_entities_pages'] = $index_entities_pages;
         $this->settings['get_started_config_finished'] = 'passed';
         update_option('searchili_settings', $this->settings);
         wp_send_json(['status' => true, 'index_entities_posts' => $this->settings['index_entities_posts'], 'index_entities_pages' => $this->settings['index_entities_pages']]);
