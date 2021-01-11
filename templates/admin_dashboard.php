@@ -63,7 +63,7 @@
                         <table class="form-table">
                             <tbody>
                             <tr>
-                                <th scope="row"><label for="search_page_id"><?php __('Search result page', 'searchili'); ?></label></th>
+                                <th scope="row"><label for="search_page_id"><?php _e('Search result page', 'searchili'); ?></label></th>
                                 <td>
                                     <label>
                                         <select name="search_page_id" id="search_page_id" class="regular-text">
