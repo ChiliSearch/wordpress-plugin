@@ -192,12 +192,12 @@
                                     <div class="progress d-none">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width:0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <button type="button" class="btn btn-round btn-info" onclick="reindexExistingContent(this)">Reindex</button>
+                                    <a class="btn btn-round btn-success disabled" id="go_home_button" href="<?= esc_url(admin_url('admin.php?page=searchili')) ?>">Go Home</a>
+                                    <a class="btn btn-round btn-info disabled" id="reindex_button" href="#reindex_existing_content" onclick="reindexExistingContent(this); return false;">Reindex</a>
                                 </div>
                             </div>
                         </li>
                     </ul>
-                    <a href="<?= esc_url(admin_url('admin.php?page=searchili')) ?>" class="btn btn-round btn-primary">Go Back</a>
                 </div>
             </div>
         </div>
@@ -332,6 +332,8 @@
         if (needToBeIndexedEntities.length === 0) {
             progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
             timeline_badge.removeClass('info').addClass('success');
+            jQuery('#reindex_existing_content #go_home_button').removeClass('disabled')
+            jQuery('#reindex_existing_content #reindex_button').removeClass('disabled')
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no new content need to be indexed in SearChili.</small></div>')
         } else {
             let successfulIndexed = 0;
@@ -341,6 +343,8 @@
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
                     timeline_body.append('<div class="alert alert-success p-2 mt-2"><small>Successfully indexed ' + successfulIndexed + ' new content.</small></div>')
+                    jQuery('#reindex_existing_content #go_home_button').removeClass('disabled')
+                    jQuery('#reindex_existing_content #reindex_button').removeClass('disabled')
                     return
                 }
                 jQuery.post(
@@ -377,7 +381,7 @@
         }
     }
     function reindexExistingContent(button) {
-        jQuery(button).attr('disabled', 'disabled')
+        jQuery(button).addClass('disabled')
         let progressbar = jQuery('#reindex_existing_content .progress-bar')
         let timeline_badge = jQuery('#reindex_existing_content>.timeline-badge')
         let timeline_body = jQuery('#reindex_existing_content .timeline-body')
