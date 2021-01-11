@@ -6,19 +6,17 @@
  *
  * @package           SearChili
  * @author            Ali Jafari <ali@searchi.li>
- * @copyright         Copyright (C) 2020, SearChili - info@searchi.li
- * @license           http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
+ * @copyright         Copyright (C) 2021, SearChili - info@searchi.li
  *
  * @wordpress-plugin
  * Plugin Name:       SearChili
  * Plugin URI:        https://searchi.li
- * Description:       SearChili is an instant site search engine for your website.
- * Version:           1.0.0
- * Author:            Ali Jafari
- * Author URI:        https://jafari.li
- * License:           GPL v3
+ * Description:       SearChili is an easy-to-use AI-based Search as a Service that provides a better search experience in your website.
+ * Version:           1.0.1
+ * Author:            SearChili
+ * Author URI:        https://searchi.li/
+ * License:           GPLv2 or later
  * Text Domain:       searchili
- * Domain Path:       /languages
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +36,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-define('SEARCHILI_VERSION', '1.0.0');
+define('SEARCHILI_VERSION', '1.0.1');
 define('SEARCHILI_DIR', dirname(__FILE__));
 define('SEARCHILI_PHP_MINIMUM', '5.6.0');
 define(
