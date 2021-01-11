@@ -6,7 +6,7 @@ Tags: search, site search, custom search, autocomplete search, ajax search, type
 Requires at least: 3.9
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,10 +67,13 @@ Sure! you can visit SearChili setting page and manage your index policy and inde
 
 == Upgrade Notice ==
 
-= 1.0.1 =
+= 1.0.2 =
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 1.0.2 =
+* minor ui bugfix
 
 = 1.0.1 =
 * Readme updated
