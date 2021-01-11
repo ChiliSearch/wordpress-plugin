@@ -74,7 +74,7 @@
                                         </select>
                                     </label>
                                     <div class="clearfix"></div>
-		                            <?php if ($this->settings['search_page_id'] == -1): ?><button type="button" class="btn btn-primary btn-sm" id="create_set_search_page">Create Search Page (recommended)</button><?php endif; ?>
+		                            <?php if (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1): ?><button type="button" class="btn btn-primary btn-sm" id="create_set_search_page">Create Search Page (recommended)</button><?php endif; ?>
                                     <div class="clearfix"></div>
                                     <small class="description"><?php echo _x('Choose the search result page.', 'searchili'); ?></small>
                                 </td>
