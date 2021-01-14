@@ -87,7 +87,7 @@ final class SearChili
 
     private function setup_client_actions()
     {
-        add_action( 'wp', [ $this, 'default_search_page' ] );
+        add_action('wp', [$this, 'default_search_page']);
         add_action('wp_enqueue_scripts', [$this, 'client_enqueue_scripts']);
         add_shortcode('searchili_search_page', function() { return '<div id="searchili-search_page"></div>'; });
     }
@@ -318,6 +318,9 @@ final class SearChili
 
     public function client_enqueue_scripts()
     {
+        if (empty($this->get_site_api_secret())) {
+            return;
+        }
         wp_enqueue_script(
             'searchili-settings-js',
             esc_url(self::SEARCHILI_CDN_BASE_URI . 'js/app.js'),
@@ -437,6 +440,9 @@ final class SearChili
     */
     public function admin_save_post_hook($postId, $post, $update)
     {
+        if (empty($this->get_site_api_secret())) {
+            return true;
+        }
         $active_post_types = [];
         if (!empty($this->settings['index_entities_posts'])) {
             $active_post_types[] = 'post';
