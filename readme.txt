@@ -6,15 +6,15 @@ Tags: search, site search, custom search, autocomplete search, ajax search, type
 Requires at least: 3.9
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-SearChili is an easy-to-use AI-based Search as a Service that provides a better search experience in your website.
+SearChili is an easy-to-use AI-powered Search as a Service that provides a better search experience in your website.
 
 == Description ==
 
-**SearChili** replaces the WordPress default search with an IA-based, lightning-fast,  responsive live search engine that provides the best search user experience.
+**SearChili** replaces the WordPress default search with an AI-powered, lightning-fast,  responsive live search engine that provides the best search user experience.
 
 [Live Demo](https://demo.searchi.li/) | [More Info](https://searchi.li)
 
@@ -67,10 +67,16 @@ Sure! you can visit SearChili setting page and manage your index policy and inde
 
 == Upgrade Notice ==
 
+= 1.0.3 =
+* Upgrade for latest changes
+
 = 1.0.2 =
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 1.0.3 =
+* bugfix
 
 = 1.0.2 =
 * minor ui bugfix
