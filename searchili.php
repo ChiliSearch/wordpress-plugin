@@ -342,7 +342,7 @@ final class SearChili
     {
         if (isset($this->settings['search_page_id']) && $this->settings['search_page_id'] > 1) {
 	        $search_page = get_post($this->settings['search_page_id']);
-	        if (!empty($search_page)) {
+	        if (!empty($search_page) && $search_page->post_status === 'publish') {
 	            return $search_page->guid;
             } else {
 	            $this->settings = $this->get_settings(true);
