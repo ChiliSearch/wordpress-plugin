@@ -335,8 +335,21 @@ final class SearChili
         $searchInputSelector = addslashes(!empty($this->settings['search_input_selector']) ? $this->settings['search_input_selector'] : 'input[name="s"]');
 	    $searchPageSize = !empty($this->settings['search_page_size']) ? intval($this->settings['search_page_size']) : 15;
 	    $saytPageSize = !empty($this->settings['sayt_page_size']) ? intval($this->settings['sayt_page_size']) : 5;
+        $isRTL = is_rtl();
+	    $phrases = json_encode([
+            'powered-by' => __('powered by', 'searchili'),
+            'search-powered-by' => __('search powered by', 'searchili'),
+            'no-result-message' => __('Couldn\'t find anything related …', 'searchili'),
+            'error-message' => __('Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'searchili'),
+            'input-placeholder' => __('Search …', 'searchili'),
+            'sayt-init-message' => __('Search …', 'searchili'),
+            'form-submit-value' => __('Search', 'searchili'),
+            'search-result-result-count' => __('About {totalCount} results ({timeTook} seconds)', 'searchili'),
+            'prev' => __('Prev', 'searchili'),
+            'next' => __('Next', 'searchili'),
+        ]);
 
-        wp_add_inline_script( 'searchili-settings-js', "SearChili.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", saytPageSize: \"{$saytPageSize}\", searchInputSelector: \"{$searchInputSelector}\"})");
+        wp_add_inline_script( 'searchili-settings-js', "SearChili.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", saytPageSize: \"{$saytPageSize}\", searchInputSelector: \"{$searchInputSelector}\", isRTL: $isRTL, phrases: $phrases})");
     }
 
     public function get_or_create_search_page()
