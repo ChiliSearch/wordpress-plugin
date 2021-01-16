@@ -110,8 +110,8 @@
         <div class="col-lg-8 col-md-12 offset-lg-2 mt-5">
             <div class="card" style="max-width: 100%;">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title">Index</h4>
-                    <p class="card-category">Checking the post index status and indexing missing posts.</p>
+                    <h4 class="card-title"><?= __('Index', 'searchili') ?></h4>
+                    <p class="card-category"><?= __('Checking the post index status and indexing missing posts.', 'searchili') ?></p>
                 </div>
                 <div class="card-body">
                     <ul class="timeline">
@@ -121,10 +121,10 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h5>Getting list of already indexed content</h5>
+                                    <h5><?= __('Getting list of already indexed content', 'searchili') ?></h5>
                                 </div>
                                 <div class="timeline-body">
-                                    <p>First we check the content which is already index in SearChili.</p>
+                                    <p><?= __('First we check the content which is already index in SearChili.', 'searchili') ?></p>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width:0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
@@ -137,10 +137,10 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h5>Getting list of contents need to be indexed</h5>
+                                    <h5><?= __('Getting list of contents need to be indexed', 'searchili') ?></h5>
                                 </div>
                                 <div class="timeline-body">
-                                    <p>Here we check the posts/pages on your website which needs to be indexed in SearChili.</p>
+                                    <p><?= __('Here we check the posts/pages on your website which needs to be indexed in SearChili.', 'searchili') ?></p>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width:0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
@@ -153,10 +153,10 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h5>Delete content which shouldn't be indexed</h5>
+                                    <h5><?= __('Delete content which shouldn\'t be indexed', 'searchili') ?></h5>
                                 </div>
                                 <div class="timeline-body">
-                                    <p>In case there are some content which are indexed but no longer exist on your website or unpublished, they should be deleted from SearChili.</p>
+                                    <p><?= __('In case there are some content which are indexed but no longer exist on your website or unpublished, they should be deleted from SearChili.', 'searchili') ?></p>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width:0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
@@ -169,10 +169,10 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h5>Index content which are not indexed</h5>
+                                    <h5><?= __('Index content which are not indexed', 'searchili') ?></h5>
                                 </div>
                                 <div class="timeline-body">
-                                    <p>Here we index the content which is publicly available on your website, but not indexed in SearChili.</p>
+                                    <p><?= __('Here we index the content which is publicly available on your website, but not indexed in SearChili.', 'searchili') ?></p>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width:0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
@@ -185,15 +185,15 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h5>Reindex existing content</h5>
+                                    <h5><?= __('Reindex existing content', 'searchili') ?></h5>
                                 </div>
                                 <div class="timeline-body">
-                                    <p>In case there are some content which are not updated with the last changes you can reindex them to get the last update.</p>
+                                    <p><?= __('In case there are some content which are not updated with the last changes you can reindex them to get the last update.', 'searchili') ?></p>
                                     <div class="progress d-none">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width:0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <a class="btn btn-round btn-success disabled" id="go_home_button" href="<?= esc_url(admin_url('admin.php?page=searchili')) ?>">Go Home</a>
-                                    <a class="btn btn-round btn-info disabled" id="reindex_button" href="#reindex_existing_content" onclick="reindexExistingContent(this); return false;">Reindex</a>
+                                    <a class="btn btn-round btn-success disabled" id="go_home_button" href="<?= esc_url(admin_url('admin.php?page=searchili')) ?>"><?= __('Go Home', 'searchili') ?></a>
+                                    <a class="btn btn-round btn-info disabled" id="reindex_button" href="#reindex_existing_content" onclick="reindexExistingContent(this); return false;"><?= __('Reindex', 'searchili') ?></a>
                                 </div>
                             </div>
                         </li>
@@ -230,11 +230,11 @@
                     // }
                     getListOfContentNeedToBeIndexed()
                 } else {
-                    alert('Failed to load list of indexed content in SearChili. please refresh the page and try again.');
+                    alert('<?= __('Failed to load list of indexed content in SearChili. please refresh the page and try again.', 'searchili') ?>');
                 }
             }
         ).fail(function () {
-            alert('Failed to load list of indexed content in SearChili. please refresh the page and try again.');
+            alert('<?= __('Failed to load list of indexed content in SearChili. please refresh the page and try again.', 'searchili') ?>');
         });
     }
     function getListOfContentNeedToBeIndexed() {
@@ -261,11 +261,11 @@
                         deleteContentShouldNotBeIndexed();
                     }, 100);
                 } else {
-                    alert('Failed to load list of content need to be indexed in SearChili. please refresh the page and try again.');
+                    alert('<?= __('Failed to load list of content need to be indexed in SearChili. please refresh the page and try again.', 'searchili') ?>');
                 }
             }
         ).fail(function () {
-            alert('Failed to load list of content need to be indexed in SearChili. please refresh the page and try again.');
+            alert('<?= __('Failed to load list of content need to be indexed in SearChili. please refresh the page and try again.', 'searchili') ?>');
         });
     }
     function deleteContentShouldNotBeIndexed() {
@@ -286,7 +286,7 @@
                 if (!(index in needToBeDeletedEntities)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
-                    timeline_body.append('<div class="alert alert-success p-2 mt-2"><small>Successfully deleted ' + successfulDeletes + ' unneeded index.</small></div>')
+                    timeline_body.append('<div class="alert alert-success p-2 mt-2"><small><?= __('Successfully deleted {successfulDeletes} unneeded index.', 'searchili') ?></small></div>'.searChiliFormat({successfulDeletes: successfulDeletes}))
                     indexMissingContent()
                     return
                 }
@@ -306,7 +306,7 @@
                             if (retry < 2) {
                                 deleteEntityFromSearChili(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small>Failed to delete post/page #'+needToBeDeletedEntities[index]+': '+('message' in response?response.message:'')+'</small></div>')
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to delete post/page #{entityId}:', 'searchili') ?> {message}</small></div>'.searChiliFormat({entityId: needToBeDeletedEntities[index], message: ('message' in response?response.message:'')}))
                                 deleteEntityFromSearChili(index+1)
                             }
                         }
@@ -315,7 +315,7 @@
                     if (retry < 2) {
                         deleteEntityFromSearChili(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small>Failed to delete post/page #'+needToBeDeletedEntities[index]+': server error!</small></span></div>')
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to delete post/page #{entityId}:', 'searchili') ?> server error!</small></span></div>'.searChiliFormat({entityId: needToBeDeletedEntities[index]}))
                         deleteEntityFromSearChili(index+1)
                     }
                 });
@@ -342,7 +342,7 @@
                 if (!(index in needToBeIndexedEntities)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
-                    timeline_body.append('<div class="alert alert-success p-2 mt-2"><small>Successfully indexed ' + successfulIndexed + ' new content.</small></div>')
+                    timeline_body.append('<div class="alert alert-success p-2 mt-2"><small><?= __('Successfully indexed {successfulIndexed} new content.', 'searchili') ?></small></div>'.searChiliFormat({successfulIndexed: successfulIndexed}))
                     jQuery('#reindex_existing_content #go_home_button').removeClass('disabled')
                     jQuery('#reindex_existing_content #reindex_button').removeClass('disabled')
                     return
@@ -363,7 +363,7 @@
                             if (retry < 2) {
                                 indexEntityInSearChili(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small>Failed to index post/page #'+needToBeIndexedEntities[index]+': '+('message' in response?response.message:'')+'</small></div>')
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{entityId}:', 'searchili') ?> {message}</small></div>'.searChiliFormat({entityId: needToBeIndexedEntities[index], message: ('message' in response?response.message:'')}))
                                 indexEntityInSearChili(index+1)
                             }
                         }
@@ -372,7 +372,7 @@
                     if (retry < 2) {
                         indexEntityInSearChili(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small>Failed to index post/page #'+needToBeIndexedEntities[index]+': server error!</small></span></div>')
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{entityId}:', 'searchili') ?>: server error!</small></span></div>'.searChiliFormat({entityId: needToBeIndexedEntities[index]}))
                         indexEntityInSearChili(index+1)
                     }
                 });
@@ -398,7 +398,7 @@
                 if (!(index in wordpressPublicEntities)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
-                    timeline_body.append('<div class="alert alert-success p-2 mt-2"><small>Successfully reindexed ' + successfulIndexed + ' content.</small></div>')
+                    timeline_body.append('<div class="alert alert-success p-2 mt-2"><small><?= __('Successfully reindexed {successfulIndexed} content.', 'searchili') ?></small></div>'.searChiliFormat({successfulIndexed: successfulIndexed}))
                     return
                 }
                 jQuery.post(
@@ -417,7 +417,7 @@
                             if (retry < 2) {
                                 indexEntityInSearChili(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small>Failed to index post/page #'+wordpressPublicEntities[index]+': '+('message' in response?response.message:'')+'</small></div>')
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{entityId}:', 'searchili') ?>: {message}</small></div>'.searChiliFormat({entityId: wordpressPublicEntities[index], message: ('message' in response?response.message:'')}))
                                 indexEntityInSearChili(index+1)
                             }
                         }
@@ -426,7 +426,7 @@
                     if (retry < 2) {
                         indexEntityInSearChili(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small>Failed to index post/page #'+wordpressPublicEntities[index]+': server error!</small></span></div>')
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{entityId}:', 'searchili') ?>: server error!</small></span></div>'.searChiliFormat({entityId: wordpressPublicEntities[index]}))
                         indexEntityInSearChili(index+1)
                     }
                 });
@@ -434,7 +434,16 @@
             indexEntityInSearChili(0)
         }
     }
-
+    String.prototype.searChiliFormat = String.prototype.searChiliFormat || function () {
+        let str = this.toString();
+        if (arguments.length) {
+            let t = typeof arguments[0], args = ("string" === t || "number" === t) ? Array.prototype.slice.call(arguments) : arguments[0];
+            for (let arg in args) {
+                str = str.replace(new RegExp("\\{" + arg + "\\}", "gi"), args[arg]);
+            }
+        };
+        return str;
+    };
     jQuery(document).ready(function ($) {
         getListOfIDsFromSearChili();
     });
