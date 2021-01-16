@@ -1213,3 +1213,10 @@ html[dir="rtl"] .card .card-body, html[dir="rtl"] .card .card-footer {
   }
 }
 /*# sourceMappingURL=material-dashboard-rtl.css.map */
+
+html[dir="rtl"] .float-right {
+  float: left!important;
+}
+html[dir="rtl"] .float-left {
+  float: right!important;
+}
