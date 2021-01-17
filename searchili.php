@@ -389,6 +389,7 @@ final class SearChili
                 'Accept' => 'application/json',
                 'Content-type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Bearer ' . $this->get_site_api_secret(),
+                'user-agent' => 'WordPress/' . get_bloginfo( 'version' ) . ' : ' . SEARCHILI_VERSION . '; ' . get_bloginfo( 'url' ),
             ],
         ];
         if (!empty($data)) {
