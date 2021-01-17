@@ -88,6 +88,7 @@ final class SearChili
 
     private function setup_client_actions()
     {
+        add_action('plugins_loaded', [$this, 'i18n'], 2);
         add_action('wp', [$this, 'default_search_page']);
         add_action('wp_enqueue_scripts', [$this, 'client_enqueue_scripts']);
         add_shortcode('searchili_search_page', function() { return '<div id="searchili-search_page"></div>'; });
@@ -401,10 +402,15 @@ final class SearChili
         return [$responseCode, $result, $responseHeaders];
     }
 
+    public function i18n()
+    {
+        load_plugin_textdomain('searchili', false, SEARCHILI_DIR . '/languages/' );
+    }
+
     public function default_search_page()
     {
         if ( (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1) && !empty( $_GET['searchili-query'] ) ) {
-            require_once 'templates/client_default_search_page.php';
+            require_once SEARCHILI_DIR . '/templates/client_default_search_page.php';
             // In our template we add header and footer ourselves,
             // so we need to stop execution here to avoid re-rendering
             // them after our footer.
@@ -417,7 +423,7 @@ final class SearChili
         wp_enqueue_style('searchili-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], SEARCHILI_VERSION);
         wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_URL . 'assets/css/material-dashboard.css', [], SEARCHILI_VERSION);
         wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_URL . 'assets/css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
-        return require_once 'templates/admin_index.php';
+        return require_once SEARCHILI_DIR . '/templates/admin_index.php';
     }
 
     public function admin_searchili_options_page()
@@ -438,12 +444,12 @@ final class SearChili
             update_option('searchili_settings', $this->settings);
         }
         if (empty($this->settings['get_started_api_finished']) || empty($this->get_site_api_secret()) || isset($_GET['changeAPI'])) {
-            return require_once 'templates/admin_get_started_api.php';
+            return require_once SEARCHILI_DIR . '/templates/admin_get_started_api.php';
         }
         if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
-            return require_once 'templates/admin_get_started_index_config.php';
+            return require_once SEARCHILI_DIR . '/templates/admin_get_started_index_config.php';
         }
-        return require_once 'templates/admin_dashboard.php';
+        return require_once SEARCHILI_DIR . '/templates/admin_dashboard.php';
     }
 
     /**
