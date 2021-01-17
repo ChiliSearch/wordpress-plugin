@@ -50,6 +50,9 @@ Sure! you can visit SearChili setting page and manage your index policy and inde
 
 ## Changelog
 
+### 1.0.5
+* fix internationalization
+
 ### 1.0.4
 * bugfix
 * add internationalization

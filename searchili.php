@@ -12,7 +12,7 @@
  * Plugin Name:       SearChili
  * Plugin URI:        https://searchi.li
  * Description:       SearChili is an easy-to-use AI-powered Search as a Service that provides a better search experience in your website.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Author:            SearChili
  * Author URI:        https://searchi.li/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-define('SEARCHILI_VERSION', '1.0.4');
+define('SEARCHILI_VERSION', '1.0.5');
 define('SEARCHILI_DIR', dirname(__FILE__));
 define('SEARCHILI_PHP_MINIMUM', '5.6.0');
 define(
