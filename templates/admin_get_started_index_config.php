@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-									<?= sprintf(__( 'After setting up everything, we will share a copy of your PUBLIC content (posts/pages, on your choice) with SearChili to make it available in search results. You can always manage this content on %sSearChili Dashboard%s.<br>Note that only your public content will be shared with SearChili, in case you change the status of a content to non-public or remove a content, it will be removed from SearChili and search results.', 'searchili' ), '<a href="https://app.searchi.li" target="_blank">', '</a>'); ?>
+									<?= sprintf(__( 'After setting up everything, we will share a copy of your PUBLIC content (posts/pages, on your choice) with Chili Search to make it available in search results. You can always manage this content on %sChili Search Dashboard%s.<br>Note that only your public content will be shared with Chili Search, in case you change the status of a content to non-public or remove a content, it will be removed from Chili Search and search results.', 'chilisearch' ), '<a href="https://app.chilisearch.com" target="_blank">', '</a>'); ?>
                                 </div>
                             </div>
                         </div>
@@ -20,7 +20,7 @@
                                 <div class="form-group">
                                     <label class="index_entities_posts">
                                         <input type="checkbox" name="index_entities_posts" id="index_entities_posts" <?= !empty($this->settings['index_entities_posts']) ? 'checked' : '' ?>>
-                                        <?= __('Index public Posts', 'searchili') ?>
+                                        <?= __('Index public Posts', 'chilisearch') ?>
                                     </label>
                                 </div>
                             </div>
@@ -30,12 +30,12 @@
                                 <div class="form-group">
                                     <label class="index_entities_pages">
                                         <input type="checkbox" name="index_entities_pages" id="index_entities_pages" <?= !empty($this->settings['index_entities_pages']) ? 'checked' : '' ?>>
-                                        <?= __('Index public Pages', 'searchili') ?>
+                                        <?= __('Index public Pages', 'chilisearch') ?>
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary"><?= __('Submit', 'searchili') ?></button>
+                        <button type="submit" class="btn btn-primary"><?= __('Submit', 'chilisearch') ?></button>
                         <div class="clearfix"></div>
                     </form>
                 </div>
@@ -57,7 +57,7 @@
                 },
                 function (response) {
                     if (response.status) {
-                        window.location.replace("<?= esc_url(admin_url('admin.php?page=searchili-indexing')) ?>");
+                        window.location.replace("<?= esc_url(admin_url('admin.php?page=chilisearch-indexing')) ?>");
                         return;
                     }
                     jQuery('#site_index_config button[type="submit"]').prop('disabled', false)

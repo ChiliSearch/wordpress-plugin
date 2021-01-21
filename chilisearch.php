@@ -1,22 +1,22 @@
 <?php
 /**
- * WP SearChili.
+ * WP Chili Search.
  *
- * WP SearChili plugin file.
+ * WP Chili Search plugin file.
  *
- * @package           SearChili
- * @author            Ali Jafari <ali@searchi.li>
- * @copyright         Copyright (C) 2021, SearChili - info@searchi.li
+ * @package           ChiliSearch
+ * @author            Ali Jafari <ali@chilisearch.com>
+ * @copyright         Copyright (C) 2021, Chili Search - info@chilisearch.com
  *
  * @wordpress-plugin
- * Plugin Name:       SearChili
- * Plugin URI:        https://searchi.li
- * Description:       SearChili is an easy-to-use AI-powered Search as a Service that provides a better search experience in your website.
+ * Plugin Name:       Chili Search
+ * Plugin URI:        https://chilisearch.com
+ * Description:       Chili Search is an easy-to-use AI-powered Search as a Service that provides a better search experience in your website.
  * Version:           1.0.5
- * Author:            SearChili
- * Author URI:        https://searchi.li/
+ * Author:            ChiliSearch
+ * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
- * Text Domain:       searchili
+ * Text Domain:       chilisearch
  * Domain Path:       /languages
  *
  * This program is free software: you can redistribute it and/or modify
@@ -37,19 +37,19 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-define('SEARCHILI_VERSION', '1.0.5');
-define('SEARCHILI_DIR', dirname(__FILE__));
-define('SEARCHILI_PHP_MINIMUM', '5.6.0');
+define('CHILISEARCH_VERSION', '1.0.5');
+define('CHILISEARCH_DIR', dirname(__FILE__));
+define('CHILISEARCH_PHP_MINIMUM', '5.6.0');
 define(
-    'SEARCHILI_URL',
+    'CHILISEARCH_URL',
     strpos(home_url('/'), 'https://') !== false || strpos(plugin_dir_url(__FILE__), 'https://') !== false ?
         str_replace('http://', 'https://', plugin_dir_url(__FILE__)) : plugin_dir_url(__FILE__)
 );
 
-final class SearChili
+final class ChiliSearch
 {
-    const SEARCHILI_BOB_BASE_URI = 'https://api.searchi.li/bob/v1/';
-    const SEARCHILI_CDN_BASE_URI = 'https://cdn.searchi.li/alice/v1/';
+    const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
+    const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
 
     private static $instance = null;
 
@@ -58,17 +58,17 @@ final class SearChili
     public static function getInstance()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new SearChili();
+            self::$instance = new ChiliSearch();
         }
         return self::$instance;
     }
 
     private function __construct()
     {
-        if ( version_compare( PHP_VERSION, SEARCHILI_PHP_MINIMUM, '<' ) ) {
+        if ( version_compare( PHP_VERSION, CHILISEARCH_PHP_MINIMUM, '<' ) ) {
             wp_die(
-                esc_html( sprintf( __( 'SearChili requires PHP version %s', 'searchili' ), SEARCHILI_PHP_MINIMUM ) ),
-                esc_html__( 'Error Activating', 'searchili' )
+                esc_html( sprintf( __( 'Chili Search requires PHP version %s', 'chilisearch' ), CHILISEARCH_PHP_MINIMUM ) ),
+                esc_html__( 'Error Activating', 'chilisearch' )
             );
         }
 
@@ -81,7 +81,7 @@ final class SearChili
     private function get_settings($forceUpdate = false)
     {
         if ($forceUpdate || empty($this->settings)) {
-            $this->settings = get_option('searchili_settings');
+            $this->settings = get_option('chilisearch_settings');
         }
         return $this->settings;
     }
@@ -91,7 +91,7 @@ final class SearChili
         add_action('plugins_loaded', [$this, 'i18n'], 2);
         add_action('wp', [$this, 'default_search_page']);
         add_action('wp_enqueue_scripts', [$this, 'client_enqueue_scripts']);
-        add_shortcode('searchili_search_page', function() { return '<div id="searchili-search_page"></div>'; });
+        add_shortcode('chilisearch_search_page', function() { return '<div id="chilisearch-search_page"></div>'; });
     }
 
 	private function setup_admin_actions()
@@ -104,73 +104,73 @@ final class SearChili
 		add_action('wp_ajax_admin_ajax_index_config', [$this, 'wp_ajax_admin_ajax_index_config'] );
 		add_action('wp_ajax_admin_ajax_config_update', [$this, 'wp_ajax_admin_ajax_config_update'] );
 		add_action('wp_ajax_admin_ajax_create_set_search_page', [$this, 'wp_ajax_admin_ajax_create_set_search_page'] );
-		add_action('wp_ajax_admin_ajax_get_list_of_ids_from_searchili', [$this, 'wp_ajax_admin_ajax_get_list_of_ids_from_searchili'] );
+		add_action('wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch', [$this, 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch'] );
 		add_action('wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed', [$this, 'wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed'] );
 		add_action('wp_ajax_admin_ajax_delete_content_should_not_be_indexed', [$this, 'wp_ajax_admin_ajax_delete_content_should_not_be_indexed'] );
 		add_action('wp_ajax_admin_ajax_index_missing_content', [$this, 'wp_ajax_admin_ajax_index_missing_content'] );
 		add_filter('plugin_action_links_' . plugin_basename(__FILE__), function($links) {
 			array_unshift($links, sprintf(
 				'<a href="%s">%s</a>',
-				esc_url(add_query_arg(array('page' => 'searchili'), admin_url('options-general.php'))),
-				__('Settings', 'searchili')
+				esc_url(add_query_arg(array('page' => 'chilisearch'), admin_url('options-general.php'))),
+				__('Settings', 'chilisearch')
 			));
 			return $links;
 		});
 		add_action('admin_menu', function() {
             add_menu_page(
-                __('SearChili Settings', 'searchili'),
-                __('SearChili', 'searchili'),
-                apply_filters('searchili_settings_capability', 'manage_options'),
-                'searchili',
-                [$this, 'admin_searchili_options_page'],
-                SEARCHILI_URL . 'icon.png'
+                __('Chili Search Settings', 'chilisearch'),
+                __('Chili Search', 'chilisearch'),
+                apply_filters('chilisearch_settings_capability', 'manage_options'),
+                'chilisearch',
+                [$this, 'admin_chilisearch_options_page'],
+                CHILISEARCH_URL . 'icon.png'
             );
             add_submenu_page(
-                'searchili',
-                __('SearChili Settings', 'searchili'),
-                __('Settings', 'searchili'),
+                'chilisearch',
+                __('Chili Search Settings', 'chilisearch'),
+                __('Settings', 'chilisearch'),
                 'manage_options',
-                'searchili',
-                [$this, 'admin_searchili_options_page']
+                'chilisearch',
+                [$this, 'admin_chilisearch_options_page']
             );
             add_submenu_page(
-                'searchili',
-                __('Indexing', 'searchili'),
-                __('Indexing', 'searchili'),
+                'chilisearch',
+                __('Indexing', 'chilisearch'),
+                __('Indexing', 'chilisearch'),
                 'manage_options',
-                'searchili-indexing',
-                [$this, 'admin_searchili_indexing_options_page']
+                'chilisearch-indexing',
+                [$this, 'admin_chilisearch_indexing_options_page']
             );
         });
 		add_action('admin_init', function() {
-            register_setting('searchili_settings_group', 'searchili_settings');
+            register_setting('chilisearch_settings_group', 'chilisearch_settings');
         });
 		add_action('admin_notices', function () {
 		    if (empty($this->settings['site_api_key'])) {
                 echo '<div class="error"><p>'
-                    . sprintf(__('SearChili: Enter site API Key in %ssettings%s page to enable SearChili.', 'searchili'),
-                        '<a href="' . esc_url(admin_url('options-general.php?page=searchili')) . '">', '</a>')
+                    . sprintf(__('Chili Search: Enter site API Key in %ssettings%s page to enable Chili Search.', 'chilisearch'),
+                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
                     . '</p></div>';
             }
 		    if (empty($this->settings['site_api_secret']) && !empty($this->settings['site_api_key'])) {
                 echo '<div class="error"><p>'
-                    . sprintf(__('SearChili: Enter site API secret in %ssettings%s page to enable indexing your content into SearChili.', 'searchili'),
-                        '<a href="' . esc_url(admin_url('options-general.php?page=searchili')) . '">', '</a>')
+                    . sprintf(__('Chili Search: Enter site API secret in %ssettings%s page to enable indexing your content into Chili Search.', 'chilisearch'),
+                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
                     . '</p></div>';
             }
 		});
 		register_activation_hook(__FILE__, function () {
-		    SearChili::getInstance()->activation();
+		    ChiliSearch::getInstance()->activation();
 		});
 	}
 
 	public function admin_ajax_check_save_api_credentials() {
         if (empty($_POST['api_secret'])) {
-            wp_send_json(['status' => false, 'message' => __( 'API Secret is not entered!', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'API Secret is not entered!', 'chilisearch' )]);
         }
         $apiSecret = sanitize_key(trim($_POST['api_secret']));
         if (strlen($apiSecret) !== 36) {
-            wp_send_json(['status' => false, 'message' => __( 'API Secret is 32 characters!', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'API Secret is 32 characters!', 'chilisearch' )]);
         }
         $this->settings = $this->get_settings(true);
         $this->settings['site_api_secret'] = $apiSecret;
@@ -178,13 +178,13 @@ final class SearChili
         if ($getSiteInfoResponseCode == 200 && !empty($getSiteInfoResult->apiKey)) {
             $this->settings['site_api_key'] = sanitize_key(trim($getSiteInfoResult->apiKey));
             $this->settings['get_started_api_finished'] = 'passed';
-            update_option('searchili_settings', $this->settings);
+            update_option('chilisearch_settings', $this->settings);
             wp_send_json(['status' => true, 'apiKey' => $getSiteInfoResult->apiKey]);
         }
         if ($getSiteInfoResponseCode == 401) {
-            wp_send_json(['status' => false, 'message' => __( 'API Secret is not valid!', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'API Secret is not valid!', 'chilisearch' )]);
         }
-        wp_send_json(['status' => false, 'message' => __( 'Request failed. Try again.', 'searchili' )]);
+        wp_send_json(['status' => false, 'message' => __( 'Request failed. Try again.', 'chilisearch' )]);
     }
 
 	public function wp_ajax_admin_ajax_index_config() {
@@ -197,22 +197,22 @@ final class SearChili
         $this->settings['index_entities_posts'] = $index_entities_posts;
         $this->settings['index_entities_pages'] = $index_entities_pages;
         $this->settings['get_started_config_finished'] = 'passed';
-        update_option('searchili_settings', $this->settings);
+        update_option('chilisearch_settings', $this->settings);
         wp_send_json(['status' => true, 'index_entities_posts' => $this->settings['index_entities_posts'], 'index_entities_pages' => $this->settings['index_entities_pages']]);
     }
 
 	public function wp_ajax_admin_ajax_config_update() {
         if (empty($_POST['search_page_size']) || $_POST['search_page_size'] != (int)$_POST['search_page_size'] || $_POST['search_page_size'] < 1 || $_POST['search_page_size'] > 20) {
-            wp_send_json(['status' => false, 'message' => __( 'Search page size must be between 1 to 20', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'Search page size must be between 1 to 20', 'chilisearch' )]);
         }
         if (empty($_POST['sayt_page_size']) || $_POST['sayt_page_size'] != (int)$_POST['sayt_page_size'] || $_POST['sayt_page_size'] < 1 || $_POST['sayt_page_size'] > 10) {
-            wp_send_json(['status' => false, 'message' => __( 'SAYT size must be between 1 to 10', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'SAYT size must be between 1 to 10', 'chilisearch' )]);
         }
         if (empty($_POST['search_input_selector'])) {
-            wp_send_json(['status' => false, 'message' => __( 'Search input selector can not be empty.', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'Search input selector can not be empty.', 'chilisearch' )]);
         }
         if (empty($_POST['search_page_id'])) {
-            wp_send_json(['status' => false, 'message' => __( 'Search result page is not selected.', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'Search result page is not selected.', 'chilisearch' )]);
         }
         $searchPageId = (int)sanitize_key(trim($_POST['search_page_id']));
         $possibleSearchPageIDs = array_map(function ($page) {
@@ -220,31 +220,31 @@ final class SearChili
         }, get_pages(['post_type' => 'page', 'post_status' => 'publish']));
         $possibleSearchPageIDs[] = -1;
         if (!in_array($searchPageId, $possibleSearchPageIDs)) {
-            wp_send_json(['status' => false, 'message' => __( 'Search result page is not valid.', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'Search result page is not valid.', 'chilisearch' )]);
         }
         $this->settings = $this->get_settings(true);
         $this->settings['search_page_size'] = (int)sanitize_key(trim($_POST['search_page_size']));
         $this->settings['sayt_page_size'] = (int)sanitize_key(trim($_POST['sayt_page_size']));
         $this->settings['search_input_selector'] = sanitize_text_field(stripslashes($_POST['search_input_selector']));
         $this->settings['search_page_id'] = $searchPageId;
-        update_option('searchili_settings', $this->settings);
+        update_option('chilisearch_settings', $this->settings);
         wp_send_json(['status' => true]);
     }
 
 	public function wp_ajax_admin_ajax_create_set_search_page() {
         $this->settings = $this->get_settings(true);
         $this->settings['search_page_id'] = wp_insert_post( [
-		    'post_title'   => wp_strip_all_tags( 'Search' ),
-		    'post_content' => '[searchili_search_page]',
+		    'post_title'   => wp_strip_all_tags(__('Search')),
+		    'post_content' => '[chilisearch_search_page]',
 		    'post_status'  => 'publish',
 		    'post_author'  => get_current_user_id(),
 		    'post_type'    => 'page',
 	    ] );
-	    update_option('searchili_settings', $this->settings);
+	    update_option('chilisearch_settings', $this->settings);
         wp_send_json(['status' => true]);
     }
 
-	public function wp_ajax_admin_ajax_get_list_of_ids_from_searchili() {
+	public function wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch() {
         list($allEntitiesResponseCode, $allEntitiesResult) = $this->send_request('GET', 'entity');
         if ($allEntitiesResponseCode == 200) {
             wp_send_json(['status' => true, 'entities' => $allEntitiesResult]);
@@ -275,7 +275,7 @@ final class SearChili
 
 	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
         if (empty($_POST['entityId'])) {
-            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'chilisearch' )]);
         }
         $entityId = (int)sanitize_key(trim($_POST['entityId']));
         list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'entity/' . $entityId);
@@ -283,17 +283,17 @@ final class SearChili
             wp_send_json(['status' => true]);
         }
         $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
-        wp_send_json(['status' => false, 'message' => esc_html__( $message, 'searchili' )]);
+        wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
     }
 
 	public function wp_ajax_admin_ajax_index_missing_content() {
         if (empty($_POST['entityId'])) {
-            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'chilisearch' )]);
         }
         $entityId = (int)sanitize_key(trim($_POST['entityId']));
         $post = get_post($entityId);
         if (empty($post)) {
-            wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'searchili' )]);
+            wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'chilisearch' )]);
         }
 
         list($putEntityResponseCode, $putEntityResult) = $this->send_request(
@@ -305,7 +305,7 @@ final class SearChili
             wp_send_json(['status' => true]);
         }
         $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
-        wp_send_json(['status' => false, 'message' => esc_html__( $message, 'searchili' )]);
+        wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
     }
 
 	public function activation()
@@ -315,7 +315,7 @@ final class SearChili
 	    $this->settings['search_input_selector'] = isset($this->settings['search_input_selector']) ? $this->settings['search_input_selector'] : 'input[name="s"]';
 	    $this->settings['search_page_size'] = isset($this->settings['search_page_size']) ? $this->settings['search_page_size'] : 15;
 	    $this->settings['sayt_page_size'] = isset($this->settings['sayt_page_size']) ? $this->settings['sayt_page_size'] : 5;
-	    update_option('searchili_settings', $this->settings);
+	    update_option('chilisearch_settings', $this->settings);
 	}
 
     public function client_enqueue_scripts()
@@ -324,10 +324,10 @@ final class SearChili
             return;
         }
         wp_enqueue_script(
-            'searchili-settings-js',
-            esc_url(self::SEARCHILI_CDN_BASE_URI . 'js/app.js'),
+            'chilisearch-settings-js',
+            esc_url(self::CHILISEARCH_CDN_BASE_URI . 'js/app.js'),
             [],
-            SEARCHILI_VERSION,
+            CHILISEARCH_VERSION,
             true
         );
 
@@ -338,19 +338,19 @@ final class SearChili
 	    $saytPageSize = !empty($this->settings['sayt_page_size']) ? intval($this->settings['sayt_page_size']) : 5;
         $isRTL = is_rtl();
 	    $phrases = json_encode([
-            'powered-by' => __('powered by', 'searchili'),
-            'search-powered-by' => __('search powered by', 'searchili'),
-            'no-result-message' => __('Couldn\'t find anything related …', 'searchili'),
-            'error-message' => __('Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'searchili'),
-            'input-placeholder' => __('Search …', 'searchili'),
-            'sayt-init-message' => __('Search …', 'searchili'),
-            'form-submit-value' => __('Search', 'searchili'),
-            'search-result-result-count' => __('About {totalCount} results ({timeTook} seconds)', 'searchili'),
-            'prev' => __('Prev', 'searchili'),
-            'next' => __('Next', 'searchili'),
+            'powered-by' => __('powered by', 'chilisearch'),
+            'search-powered-by' => __('search powered by', 'chilisearch'),
+            'no-result-message' => __('Couldn\'t find anything related …', 'chilisearch'),
+            'error-message' => __('Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch'),
+            'input-placeholder' => __('Search …', 'chilisearch'),
+            'sayt-init-message' => __('Search …', 'chilisearch'),
+            'form-submit-value' => __('Search', 'chilisearch'),
+            'search-result-result-count' => __('About {totalCount} results ({timeTook} seconds)', 'chilisearch'),
+            'prev' => __('Prev', 'chilisearch'),
+            'next' => __('Next', 'chilisearch'),
         ]);
 
-        wp_add_inline_script( 'searchili-settings-js', "SearChili.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", saytPageSize: \"{$saytPageSize}\", searchInputSelector: \"{$searchInputSelector}\", isRTL: $isRTL, phrases: $phrases})");
+        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", saytPageSize: \"{$saytPageSize}\", searchInputSelector: \"{$searchInputSelector}\", isRTL: $isRTL, phrases: $phrases})");
     }
 
     public function get_or_create_search_page()
@@ -362,7 +362,7 @@ final class SearChili
             } else {
 	            $this->settings = $this->get_settings(true);
                 $this->settings['search_page_id'] = -1;
-                update_option('searchili_settings', $this->settings);
+                update_option('chilisearch_settings', $this->settings);
             }
         }
 	    return get_site_url();
@@ -389,13 +389,13 @@ final class SearChili
                 'Accept' => 'application/json',
                 'Content-type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Bearer ' . $this->get_site_api_secret(),
-                'user-agent' => 'WordPress/' . get_bloginfo( 'version' ) . ' : ' . SEARCHILI_VERSION . '; ' . get_bloginfo( 'url' ),
+                'user-agent' => 'WordPress/' . get_bloginfo( 'version' ) . ' : ' . CHILISEARCH_VERSION . ' ; ' . get_bloginfo( 'url' ),
             ],
         ];
         if (!empty($data)) {
             $args['body'] = $data;
         }
-        $response = @wp_remote_request( self::SEARCHILI_BOB_BASE_URI . $endpoint, $args );
+        $response = @wp_remote_request( self::CHILISEARCH_BOB_BASE_URI . $endpoint, $args );
         $responseCode = (int)wp_remote_retrieve_response_code( $response );
         $result = $body = wp_remote_retrieve_body( $response );
         $result = !empty($result) ? json_decode($result) : null;
@@ -405,13 +405,13 @@ final class SearChili
 
     public function i18n()
     {
-        load_plugin_textdomain('searchili', false, SEARCHILI_DIR . '/languages/' );
+        load_plugin_textdomain('chilisearch', false, CHILISEARCH_DIR . '/languages/' );
     }
 
     public function default_search_page()
     {
-        if ( (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1) && !empty( $_GET['searchili-query'] ) ) {
-            require_once SEARCHILI_DIR . '/templates/client_default_search_page.php';
+        if ( (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1) && !empty( $_GET['chilisearch-query'] ) ) {
+            require_once CHILISEARCH_DIR . '/templates/client_default_search_page.php';
             // In our template we add header and footer ourselves,
             // so we need to stop execution here to avoid re-rendering
             // them after our footer.
@@ -419,38 +419,38 @@ final class SearChili
         }
     }
 
-    public function admin_searchili_indexing_options_page()
+    public function admin_chilisearch_indexing_options_page()
     {
-        wp_enqueue_style('searchili-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_URL . 'assets/css/material-dashboard.css', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_URL . 'assets/css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
-        return require_once SEARCHILI_DIR . '/templates/admin_index.php';
+        wp_enqueue_style('chilisearch-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], CHILISEARCH_VERSION);
+        wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
+        wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
+        return require_once CHILISEARCH_DIR . '/templates/admin_index.php';
     }
 
-    public function admin_searchili_options_page()
+    public function admin_chilisearch_options_page()
     {
-        wp_enqueue_style('searchili-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard', SEARCHILI_URL . 'assets/css/material-dashboard.css', [], SEARCHILI_VERSION);
-        wp_enqueue_style('searchili-css-material-dashboard-rtl', SEARCHILI_URL . 'assets/css/material-dashboard-rtl.css', [], SEARCHILI_VERSION);
+        wp_enqueue_style('chilisearch-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], CHILISEARCH_VERSION);
+        wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
+        wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
 
         list($getSiteInfoResponseCode, $siteInfo) = $this->send_request('GET', 'site');
         if ($getSiteInfoResponseCode === 401) {
             $this->settings = $this->get_settings(true);
             unset($this->settings['site_api_secret'], $this->settings['get_started_config_finished']);
-            update_option('searchili_settings', $this->settings);
+            update_option('chilisearch_settings', $this->settings);
         }
         if (!empty($siteInfo->apiKey) && $siteInfo->apiKey != $this->get_site_api_key()) {
             $this->settings = $this->get_settings(true);
             $this->settings['site_api_key'] = $siteInfo->apiKey;
-            update_option('searchili_settings', $this->settings);
+            update_option('chilisearch_settings', $this->settings);
         }
         if (empty($this->settings['get_started_api_finished']) || empty($this->get_site_api_secret()) || isset($_GET['changeAPI'])) {
-            return require_once SEARCHILI_DIR . '/templates/admin_get_started_api.php';
+            return require_once CHILISEARCH_DIR . '/templates/admin_get_started_api.php';
         }
         if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
-            return require_once SEARCHILI_DIR . '/templates/admin_get_started_index_config.php';
+            return require_once CHILISEARCH_DIR . '/templates/admin_get_started_index_config.php';
         }
-        return require_once SEARCHILI_DIR . '/templates/admin_dashboard.php';
+        return require_once CHILISEARCH_DIR . '/templates/admin_dashboard.php';
     }
 
     /**
@@ -515,4 +515,4 @@ final class SearChili
     }
 }
 
-SearChili::getInstance();
+ChiliSearch::getInstance();
