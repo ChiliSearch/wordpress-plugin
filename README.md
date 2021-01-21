@@ -50,6 +50,9 @@ Sure! you can visit Chili Search setting page and manage your index policy and i
 
 ## Changelog
 
+### 1.1.0
+* rebrand to Chili Search
+
 ### 1.0.5
 * fix internationalization
 
