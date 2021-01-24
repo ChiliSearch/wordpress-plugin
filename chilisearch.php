@@ -336,7 +336,7 @@ final class ChiliSearch
         $searchInputSelector = addslashes(!empty($this->settings['search_input_selector']) ? $this->settings['search_input_selector'] : 'input[name="s"]');
 	    $searchPageSize = !empty($this->settings['search_page_size']) ? intval($this->settings['search_page_size']) : 15;
 	    $saytPageSize = !empty($this->settings['sayt_page_size']) ? intval($this->settings['sayt_page_size']) : 5;
-        $isRTL = is_rtl();
+        $isRTL = is_rtl() ? 'true' : 'false';
 	    $phrases = json_encode([
             'powered-by' => __('powered by', 'chilisearch'),
             'search-powered-by' => __('search powered by', 'chilisearch'),
