@@ -1,7 +1,7 @@
 ﻿=== Chili Search – WordPress Search Plugin ===
 Plugin URI: https://chilisearch.com
 Donate link: https://chilisearch.com/wp-plugin
-Contributors: chilisearch, jafarili
+Contributors: chilisearch
 Tags: search, site search, custom search, autocomplete search, ajax search, typeahead, search-as-you-type, SAYT, search experience
 Requires at least: 3.9
 Tested up to: 5.6
