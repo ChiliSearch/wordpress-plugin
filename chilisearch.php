@@ -53,7 +53,23 @@ final class ChiliSearch
 
     private static $instance = null;
 
-    private $settings;
+    private $settings = [
+        'site_api_key' => null,
+        'site_api_secret' => null,
+        'get_started_api_finished' => false,
+        'get_started_config_finished' => false,
+        'search_input_selector' => 'input[name="s"]',
+        'search_page_size' => 15,
+        'sayt_page_size' => 5,
+        'search_page_id' => -1,
+        'index_documents_posts' => true,
+        'index_documents_pages' => true,
+        'index_documents_media' => false,
+        'index_documents_woocommerce_products' => false,
+        'index_documents_bbpress' => false,
+        'index_documents_approved_comments' => false,
+        'index_documents_doc_files' => false,
+    ];
 
     public static function getInstance()
     {
@@ -78,11 +94,9 @@ final class ChiliSearch
         $this->setup_admin_actions();
     }
 
-    private function get_settings($forceUpdate = false)
+    private function get_settings()
     {
-        if ($forceUpdate || empty($this->settings)) {
-            $this->settings = get_option('chilisearch_settings');
-        }
+        $this->settings = array_merge($this->settings, get_option('chilisearch_settings'));
         return $this->settings;
     }
 
@@ -145,20 +159,20 @@ final class ChiliSearch
 		add_action('admin_init', function() {
             register_setting('chilisearch_settings_group', 'chilisearch_settings');
         });
-		add_action('admin_notices', function () {
-		    if (empty($this->settings['site_api_key'])) {
-                echo '<div class="error"><p>'
-                    . sprintf(__('Chili Search: Enter site API Key in %ssettings%s page to enable Chili Search.', 'chilisearch'),
-                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
-                    . '</p></div>';
-            }
-		    if (empty($this->settings['site_api_secret']) && !empty($this->settings['site_api_key'])) {
-                echo '<div class="error"><p>'
-                    . sprintf(__('Chili Search: Enter site API secret in %ssettings%s page to enable indexing your content into Chili Search.', 'chilisearch'),
-                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
-                    . '</p></div>';
-            }
-		});
+//		add_action('admin_notices', function () {
+//		    if (empty($this->settings['site_api_key'])) {
+//                echo '<div class="error"><p>'
+//                    . sprintf(__('Chili Search: Enter site API Key in %ssettings%s page to enable Chili Search.', 'chilisearch'),
+//                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
+//                    . '</p></div>';
+//            }
+//		    if (empty($this->settings['site_api_secret']) && !empty($this->settings['site_api_key'])) {
+//                echo '<div class="error"><p>'
+//                    . sprintf(__('Chili Search: Enter site API secret in %ssettings%s page to enable indexing your content into Chili Search.', 'chilisearch'),
+//                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
+//                    . '</p></div>';
+//            }
+//		});
 		register_activation_hook(__FILE__, function () {
 		    ChiliSearch::getInstance()->activation();
 		});
@@ -172,10 +186,10 @@ final class ChiliSearch
             'language' => get_bloginfo('language'),
         ]);
         if ($getSiteInfoResponseCode == 201 && !empty($getSiteInfoResult->apiSecret) && !empty($getSiteInfoResult->apiKey)) {
-            $this->settings = $this->get_settings(true);
+            $this->settings = $this->get_settings();
             $this->settings['site_api_secret'] = sanitize_key(trim($getSiteInfoResult->apiSecret));
             $this->settings['site_api_key'] = sanitize_key(trim($getSiteInfoResult->apiKey));
-            $this->settings['get_started_api_finished'] = 'passed';
+            $this->settings['get_started_api_finished'] = true;
             update_option('chilisearch_settings', $this->settings);
             wp_send_json(['status' => true, 'apiKey' => $getSiteInfoResult->apiKey]);
         }
@@ -186,17 +200,27 @@ final class ChiliSearch
     }
 
 	public function wp_ajax_admin_ajax_index_config() {
-        $index_entities_posts = isset($_POST['index_entities_posts']) && $_POST['index_entities_posts'] == 'true';
-        $index_entities_pages = isset($_POST['index_entities_pages']) && $_POST['index_entities_pages'] == 'true';
-        if (empty($index_entities_posts) && empty($index_entities_pages)) {
-            wp_send_json(['status' => false, 'message' => 'At least one of the options must be chosen.']);
+        $index_documents_posts = isset($_POST['index_documents_posts']) && $_POST['index_documents_posts'] == 'true';
+        $index_documents_pages = isset($_POST['index_documents_pages']) && $_POST['index_documents_pages'] == 'true';
+        $index_documents_media = isset($_POST['index_documents_media']) && $_POST['index_documents_media'] == 'true';
+        $index_documents_woocommerce_products = isset($_POST['index_documents_woocommerce_products']) && $_POST['index_documents_woocommerce_products'] == 'true';
+        $index_documents_bbpress = isset($_POST['index_documents_bbpress']) && $_POST['index_documents_bbpress'] == 'true';
+        $index_documents_approved_comments = isset($_POST['index_documents_approved_comments']) && $_POST['index_documents_approved_comments'] == 'true';
+        $index_documents_doc_files = isset($_POST['index_documents_doc_files']) && $_POST['index_documents_doc_files'] == 'true';
+        if (!($index_documents_posts || $index_documents_pages || $index_documents_media || $index_documents_woocommerce_products || $index_documents_bbpress || $index_documents_approved_comments || $index_documents_doc_files)) {
+            wp_send_json(['status' => false, 'message' => __('Choose at least one option.')]);
         }
-        $this->settings = $this->get_settings(true);
-        $this->settings['index_entities_posts'] = $index_entities_posts;
-        $this->settings['index_entities_pages'] = $index_entities_pages;
-        $this->settings['get_started_config_finished'] = 'passed';
+        $this->settings = $this->get_settings();
+        $this->settings['index_documents_posts'] = $index_documents_posts;
+        $this->settings['index_documents_pages'] = $index_documents_pages;
+        $this->settings['index_documents_media'] = $index_documents_media;
+        $this->settings['index_documents_woocommerce_products'] = $index_documents_woocommerce_products;
+        $this->settings['index_documents_bbpress'] = $index_documents_bbpress;
+        $this->settings['index_documents_approved_comments'] = $index_documents_approved_comments;
+        $this->settings['index_documents_doc_files'] = $index_documents_doc_files;
+        $this->settings['get_started_config_finished'] = true;
         update_option('chilisearch_settings', $this->settings);
-        wp_send_json(['status' => true, 'index_entities_posts' => $this->settings['index_entities_posts'], 'index_entities_pages' => $this->settings['index_entities_pages']]);
+        wp_send_json(['status' => true]);
     }
 
 	public function wp_ajax_admin_ajax_config_update() {
@@ -220,7 +244,7 @@ final class ChiliSearch
         if (!in_array($searchPageId, $possibleSearchPageIDs)) {
             wp_send_json(['status' => false, 'message' => __( 'Search result page is not valid.', 'chilisearch' )]);
         }
-        $this->settings = $this->get_settings(true);
+        $this->settings = $this->get_settings();
         $this->settings['search_page_size'] = (int)sanitize_key(trim($_POST['search_page_size']));
         $this->settings['sayt_page_size'] = (int)sanitize_key(trim($_POST['sayt_page_size']));
         $this->settings['search_input_selector'] = sanitize_text_field(stripslashes($_POST['search_input_selector']));
@@ -230,7 +254,7 @@ final class ChiliSearch
     }
 
 	public function wp_ajax_admin_ajax_create_set_search_page() {
-        $this->settings = $this->get_settings(true);
+        $this->settings = $this->get_settings();
         $this->settings['search_page_id'] = wp_insert_post( [
 		    'post_title'   => wp_strip_all_tags(__('Search')),
 		    'post_content' => '[chilisearch_search_page]',
@@ -252,10 +276,10 @@ final class ChiliSearch
 
 	public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed() {
         $active_post_types = [];
-        if (!empty($this->settings['index_entities_posts'])) {
+        if (!empty($this->settings['index_documents_posts'])) {
 		    $active_post_types[] = 'post';
         }
-		if (!empty($this->settings['index_entities_pages'])) {
+		if (!empty($this->settings['index_documents_pages'])) {
 		    $active_post_types[] = 'page';
 		}
         $posts = wp_get_recent_posts([
@@ -308,17 +332,11 @@ final class ChiliSearch
 
 	public function activation()
 	{
-	    $this->settings['index_entities_posts'] = !empty($this->settings['index_entities_posts']) ? $this->settings['index_entities_posts'] : "on";
-	    $this->settings['index_entities_pages'] = !empty($this->settings['index_entities_pages']) ? $this->settings['index_entities_pages'] : "on";
-	    $this->settings['search_input_selector'] = isset($this->settings['search_input_selector']) ? $this->settings['search_input_selector'] : 'input[name="s"]';
-	    $this->settings['search_page_size'] = isset($this->settings['search_page_size']) ? $this->settings['search_page_size'] : 15;
-	    $this->settings['sayt_page_size'] = isset($this->settings['sayt_page_size']) ? $this->settings['sayt_page_size'] : 5;
-	    update_option('chilisearch_settings', $this->settings);
 	}
 
     public function client_enqueue_scripts()
     {
-        if (empty($this->get_site_api_secret())) {
+        if (empty($this->settings['site_api_secret'])) {
             return;
         }
         wp_enqueue_script(
@@ -330,10 +348,10 @@ final class ChiliSearch
         );
 
         $searchPage = $this->get_or_create_search_page();
-        $apiKey = $this->get_site_api_key();
-        $searchInputSelector = addslashes(!empty($this->settings['search_input_selector']) ? $this->settings['search_input_selector'] : 'input[name="s"]');
-	    $searchPageSize = !empty($this->settings['search_page_size']) ? intval($this->settings['search_page_size']) : 15;
-	    $saytPageSize = !empty($this->settings['sayt_page_size']) ? intval($this->settings['sayt_page_size']) : 5;
+        $apiKey = $this->settings['site_api_key'];
+        $searchInputSelector = addslashes($this->settings['search_input_selector']);
+	    $searchPageSize = $this->settings['search_page_size'];
+	    $saytPageSize = $this->settings['sayt_page_size'];
         $isRTL = is_rtl() ? 'true' : 'false';
 	    $phrases = json_encode([
             'powered-by' => __('powered by', 'chilisearch'),
@@ -358,22 +376,12 @@ final class ChiliSearch
 	        if (!empty($search_page) && $search_page->post_status === 'publish') {
 	            return $search_page->guid;
             } else {
-	            $this->settings = $this->get_settings(true);
+	            $this->settings = $this->get_settings();
                 $this->settings['search_page_id'] = -1;
                 update_option('chilisearch_settings', $this->settings);
             }
         }
 	    return get_site_url();
-    }
-
-    private function get_site_api_key()
-    {
-        return isset($this->settings['site_api_key']) ? $this->settings['site_api_key'] : '';
-    }
-
-    private function get_site_api_secret()
-    {
-        return isset($this->settings['site_api_secret']) ? $this->settings['site_api_secret'] : '';
     }
 
     private function send_request($method, $endpoint, $data = [])
@@ -389,8 +397,8 @@ final class ChiliSearch
                 'user-agent' => 'WordPress/' . get_bloginfo( 'version' ) . ' : ' . CHILISEARCH_VERSION . ' ; ' . get_bloginfo( 'url' ),
             ],
         ];
-        if (!empty($this->get_site_api_secret())) {
-            $args['headers']['Authorization'] = 'Bearer ' . $this->get_site_api_secret();
+        if (!empty($this->settings['site_api_secret'])) {
+            $args['headers']['Authorization'] = 'Bearer ' . $this->settings['site_api_secret'];
         }
         if (!empty($data)) {
             $args['body'] = $data;
@@ -410,7 +418,7 @@ final class ChiliSearch
 
     public function default_search_page()
     {
-        if ( (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1) && !empty( $_GET['chilisearch-query'] ) ) {
+        if ($this->settings['search_page_id'] == -1 && !empty( $_GET['chilisearch-query'])) {
             require_once CHILISEARCH_DIR . '/templates/client_default_search_page.php';
             // In our template we add header and footer ourselves,
             // so we need to stop execution here to avoid re-rendering
@@ -446,7 +454,7 @@ final class ChiliSearch
                 update_option('chilisearch_settings', $this->settings);
             }
         }
-        if (empty($this->settings['get_started_api_finished']) || empty($this->get_site_api_secret()) || isset($_GET['changeAPI'])) {
+        if (empty($this->settings['get_started_api_finished']) || empty($this->settings['site_api_secret']) || isset($_GET['changeAPI'])) {
             return require_once CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
@@ -463,14 +471,14 @@ final class ChiliSearch
     */
     public function admin_save_post_hook($postId, $post, $update)
     {
-        if (empty($this->get_site_api_secret())) {
+        if (empty($this->settings['site_api_secret'])) {
             return true;
         }
         $active_post_types = [];
-        if (!empty($this->settings['index_entities_posts'])) {
+        if (!empty($this->settings['index_documents_posts'])) {
             $active_post_types[] = 'post';
         }
-        if (!empty($this->settings['index_entities_pages'])) {
+        if (!empty($this->settings['index_documents_pages'])) {
             $active_post_types[] = 'page';
         }
         if (!in_array($post->post_type, $active_post_types)) {
