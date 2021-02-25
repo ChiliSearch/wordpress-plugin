@@ -69,6 +69,7 @@ final class ChiliSearch
         'index_documents_bbpress' => false,
         'index_documents_approved_comments' => false,
         'index_documents_doc_files' => false,
+        'website_info' => null,
     ];
 
     public static function getInstance()
@@ -441,26 +442,44 @@ final class ChiliSearch
         wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
         wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
 
-        if (!empty($this->settings['site_api_secret'])) {
-            list($getSiteInfoResponseCode, $siteInfo) = $this->send_request('GET', 'site');
-            if ($getSiteInfoResponseCode === 401) {
-                $this->settings = $this->get_settings(true);
-                unset($this->settings['site_api_secret'], $this->settings['get_started_config_finished']);
-                update_option('chilisearch_settings', $this->settings);
-            }
-            if (!empty($siteInfo->apiKey) && $siteInfo->apiKey != $this->get_site_api_key()) {
-                $this->settings = $this->get_settings(true);
-                $this->settings['site_api_key'] = $siteInfo->apiKey;
-                update_option('chilisearch_settings', $this->settings);
-            }
-        }
-        if (empty($this->settings['get_started_api_finished']) || empty($this->settings['site_api_secret'])) {
+        if (empty($this->settings['site_api_secret']) || empty($this->settings['get_started_api_finished'])) {
             return require_once CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
             return require_once CHILISEARCH_DIR . '/templates/admin_get_started_index_config.php';
         }
         return require_once CHILISEARCH_DIR . '/templates/admin_dashboard.php';
+    }
+
+    public function get_website_info()
+    {
+        if (empty($this->settings['site_api_secret'])) {
+            return null;
+        }
+        if (!empty($this->settings['website_info']['last_check'])) {
+            $seconds_ago = microtime(true) - $this->settings['website_info']['last_check'];
+            if ($seconds_ago < 10 * 60) {
+                return $this->settings['website_info'];
+            }
+        }
+        list($getSiteInfoResponseCode, $siteInfo) = $this->send_request('GET', 'website');
+        if ($getSiteInfoResponseCode === 401) {
+            $this->settings = $this->get_settings();
+            unset($this->settings['site_api_secret'], $this->settings['get_started_config_finished']);
+            update_option('chilisearch_settings', $this->settings);
+            return null;
+        }
+        if ($getSiteInfoResponseCode !== 200) {
+            return null;
+        }
+        $this->settings = $this->get_settings();
+        if (!empty($siteInfo->apiKey) && $siteInfo->apiKey != $this->settings['site_api_key']) {
+            $this->settings['site_api_key'] = $siteInfo->apiKey;
+        }
+        $this->settings['website_info'] = (array)$siteInfo;
+        $this->settings['website_info']['last_check'] = microtime(true);
+        update_option('chilisearch_settings', $this->settings);
+        return $this->settings['website_info'];
     }
 
     /**

@@ -1,3 +1,6 @@
+<?php
+$siteInfo = ChiliSearch::getInstance()->get_website_info();
+?>
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -7,7 +10,7 @@
                         <i class="material-icons">storage</i>
                     </div>
                     <p class="card-category"><?= __('Used Space', 'chilisearch') ?></p>
-                    <h3 class="card-title"><?= isset($siteInfo->usedSpace) ? esc_html($siteInfo->usedSpace) : __('N/A', 'chilisearch') ?></h3>
+                    <h3 class="card-title"><?= isset($siteInfo['usedSpace']) ? esc_html($siteInfo['usedSpace']) : __('N/A', 'chilisearch') ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -24,7 +27,7 @@
                         <i class="material-icons">check_circle</i>
                     </div>
                     <p class="card-category"><?= __('Number of Searches', 'chilisearch') ?></p>
-                    <h3 class="card-title"><?= isset($siteInfo->thisMonthRequestCount) ? esc_html($siteInfo->thisMonthRequestCount) : __('N/A', 'chilisearch') ?></h3>
+                    <h3 class="card-title"><?= isset($siteInfo['thisMonthRequestCount']) ? esc_html($siteInfo['thisMonthRequestCount']) : __('N/A', 'chilisearch') ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -40,7 +43,7 @@
                         <i class="material-icons">dns</i>
                     </div>
                     <p class="card-category"><?= __('Number of Indexed Posts', 'chilisearch') ?></p>
-                    <h3 class="card-title"><?= isset($siteInfo->thisMonthRequestCount) ? esc_html($siteInfo->entitiesCount) : __('N/A', 'chilisearch') ?></h3>
+                    <h3 class="card-title"><?= isset($siteInfo['thisMonthRequestCount']) ? esc_html($siteInfo['thisMonthRequestCount']) : __('N/A', 'chilisearch') ?></h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
