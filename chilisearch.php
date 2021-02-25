@@ -454,7 +454,7 @@ final class ChiliSearch
                 update_option('chilisearch_settings', $this->settings);
             }
         }
-        if (empty($this->settings['get_started_api_finished']) || empty($this->settings['site_api_secret']) || isset($_GET['changeAPI'])) {
+        if (empty($this->settings['get_started_api_finished']) || empty($this->settings['site_api_secret'])) {
             return require_once CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
