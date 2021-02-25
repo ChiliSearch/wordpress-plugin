@@ -268,7 +268,7 @@ final class ChiliSearch
     }
 
 	public function wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch() {
-        list($allEntitiesResponseCode, $allEntitiesResult) = $this->send_request('GET', 'entity');
+        list($allEntitiesResponseCode, $allEntitiesResult) = $this->send_request('GET', 'documents');
         if ($allEntitiesResponseCode == 200) {
             wp_send_json(['status' => true, 'entities' => $allEntitiesResult]);
         }
@@ -283,25 +283,30 @@ final class ChiliSearch
 		if (!empty($this->settings['index_documents_pages'])) {
 		    $active_post_types[] = 'page';
 		}
-        $posts = wp_get_recent_posts([
-            'numberposts' => 10000,
-	        'post_type' => $active_post_types,
-	        'post_status' => 'publish',
-	        'orderby' => 'ID',
-		    'order' => 'ASC',
-        ]);
-		$posts = array_map(function ($post) {
-		    return (string)$post['ID'];
-		}, $posts);
-		wp_send_json(['status' => true, 'posts' => $posts]);
+
+		$documents = [];
+
+        $posts = array_map(function ($post) {
+            return sprintf('%s-%d', $post['post_type'], $post['ID']);
+        }, wp_get_recent_posts([
+            'numberposts' => -1,
+            'post_type' => $active_post_types,
+            'post_status' => 'publish',
+            'orderby' => 'ID',
+            'order' => 'ASC',
+        ]));
+
+        $documents = array_merge($documents, $posts);
+
+		wp_send_json(['status' => true, 'documents' => $documents]);
     }
 
 	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
-        if (empty($_POST['entityId'])) {
-            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'chilisearch' )]);
+        if (empty($_POST['documentId'])) {
+            wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
-        $entityId = (int)sanitize_key(trim($_POST['entityId']));
-        list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'entity/' . $entityId);
+        $documentId = (int)sanitize_key(trim($_POST['documentId']));
+        list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'entity/' . $documentId);
         if ($deleteResponseCode == 200 && !empty($deleteResult->status) && $deleteResult->status === 'deleted') {
             wp_send_json(['status' => true]);
         }
@@ -310,21 +315,30 @@ final class ChiliSearch
     }
 
 	public function wp_ajax_admin_ajax_index_missing_content() {
-        if (empty($_POST['entityId'])) {
-            wp_send_json(['status' => false, 'message' => __( 'EntityID is not entered!', 'chilisearch' )]);
+        if (empty($_POST['documentId'])) {
+            wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
-        $entityId = (int)sanitize_key(trim($_POST['entityId']));
-        $post = get_post($entityId);
-        if (empty($post)) {
-            wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'chilisearch' )]);
+        list($documentType, $documentId) = explode('-', sanitize_key(trim($_POST['documentId'])));
+        switch ($documentType) {
+            case 'post':
+            case 'page':
+                $post = get_post((int)$documentId);
+                if (empty($post)) {
+                    wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'chilisearch' )]);
+                }
+                $document = self::transform_post_to_document($post);
+                break;
+            default:
+                wp_send_json(['status' => false, 'message' => __( 'Document type is invalid.', 'chilisearch' )]);
+                return;
         }
 
         list($putEntityResponseCode, $putEntityResult) = $this->send_request(
             'PUT',
-            'entity/' . $post->ID,
-            self::transformPostToEntity($post)
+            'documents',
+            $document
         );
-        if ($putEntityResponseCode >= 200 && $putEntityResponseCode <= 299) {
+        if ($putEntityResponseCode === 200 || $putEntityResponseCode === 201) {
             wp_send_json(['status' => true]);
         }
         $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
@@ -507,8 +521,8 @@ final class ChiliSearch
             if ($post->post_status === 'publish') {
                 list($putEntityResponseCode) = $this->send_request(
                     'PUT',
-                    'entity/' . $postId,
-                    self::transformPostToEntity($post)
+                    'documents',
+                    self::transform_post_to_document($post)
                 );
                 if ($putEntityResponseCode >= 200 && $putEntityResponseCode <= 299) {
                     return true;
@@ -523,10 +537,11 @@ final class ChiliSearch
         return false;
     }
 
-    public static function transformPostToEntity($post)
+    public static function transform_post_to_document($post)
     {
         return [
-            'id' => (string)$post->ID,
+            'id' => sprintf('%s-%d', $post->post_type, $post->ID),
+            'type' => $post->post_type,
             'title' => !empty($post->post_title) ? $post->post_title : '',
             'link' => get_permalink($post->ID),
             'excerpt' => !empty($post->post_excerpt) ? $post->post_excerpt : null,

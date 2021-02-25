@@ -251,7 +251,7 @@
                 if (status === "success" && response.status) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
-                    wordpressPublicEntities = wordpressPublicEntities.concat(response.posts)
+                    wordpressPublicEntities = wordpressPublicEntities.concat(response.documents)
                     // if (wordpressPublicEntities.length === 0) {
                     //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no content need to be indexed yet. Make sure you have public posts and pages and check configurations and make sure you want to index posts and pages.</small></div>')
                     // } else {
@@ -294,7 +294,7 @@
                     ajaxurl,
                     {
                         'action': 'admin_ajax_delete_content_should_not_be_indexed',
-                        'entityId': needToBeDeletedEntities[index],
+                        'documentId': needToBeDeletedEntities[index],
                     },
                     function (response, status) {
                         if (status === "success" && response.status) {
@@ -306,7 +306,7 @@
                             if (retry < 2) {
                                 deleteEntityFromChiliSearch(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to delete post/page #{entityId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({entityId: needToBeDeletedEntities[index], message: ('message' in response?response.message:'')}))
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeDeletedEntities[index], message: ('message' in response?response.message:'')}))
                                 deleteEntityFromChiliSearch(index+1)
                             }
                         }
@@ -315,7 +315,7 @@
                     if (retry < 2) {
                         deleteEntityFromChiliSearch(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to delete post/page #{entityId}:', 'chilisearch') ?> server error!</small></span></div>'.searChiliFormat({entityId: needToBeDeletedEntities[index]}))
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> server error!</small></span></div>'.searChiliFormat({documentId: needToBeDeletedEntities[index]}))
                         deleteEntityFromChiliSearch(index+1)
                     }
                 });
@@ -351,7 +351,7 @@
                     ajaxurl,
                     {
                         'action': 'admin_ajax_index_missing_content',
-                        'entityId': needToBeIndexedEntities[index],
+                        'documentId': needToBeIndexedEntities[index],
                     },
                     function (response, status) {
                         if (status === "success" && response.status) {
@@ -363,7 +363,7 @@
                             if (retry < 2) {
                                 indexEntityInChiliSearch(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{entityId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({entityId: needToBeIndexedEntities[index], message: ('message' in response?response.message:'')}))
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeIndexedEntities[index], message: ('message' in response?response.message:'')}))
                                 indexEntityInChiliSearch(index+1)
                             }
                         }
@@ -372,7 +372,7 @@
                     if (retry < 2) {
                         indexEntityInChiliSearch(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{entityId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({entityId: needToBeIndexedEntities[index]}))
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: needToBeIndexedEntities[index]}))
                         indexEntityInChiliSearch(index+1)
                     }
                 });
@@ -405,7 +405,7 @@
                     ajaxurl,
                     {
                         'action': 'admin_ajax_index_missing_content',
-                        'entityId': wordpressPublicEntities[index],
+                        'documentId': wordpressPublicEntities[index],
                     },
                     function (response, status) {
                         if (status === "success" && response.status) {
@@ -417,7 +417,7 @@
                             if (retry < 2) {
                                 indexEntityInChiliSearch(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{entityId}:', 'chilisearch') ?>: {message}</small></div>'.searChiliFormat({entityId: wordpressPublicEntities[index], message: ('message' in response?response.message:'')}))
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: {message}</small></div>'.searChiliFormat({documentId: wordpressPublicEntities[index], message: ('message' in response?response.message:'')}))
                                 indexEntityInChiliSearch(index+1)
                             }
                         }
@@ -426,7 +426,7 @@
                     if (retry < 2) {
                         indexEntityInChiliSearch(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{entityId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({entityId: wordpressPublicEntities[index]}))
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: wordpressPublicEntities[index]}))
                         indexEntityInChiliSearch(index+1)
                     }
                 });
