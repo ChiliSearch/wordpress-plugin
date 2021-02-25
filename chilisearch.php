@@ -306,11 +306,11 @@ final class ChiliSearch
             wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
         $documentId = (int)sanitize_key(trim($_POST['documentId']));
-        list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'entity/' . $documentId);
+        list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'documents/' . $documentId);
         if ($deleteResponseCode == 200 && !empty($deleteResult->status) && $deleteResult->status === 'deleted') {
             wp_send_json(['status' => true]);
         }
-        $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
+        $message = !empty($putDocumentResult->message) ? $putDocumentResult->message : '';
         wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
     }
 
@@ -333,15 +333,15 @@ final class ChiliSearch
                 return;
         }
 
-        list($putEntityResponseCode, $putEntityResult) = $this->send_request(
+        list($putDocumentResponseCode, $putDocumentResult) = $this->send_request(
             'PUT',
             'documents',
             $document
         );
-        if ($putEntityResponseCode === 200 || $putEntityResponseCode === 201) {
+        if ($putDocumentResponseCode === 200 || $putDocumentResponseCode === 201) {
             wp_send_json(['status' => true]);
         }
-        $message = !empty($putEntityResult->message) ? $putEntityResult->message : '';
+        $message = !empty($putDocumentResult->message) ? $putDocumentResult->message : '';
         wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
     }
 
@@ -519,17 +519,17 @@ final class ChiliSearch
         }
         try {
             if ($post->post_status === 'publish') {
-                list($putEntityResponseCode) = $this->send_request(
+                list($putDocumentResponseCode) = $this->send_request(
                     'PUT',
                     'documents',
                     self::transform_post_to_document($post)
                 );
-                if ($putEntityResponseCode >= 200 && $putEntityResponseCode <= 299) {
+                if ($putDocumentResponseCode >= 200 && $putDocumentResponseCode <= 299) {
                     return true;
                 }
             } else {
-                list($putEntityResponseCode) = $this->send_request('DELETE', 'entity/' . $postId);
-                if ($putEntityResponseCode == 200) {
+                list($putDocumentResponseCode) = $this->send_request('DELETE', 'documents');
+                if ($putDocumentResponseCode == 200) {
                     return true;
                 }
             }

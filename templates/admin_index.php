@@ -282,7 +282,7 @@
         } else {
             let successfulDeletes = 0;
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeDeletedEntities.length + ' indexes need to be deleted.</small></div>')
-            function deleteEntityFromChiliSearch(index, retry = 0) {
+            function deleteDocumentFromChiliSearch(index, retry = 0) {
                 if (!(index in needToBeDeletedEntities)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
@@ -301,26 +301,26 @@
                             successfulDeletes++
                             let progressPercentage = (index / needToBeDeletedEntities.length) * 100
                             progressbar.css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage)
-                            deleteEntityFromChiliSearch(index+1)
+                            deleteDocumentFromChiliSearch(index+1)
                         } else {
                             if (retry < 2) {
-                                deleteEntityFromChiliSearch(index, retry + 1)
+                                deleteDocumentFromChiliSearch(index, retry + 1)
                             } else {
                                 timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeDeletedEntities[index], message: ('message' in response?response.message:'')}))
-                                deleteEntityFromChiliSearch(index+1)
+                                deleteDocumentFromChiliSearch(index+1)
                             }
                         }
                     }
                 ).fail(function () {
                     if (retry < 2) {
-                        deleteEntityFromChiliSearch(index, retry + 1)
+                        deleteDocumentFromChiliSearch(index, retry + 1)
                     } else {
                         timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> server error!</small></span></div>'.searChiliFormat({documentId: needToBeDeletedEntities[index]}))
-                        deleteEntityFromChiliSearch(index+1)
+                        deleteDocumentFromChiliSearch(index+1)
                     }
                 });
             }
-            deleteEntityFromChiliSearch(0)
+            deleteDocumentFromChiliSearch(0)
         }
     }
     function indexMissingContent() {
@@ -338,7 +338,7 @@
         } else {
             let successfulIndexed = 0;
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeIndexedEntities.length + ' new content need to be indexed.</small></div>')
-            function indexEntityInChiliSearch(index, retry = 0) {
+            function indexDocumentInChiliSearch(index, retry = 0) {
                 if (!(index in needToBeIndexedEntities)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
@@ -358,26 +358,26 @@
                             successfulIndexed++
                             let progressPercentage = (index / needToBeIndexedEntities.length) * 100
                             progressbar.css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage)
-                            indexEntityInChiliSearch(index+1)
+                            indexDocumentInChiliSearch(index+1)
                         } else {
                             if (retry < 2) {
-                                indexEntityInChiliSearch(index, retry + 1)
+                                indexDocumentInChiliSearch(index, retry + 1)
                             } else {
                                 timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeIndexedEntities[index], message: ('message' in response?response.message:'')}))
-                                indexEntityInChiliSearch(index+1)
+                                indexDocumentInChiliSearch(index+1)
                             }
                         }
                     }
                 ).fail(function () {
                     if (retry < 2) {
-                        indexEntityInChiliSearch(index, retry + 1)
+                        indexDocumentInChiliSearch(index, retry + 1)
                     } else {
                         timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: needToBeIndexedEntities[index]}))
-                        indexEntityInChiliSearch(index+1)
+                        indexDocumentInChiliSearch(index+1)
                     }
                 });
             }
-            indexEntityInChiliSearch(0)
+            indexDocumentInChiliSearch(0)
         }
     }
     function reindexExistingContent(button) {
@@ -394,7 +394,7 @@
         } else {
             let successfulIndexed = 0;
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeIndexedEntities.length + ' new content need to be indexed.</small></div>')
-            function indexEntityInChiliSearch(index, retry = 0) {
+            function indexDocumentInChiliSearch(index, retry = 0) {
                 if (!(index in wordpressPublicEntities)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
@@ -412,26 +412,26 @@
                             successfulIndexed++
                             let progressPercentage = (index / wordpressPublicEntities.length) * 100
                             progressbar.css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage)
-                            indexEntityInChiliSearch(index+1)
+                            indexDocumentInChiliSearch(index+1)
                         } else {
                             if (retry < 2) {
-                                indexEntityInChiliSearch(index, retry + 1)
+                                indexDocumentInChiliSearch(index, retry + 1)
                             } else {
                                 timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: {message}</small></div>'.searChiliFormat({documentId: wordpressPublicEntities[index], message: ('message' in response?response.message:'')}))
-                                indexEntityInChiliSearch(index+1)
+                                indexDocumentInChiliSearch(index+1)
                             }
                         }
                     }
                 ).fail(function () {
                     if (retry < 2) {
-                        indexEntityInChiliSearch(index, retry + 1)
+                        indexDocumentInChiliSearch(index, retry + 1)
                     } else {
                         timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: wordpressPublicEntities[index]}))
-                        indexEntityInChiliSearch(index+1)
+                        indexDocumentInChiliSearch(index+1)
                     }
                 });
             }
-            indexEntityInChiliSearch(0)
+            indexDocumentInChiliSearch(0)
         }
     }
     String.prototype.searChiliFormat = String.prototype.searChiliFormat || function () {
