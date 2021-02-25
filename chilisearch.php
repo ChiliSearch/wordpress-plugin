@@ -547,6 +547,7 @@ final class ChiliSearch
             'excerpt' => !empty($post->post_excerpt) ? $post->post_excerpt : null,
             'body' => !empty($post->post_content) ? $post->post_content : null,
             'image' => !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null,
+            'author' => !empty($author = get_user_by('id', $post->post_author)) ? $author->display_name : null,
             'categories' => array_map(function ($catId) {
                 $category = get_category($catId);
                 return !empty($category->name) ? $category->name : null;
