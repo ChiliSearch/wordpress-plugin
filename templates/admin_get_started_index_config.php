@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="index_documents_pages">
-                                        <input type="checkbox" name="index_documents_doc_files" id="index_documents_doc_files" <?= $this->settings['index_documents_approved_doc_files'] ? 'checked' : '' ?>>
+                                        <input type="checkbox" name="index_documents_doc_files" id="index_documents_doc_files" <?= $this->settings['index_documents_doc_files'] ? 'checked' : '' ?>>
                                         <?= __('Document Files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch') ?>
                                     </label>
                                 </div>

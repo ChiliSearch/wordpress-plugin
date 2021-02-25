@@ -205,8 +205,8 @@
 </div>
 
 <script type="text/javascript">
-    var alreadyIndexedEntities = []
-    var wordpressPublicEntities = []
+    var alreadyIndexedDocuments = []
+    var wordpressPublicDocuments = []
 
     function getListOfIDsFromChiliSearch() {
         let progressbar = jQuery('#get_list_of_ids_from_chilisearch .progress-bar')
@@ -222,11 +222,11 @@
                 if (status === "success" && response.status) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
-                    alreadyIndexedEntities = alreadyIndexedEntities.concat(response.entities)
-                    // if (alreadyIndexedEntities.length === 0) {
+                    alreadyIndexedDocuments = alreadyIndexedDocuments.concat(response.documents)
+                    // if (alreadyIndexedDocuments.length === 0) {
                     //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no content indexed yet.</small></div>')
                     // } else {
-                    //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are already ' + alreadyIndexedEntities.length + ' posts indexed.</small></div>')
+                    //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are already ' + alreadyIndexedDocuments.length + ' posts indexed.</small></div>')
                     // }
                     getListOfContentNeedToBeIndexed()
                 } else {
@@ -251,11 +251,11 @@
                 if (status === "success" && response.status) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
-                    wordpressPublicEntities = wordpressPublicEntities.concat(response.documents)
-                    // if (wordpressPublicEntities.length === 0) {
+                    wordpressPublicDocuments = wordpressPublicDocuments.concat(response.documents)
+                    // if (wordpressPublicDocuments.length === 0) {
                     //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no content need to be indexed yet. Make sure you have public posts and pages and check configurations and make sure you want to index posts and pages.</small></div>')
                     // } else {
-                    //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + wordpressPublicEntities.length + ' posts and pages need to be indexed.</small></div>')
+                    //     timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + wordpressPublicDocuments.length + ' posts and pages need to be indexed.</small></div>')
                     // }
                     setTimeout(function() {
                         deleteContentShouldNotBeIndexed();
@@ -273,17 +273,17 @@
         let timeline_badge = jQuery('#delete_content_should_not_be_indexed>.timeline-badge')
         let timeline_body = jQuery('#delete_content_should_not_be_indexed .timeline-body')
         progressbar.css('width', '0%').attr('aria-valuenow', 0)
-        let needToBeDeletedEntities = alreadyIndexedEntities.filter(x => !wordpressPublicEntities.includes(x));
-        if (needToBeDeletedEntities.length === 0) {
+        let needToBeDeletedDocuments = alreadyIndexedDocuments.filter(x => !wordpressPublicDocuments.includes(x));
+        if (needToBeDeletedDocuments.length === 0) {
             progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
             timeline_badge.removeClass('info').addClass('success');
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no content need to be deleted from Chili Search.</small></div>')
             indexMissingContent()
         } else {
             let successfulDeletes = 0;
-            // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeDeletedEntities.length + ' indexes need to be deleted.</small></div>')
+            // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeDeletedDocuments.length + ' indexes need to be deleted.</small></div>')
             function deleteDocumentFromChiliSearch(index, retry = 0) {
-                if (!(index in needToBeDeletedEntities)) {
+                if (!(index in needToBeDeletedDocuments)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
                     timeline_body.append('<div class="alert alert-success p-2 mt-2"><small><?= __('Successfully deleted {successfulDeletes} unneeded index.', 'chilisearch') ?></small></div>'.searChiliFormat({successfulDeletes: successfulDeletes}))
@@ -294,19 +294,19 @@
                     ajaxurl,
                     {
                         'action': 'admin_ajax_delete_content_should_not_be_indexed',
-                        'documentId': needToBeDeletedEntities[index],
+                        'documentId': needToBeDeletedDocuments[index],
                     },
                     function (response, status) {
                         if (status === "success" && response.status) {
                             successfulDeletes++
-                            let progressPercentage = (index / needToBeDeletedEntities.length) * 100
+                            let progressPercentage = (index / needToBeDeletedDocuments.length) * 100
                             progressbar.css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage)
                             deleteDocumentFromChiliSearch(index+1)
                         } else {
                             if (retry < 2) {
                                 deleteDocumentFromChiliSearch(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeDeletedEntities[index], message: ('message' in response?response.message:'')}))
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeDeletedDocuments[index], message: ('message' in response?response.message:'')}))
                                 deleteDocumentFromChiliSearch(index+1)
                             }
                         }
@@ -315,7 +315,7 @@
                     if (retry < 2) {
                         deleteDocumentFromChiliSearch(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> server error!</small></span></div>'.searChiliFormat({documentId: needToBeDeletedEntities[index]}))
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to delete post/page #{documentId}:', 'chilisearch') ?> server error!</small></span></div>'.searChiliFormat({documentId: needToBeDeletedDocuments[index]}))
                         deleteDocumentFromChiliSearch(index+1)
                     }
                 });
@@ -328,8 +328,8 @@
         let timeline_badge = jQuery('#index_missing_content>.timeline-badge')
         let timeline_body = jQuery('#index_missing_content .timeline-body')
         progressbar.css('width', '0%').attr('aria-valuenow', 0)
-        let needToBeIndexedEntities = wordpressPublicEntities.filter(x => !alreadyIndexedEntities.includes(x));
-        if (needToBeIndexedEntities.length === 0) {
+        let needToBeIndexedDocuments = wordpressPublicDocuments.filter(x => !alreadyIndexedDocuments.includes(x));
+        if (needToBeIndexedDocuments.length === 0) {
             progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
             timeline_badge.removeClass('info').addClass('success');
             jQuery('#reindex_existing_content #go_home_button').removeClass('disabled')
@@ -337,9 +337,9 @@
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no new content need to be indexed in Chili Search.</small></div>')
         } else {
             let successfulIndexed = 0;
-            // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeIndexedEntities.length + ' new content need to be indexed.</small></div>')
+            // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeIndexedDocuments.length + ' new content need to be indexed.</small></div>')
             function indexDocumentInChiliSearch(index, retry = 0) {
-                if (!(index in needToBeIndexedEntities)) {
+                if (!(index in needToBeIndexedDocuments)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
                     timeline_body.append('<div class="alert alert-success p-2 mt-2"><small><?= __('Successfully indexed {successfulIndexed} new content.', 'chilisearch') ?></small></div>'.searChiliFormat({successfulIndexed: successfulIndexed}))
@@ -351,19 +351,19 @@
                     ajaxurl,
                     {
                         'action': 'admin_ajax_index_missing_content',
-                        'documentId': needToBeIndexedEntities[index],
+                        'documentId': needToBeIndexedDocuments[index],
                     },
                     function (response, status) {
                         if (status === "success" && response.status) {
                             successfulIndexed++
-                            let progressPercentage = (index / needToBeIndexedEntities.length) * 100
+                            let progressPercentage = (index / needToBeIndexedDocuments.length) * 100
                             progressbar.css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage)
                             indexDocumentInChiliSearch(index+1)
                         } else {
                             if (retry < 2) {
                                 indexDocumentInChiliSearch(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeIndexedEntities[index], message: ('message' in response?response.message:'')}))
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?> {message}</small></div>'.searChiliFormat({documentId: needToBeIndexedDocuments[index], message: ('message' in response?response.message:'')}))
                                 indexDocumentInChiliSearch(index+1)
                             }
                         }
@@ -372,7 +372,7 @@
                     if (retry < 2) {
                         indexDocumentInChiliSearch(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: needToBeIndexedEntities[index]}))
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: needToBeIndexedDocuments[index]}))
                         indexDocumentInChiliSearch(index+1)
                     }
                 });
@@ -387,15 +387,15 @@
         let timeline_body = jQuery('#reindex_existing_content .timeline-body')
         progressbar.css('width', '0%').attr('aria-valuenow', 0)
         progressbar.parent().removeClass('d-none')
-        if (wordpressPublicEntities.length === 0) {
+        if (wordpressPublicDocuments.length === 0) {
             progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
             timeline_badge.removeClass('info').addClass('success');
             // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There\'s no new content need to be indexed in Chili Search.</small></div>')
         } else {
             let successfulIndexed = 0;
-            // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeIndexedEntities.length + ' new content need to be indexed.</small></div>')
+            // timeline_body.append('<div class="alert alert-info p-2 mt-2 mb-0"><small>There are ' + needToBeIndexedDocuments.length + ' new content need to be indexed.</small></div>')
             function indexDocumentInChiliSearch(index, retry = 0) {
-                if (!(index in wordpressPublicEntities)) {
+                if (!(index in wordpressPublicDocuments)) {
                     progressbar.css('width', '100%').attr('aria-valuenow', 100).removeClass('bg-info progress-bar-animated').addClass('bg-success');
                     timeline_badge.removeClass('info').addClass('success');
                     timeline_body.append('<div class="alert alert-success p-2 mt-2"><small><?= __('Successfully reindexed {successfulIndexed} content.', 'chilisearch') ?></small></div>'.searChiliFormat({successfulIndexed: successfulIndexed}))
@@ -405,19 +405,19 @@
                     ajaxurl,
                     {
                         'action': 'admin_ajax_index_missing_content',
-                        'documentId': wordpressPublicEntities[index],
+                        'documentId': wordpressPublicDocuments[index],
                     },
                     function (response, status) {
                         if (status === "success" && response.status) {
                             successfulIndexed++
-                            let progressPercentage = (index / wordpressPublicEntities.length) * 100
+                            let progressPercentage = (index / wordpressPublicDocuments.length) * 100
                             progressbar.css('width', progressPercentage + '%').attr('aria-valuenow', progressPercentage)
                             indexDocumentInChiliSearch(index+1)
                         } else {
                             if (retry < 2) {
                                 indexDocumentInChiliSearch(index, retry + 1)
                             } else {
-                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: {message}</small></div>'.searChiliFormat({documentId: wordpressPublicEntities[index], message: ('message' in response?response.message:'')}))
+                                timeline_body.append('<div class="alert alert-danger p-2 mt-2"><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: {message}</small></div>'.searChiliFormat({documentId: wordpressPublicDocuments[index], message: ('message' in response?response.message:'')}))
                                 indexDocumentInChiliSearch(index+1)
                             }
                         }
@@ -426,7 +426,7 @@
                     if (retry < 2) {
                         indexDocumentInChiliSearch(index, retry + 1)
                     } else {
-                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: wordpressPublicEntities[index]}))
+                        timeline_body.append('<div class="alert alert-danger p-2 mt-2"><span><small><?= __('Failed to index post/page #{documentId}:', 'chilisearch') ?>: server error!</small></span></div>'.searChiliFormat({documentId: wordpressPublicDocuments[index]}))
                         indexDocumentInChiliSearch(index+1)
                     }
                 });

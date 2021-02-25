@@ -98,6 +98,8 @@ final class ChiliSearch
     private function get_settings()
     {
         $this->settings = array_merge($this->settings, get_option('chilisearch_settings'));
+        $this->settings['index_documents_woocommerce_products'] = $this->settings['index_documents_woocommerce_products'] && is_plugin_active('woocommerce/woocommerce.php');
+        $this->settings['index_documents_bbpress'] = $this->settings['index_documents_bbpress'] && is_plugin_active('bbpress/bbpress.php');
         return $this->settings;
     }
 
@@ -268,14 +270,17 @@ final class ChiliSearch
     }
 
 	public function wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch() {
-        list($allEntitiesResponseCode, $allEntitiesResult) = $this->send_request('GET', 'documents');
-        if ($allEntitiesResponseCode == 200) {
-            wp_send_json(['status' => true, 'entities' => $allEntitiesResult]);
+        list($allDocumentsResponseCode, $allDocumentsResult) = $this->send_request('GET', 'documents');
+        if ($allDocumentsResponseCode == 200) {
+            wp_send_json(['status' => true, 'documents' => $allDocumentsResult]);
         }
-        wp_send_json(['status' => false, 'payload' => $allEntitiesResult]);
+        wp_send_json(['status' => false, 'payload' => $allDocumentsResult]);
     }
 
-	public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed() {
+	public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed()
+    {
+        $documents = [];
+
         $active_post_types = [];
         if (!empty($this->settings['index_documents_posts'])) {
 		    $active_post_types[] = 'post';
@@ -283,29 +288,46 @@ final class ChiliSearch
 		if (!empty($this->settings['index_documents_pages'])) {
 		    $active_post_types[] = 'page';
 		}
+		if (!empty($this->settings['index_documents_media'])) {
+		    $active_post_types[] = 'attachment';
+		}
+		if (!empty($this->settings['index_documents_woocommerce_products'])) {
+		    $active_post_types[] = 'product';
+		    $active_post_types[] = 'product_variation';
+		}
+		if (!empty($this->settings['index_documents_bbpress'])) {
+		    $active_post_types[] = 'topic';
+		}
 
-		$documents = [];
-
-        $posts = array_map(function ($post) {
-            return sprintf('%s-%d', $post['post_type'], $post['ID']);
-        }, wp_get_recent_posts([
-            'numberposts' => -1,
+        $query = new WP_Query([
             'post_type' => $active_post_types,
-            'post_status' => 'publish',
+            'post_status' => 'inherit,publish',
+            'posts_per_page' => -1,
             'orderby' => 'ID',
             'order' => 'ASC',
-        ]));
-
+        ]);
+        $posts = array_filter($query->posts, function ($post) {
+            if ($post->post_status === 'inherit') {
+                $post_parent = get_post($post->post_parent);
+                if ($post_parent === null || $post_parent->post_status !== 'publish') {
+                    return false;
+                }
+            }
+            return true;
+        });
+        $posts = array_map(function ($post) {
+            return sprintf('%s-%d', $post->post_type, $post->ID);
+        }, $posts);
         $documents = array_merge($documents, $posts);
 
-		wp_send_json(['status' => true, 'documents' => $documents]);
+        wp_send_json(['status' => true, 'documents' => $documents]);
     }
 
 	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
         if (empty($_POST['documentId'])) {
             wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
-        $documentId = (int)sanitize_key(trim($_POST['documentId']));
+        $documentId = sanitize_key(trim($_POST['documentId']));
         list($deleteResponseCode, $deleteResult) = $this->send_request('DELETE', 'documents/' . $documentId);
         if ($deleteResponseCode == 200 && !empty($deleteResult->status) && $deleteResult->status === 'deleted') {
             wp_send_json(['status' => true]);
@@ -322,11 +344,15 @@ final class ChiliSearch
         switch ($documentType) {
             case 'post':
             case 'page':
+            case 'attachment':
+            case 'product':
+            case 'product_variation':
+            case 'topic':
                 $post = get_post((int)$documentId);
                 if (empty($post)) {
                     wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'chilisearch' )]);
                 }
-                $document = self::transform_post_to_document($post);
+                $document = $this->transform_post_to_document($post);
                 break;
             default:
                 wp_send_json(['status' => false, 'message' => __( 'Document type is invalid.', 'chilisearch' )]);
@@ -522,7 +548,7 @@ final class ChiliSearch
                 list($putDocumentResponseCode) = $this->send_request(
                     'PUT',
                     'documents',
-                    self::transform_post_to_document($post)
+                    $this->transform_post_to_document($post)
                 );
                 if ($putDocumentResponseCode >= 200 && $putDocumentResponseCode <= 299) {
                     return true;
@@ -537,16 +563,14 @@ final class ChiliSearch
         return false;
     }
 
-    public static function transform_post_to_document($post)
+    public function transform_post_to_document($post)
     {
-        return [
+        $document = [
             'id' => sprintf('%s-%d', $post->post_type, $post->ID),
-            'type' => $post->post_type,
-            'title' => !empty($post->post_title) ? $post->post_title : '',
+            'type' => null,
             'link' => get_permalink($post->ID),
             'excerpt' => !empty($post->post_excerpt) ? $post->post_excerpt : null,
             'body' => !empty($post->post_content) ? $post->post_content : null,
-            'image' => !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null,
             'author' => !empty($author = get_user_by('id', $post->post_author)) ? $author->display_name : null,
             'categories' => array_map(function ($catId) {
                 $category = get_category($catId);
@@ -557,6 +581,44 @@ final class ChiliSearch
             }, wp_get_post_tags($post->ID)),
             'publishedAt' => !empty($post->post_date_gmt) ? $post->post_date_gmt : null,
         ];
+        switch ($post->post_type) {
+            case 'post':
+            case 'page':
+            case 'product':
+                $document['type'] = $post->post_type;
+                $document['title'] = !empty($post->post_title) ? $post->post_title : '';
+                $document['image'] = !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null;
+                break;
+            case 'attachment':
+                $document['type'] = 'media';
+                $document['title'] = !empty($post->post_title) ? str_replace('-', ' ', $post->post_title) : '';
+                $document['image'] = !empty($post->guid) ? $post->guid : null; // TODO only if it is image
+                if (!empty($this->settings['index_documents_doc_files'])) {
+                    if (in_array($post->post_mime_type, [
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/pdf',
+                        'text/html',
+                        'application/vnd.oasis.opendocument.text',
+                        'text/plain',
+                    ])) {
+                        $document['docFileType'] = $post->post_mime_type;
+                        $document['docFileBody'] = base64_encode(file_get_contents(get_attached_file($post->ID)));
+                    }
+                }
+                break;
+            default:
+                throw new Exception('Type not defined!');
+        }
+        if (!empty($this->settings['index_documents_approved_comments'])) {
+            // TODO handle this on server side
+            $document['comments'] = array_map(function ($comment) {
+                return $comment->comment_content;
+            }, get_comments(['post_id' => $post->ID]));
+        }
+        return $document;
     }
 }
 
