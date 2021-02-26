@@ -624,7 +624,6 @@ final class ChiliSearch
                 return null; // Type not defined!
         }
         if (!empty($this->settings['index_documents_approved_comments'])) {
-            // TODO handle this on server side
             $document['comments'] = array_map(function ($comment) {
                 return $comment->comment_content;
             }, get_comments(['post_id' => $post->ID]));
