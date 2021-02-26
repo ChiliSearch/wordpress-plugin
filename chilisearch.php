@@ -51,6 +51,17 @@ final class ChiliSearch
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
     const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
 
+    const DOC_FILE_MIME_TYPES = [
+        'application/msword' => 'doc',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+        'application/pdf' => 'pdf',
+        'text/html' => 'html',
+        'application/vnd.oasis.opendocument.text' => 'odt',
+        'text/plain' => 'txt',
+    ];
+
     private static $instance = null;
 
     private $settings = [
@@ -358,6 +369,9 @@ final class ChiliSearch
                 wp_send_json(['status' => false, 'message' => __( 'Document type is invalid.', 'chilisearch' )]);
                 return;
         }
+        if (empty($document)) {
+            wp_send_json(['status' => false, 'message' => __( 'Document type is invalid.', 'chilisearch' )]);
+        }
 
         list($putDocumentResponseCode, $putDocumentResult) = $this->send_request(
             'PUT',
@@ -473,7 +487,7 @@ final class ChiliSearch
         wp_enqueue_style('chilisearch-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], CHILISEARCH_VERSION);
         wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
         wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
-        return require_once CHILISEARCH_DIR . '/templates/admin_index.php';
+        return require CHILISEARCH_DIR . '/templates/admin_index.php';
     }
 
     public function admin_chilisearch_options_page()
@@ -483,12 +497,12 @@ final class ChiliSearch
         wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
 
         if (empty($this->settings['site_api_secret']) || empty($this->settings['get_started_api_finished'])) {
-            return require_once CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
+            return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
-            return require_once CHILISEARCH_DIR . '/templates/admin_get_started_index_config.php';
+            return require CHILISEARCH_DIR . '/templates/admin_get_started_index_config.php';
         }
-        return require_once CHILISEARCH_DIR . '/templates/admin_dashboard.php';
+        return require CHILISEARCH_DIR . '/templates/admin_dashboard.php';
     }
 
     public function get_website_info()
@@ -540,15 +554,19 @@ final class ChiliSearch
         if (!empty($this->settings['index_documents_pages'])) {
             $active_post_types[] = 'page';
         }
-        if (!in_array($post->post_type, $active_post_types)) {
+        if (!in_array($post->post_type, $active_post_types, true)) {
             return true;
         }
         try {
             if ($post->post_status === 'publish') {
+                $document = $this->transform_post_to_document($post);
+                if (empty($document)) {
+                    return true;
+                }
                 list($putDocumentResponseCode) = $this->send_request(
                     'PUT',
                     'documents',
-                    $this->transform_post_to_document($post)
+                    $document
                 );
                 if ($putDocumentResponseCode >= 200 && $putDocumentResponseCode <= 299) {
                     return true;
@@ -567,7 +585,8 @@ final class ChiliSearch
     {
         $document = [
             'id' => sprintf('%s-%d', $post->post_type, $post->ID),
-            'type' => null,
+            'type' => $post->post_type,
+            'title' => !empty($post->post_title) ? $post->post_title : '',
             'link' => get_permalink($post->ID),
             'excerpt' => !empty($post->post_excerpt) ? $post->post_excerpt : null,
             'body' => !empty($post->post_content) ? $post->post_content : null,
@@ -585,32 +604,24 @@ final class ChiliSearch
             case 'post':
             case 'page':
             case 'product':
-                $document['type'] = $post->post_type;
-                $document['title'] = !empty($post->post_title) ? $post->post_title : '';
                 $document['image'] = !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null;
                 break;
             case 'attachment':
                 $document['type'] = 'media';
-                $document['title'] = !empty($post->post_title) ? str_replace('-', ' ', $post->post_title) : '';
-                $document['image'] = !empty($post->guid) ? $post->guid : null; // TODO only if it is image
-                if (!empty($this->settings['index_documents_doc_files'])) {
-                    if (in_array($post->post_mime_type, [
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        'application/pdf',
-                        'text/html',
-                        'application/vnd.oasis.opendocument.text',
-                        'text/plain',
-                    ])) {
-                        $document['docFileType'] = $post->post_mime_type;
-                        $document['docFileBody'] = base64_encode(file_get_contents(get_attached_file($post->ID)));
-                    }
+                $document['title'] = str_replace('-', ' ', $document['title']);
+                if (strpos($post->post_mime_type, 'image') !== false) {
+                    $document['image'] = !empty($post->guid) ? $post->guid : null;
+                }
+                if (
+                    !empty($this->settings['index_documents_doc_files']) &&
+                    array_key_exists($post->post_mime_type, self::DOC_FILE_MIME_TYPES)
+                ) {
+                    $document['docFileType'] = self::DOC_FILE_MIME_TYPES[$post->post_mime_type];
+                    $document['docFileBody'] = base64_encode(file_get_contents(get_attached_file($post->ID)));
                 }
                 break;
             default:
-                throw new Exception('Type not defined!');
+                return null; // Type not defined!
         }
         if (!empty($this->settings['index_documents_approved_comments'])) {
             // TODO handle this on server side
