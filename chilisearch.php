@@ -51,7 +51,7 @@ final class ChiliSearch
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
     const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
 
-    const DOC_FILE_MIME_TYPES = [
+    const MIME_TYPES_DOCS = [
         'application/msword' => 'doc',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
         'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
@@ -60,6 +60,13 @@ final class ChiliSearch
         'text/html' => 'html',
         'application/vnd.oasis.opendocument.text' => 'odt',
         'text/plain' => 'txt',
+    ];
+
+    const MIME_TYPES_IMAGES = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif',
+        'image/x-icon' => 'ico',
     ];
 
     private static $instance = null;
@@ -74,12 +81,14 @@ final class ChiliSearch
         'sayt_page_size' => 5,
         'search_page_id' => -1,
         'index_documents_posts' => true,
+        'index_documents_posts_approved_comments' => false,
         'index_documents_pages' => true,
+        'index_documents_pages_approved_comments' => false,
         'index_documents_media' => false,
+        'index_documents_media_doc_files' => false,
+        'index_documents_media_approved_comments' => false,
         'index_documents_woocommerce_products' => false,
         'index_documents_bbpress' => false,
-        'index_documents_approved_comments' => false,
-        'index_documents_doc_files' => false,
         'website_info' => null,
     ];
 
@@ -122,7 +131,7 @@ final class ChiliSearch
         add_shortcode('chilisearch_search_page', function() { return '<div id="chilisearch-search_page"></div>'; });
     }
 
-	private function setup_admin_actions()
+    private function setup_admin_actions()
 	{
         add_action('save_post', [$this, 'admin_save_post_hook'], 10, 3);
 		if (!is_admin()) {
@@ -215,23 +224,27 @@ final class ChiliSearch
 
 	public function wp_ajax_admin_ajax_index_config() {
         $index_documents_posts = isset($_POST['index_documents_posts']) && $_POST['index_documents_posts'] == 'true';
+        $index_documents_posts_approved_comments = isset($_POST['index_documents_posts_approved_comments']) && $_POST['index_documents_posts_approved_comments'] == 'true';
         $index_documents_pages = isset($_POST['index_documents_pages']) && $_POST['index_documents_pages'] == 'true';
+        $index_documents_pages_approved_comments = isset($_POST['index_documents_pages_approved_comments']) && $_POST['index_documents_pages_approved_comments'] == 'true';
         $index_documents_media = isset($_POST['index_documents_media']) && $_POST['index_documents_media'] == 'true';
+        $index_documents_media_approved_comments = isset($_POST['index_documents_media_approved_comments']) && $_POST['index_documents_media_approved_comments'] == 'true';
         $index_documents_woocommerce_products = isset($_POST['index_documents_woocommerce_products']) && $_POST['index_documents_woocommerce_products'] == 'true';
         $index_documents_bbpress = isset($_POST['index_documents_bbpress']) && $_POST['index_documents_bbpress'] == 'true';
-        $index_documents_approved_comments = isset($_POST['index_documents_approved_comments']) && $_POST['index_documents_approved_comments'] == 'true';
-        $index_documents_doc_files = isset($_POST['index_documents_doc_files']) && $_POST['index_documents_doc_files'] == 'true';
-        if (!($index_documents_posts || $index_documents_pages || $index_documents_media || $index_documents_woocommerce_products || $index_documents_bbpress || $index_documents_approved_comments || $index_documents_doc_files)) {
+        $index_documents_media_doc_files = isset($_POST['index_documents_media_doc_files']) && $_POST['index_documents_media_doc_files'] == 'true';
+        if (!($index_documents_posts || $index_documents_pages || $index_documents_media || $index_documents_woocommerce_products || $index_documents_bbpress)) {
             wp_send_json(['status' => false, 'message' => __('Choose at least one option.')]);
         }
         $this->settings = $this->get_settings();
         $this->settings['index_documents_posts'] = $index_documents_posts;
+        $this->settings['index_documents_posts_approved_comments'] = $index_documents_posts_approved_comments;
         $this->settings['index_documents_pages'] = $index_documents_pages;
+        $this->settings['index_documents_pages_approved_comments'] = $index_documents_pages_approved_comments;
         $this->settings['index_documents_media'] = $index_documents_media;
+        $this->settings['index_documents_media_doc_files'] = $index_documents_media_doc_files;
+        $this->settings['index_documents_media_approved_comments'] = $index_documents_media_approved_comments;
         $this->settings['index_documents_woocommerce_products'] = $index_documents_woocommerce_products;
         $this->settings['index_documents_bbpress'] = $index_documents_bbpress;
-        $this->settings['index_documents_approved_comments'] = $index_documents_approved_comments;
-        $this->settings['index_documents_doc_files'] = $index_documents_doc_files;
         $this->settings['get_started_config_finished'] = true;
         update_option('chilisearch_settings', $this->settings);
         wp_send_json(['status' => true]);
@@ -352,23 +365,11 @@ final class ChiliSearch
             wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
         list($documentType, $documentId) = explode('-', sanitize_key(trim($_POST['documentId'])));
-        switch ($documentType) {
-            case 'post':
-            case 'page':
-            case 'attachment':
-            case 'product':
-            case 'product_variation':
-            case 'topic':
-                $post = get_post((int)$documentId);
-                if (empty($post)) {
-                    wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'chilisearch' )]);
-                }
-                $document = $this->transform_post_to_document($post);
-                break;
-            default:
-                wp_send_json(['status' => false, 'message' => __( 'Document type is invalid.', 'chilisearch' )]);
-                return;
+        $post = get_post((int)$documentId);
+        if (empty($post)) {
+            wp_send_json(['status' => false, 'message' => __( 'Post not found!', 'chilisearch' )]);
         }
+        $document = $this->transform_post_to_document($post);
         if (empty($document)) {
             wp_send_json(['status' => false, 'message' => __( 'Document type is invalid.', 'chilisearch' )]);
         }
@@ -609,23 +610,26 @@ final class ChiliSearch
             case 'attachment':
                 $document['type'] = 'media';
                 $document['title'] = str_replace('-', ' ', $document['title']);
-                if (strpos($post->post_mime_type, 'image') !== false) {
+                if (array_key_exists($post->post_mime_type, self::MIME_TYPES_IMAGES)) {
                     $document['image'] = !empty($post->guid) ? $post->guid : null;
-                }
-                if (
-                    !empty($this->settings['index_documents_doc_files']) &&
-                    array_key_exists($post->post_mime_type, self::DOC_FILE_MIME_TYPES)
+                } elseif (
+                    !empty($this->settings['index_documents_media_doc_files']) &&
+                    array_key_exists($post->post_mime_type, self::MIME_TYPES_DOCS)
                 ) {
-                    $document['docFileType'] = self::DOC_FILE_MIME_TYPES[$post->post_mime_type];
-                    $document['docFileBody'] = base64_encode(file_get_contents(get_attached_file($post->ID)));
+                    $document['docFileType'] = self::MIME_TYPES_DOCS[$post->post_mime_type];
+                    $document['docFileBody'] = @base64_encode(file_get_contents(get_attached_file($post->ID)));
                 }
                 break;
             default:
                 return null; // Type not defined!
         }
-        if (!empty($this->settings['index_documents_approved_comments'])) {
+        if (
+            ($post->post_type === 'post' && !empty($this->settings['index_documents_posts_approved_comments'])) ||
+            ($post->post_type === 'page' && !empty($this->settings['index_documents_pages_approved_comments'])) ||
+            ($post->post_type === 'attachment' && !empty($this->settings['index_documents_media_approved_comments']))
+        ) {
             $document['comments'] = array_map(function ($comment) {
-                return $comment->comment_content;
+                return (string)$comment->comment_content;
             }, get_comments(['post_id' => $post->ID]));
         }
         return $document;
