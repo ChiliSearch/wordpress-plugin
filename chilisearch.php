@@ -68,6 +68,20 @@ final class ChiliSearch
         'image/gif' => 'gif',
         'image/x-icon' => 'ico',
     ];
+    const WP_POST_TYPE_POST = 'post';
+    const WP_POST_TYPE_PAGE = 'page';
+    const WP_POST_TYPE_ATTACHMENT = 'attachment';
+    const WP_POST_TYPE_PRODUCT = 'product';
+    const WP_POST_TYPE_PRODUCT_VARIATION = 'product_variation';
+    const WP_POST_TYPE_TOPIC = 'topic';
+    const WP_POST_TYPES = [
+        self::WP_POST_TYPE_POST,
+        self::WP_POST_TYPE_PAGE,
+        self::WP_POST_TYPE_ATTACHMENT,
+        self::WP_POST_TYPE_PRODUCT,
+        self::WP_POST_TYPE_PRODUCT_VARIATION,
+        self::WP_POST_TYPE_TOPIC,
+    ];
 
     private static $instance = null;
 
@@ -145,6 +159,7 @@ final class ChiliSearch
 		add_action('wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed', [$this, 'wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed'] );
 		add_action('wp_ajax_admin_ajax_delete_content_should_not_be_indexed', [$this, 'wp_ajax_admin_ajax_delete_content_should_not_be_indexed'] );
 		add_action('wp_ajax_admin_ajax_index_missing_content', [$this, 'wp_ajax_admin_ajax_index_missing_content'] );
+		add_action('wp_ajax_admin_ajax_get_posts_count', [$this, 'wp_ajax_admin_ajax_get_posts_count'] );
 		add_filter('plugin_action_links_' . plugin_basename(__FILE__), function($links) {
 			array_unshift($links, sprintf(
 				'<a href="%s">%s</a>',
@@ -266,7 +281,7 @@ final class ChiliSearch
         $searchPageId = (int)sanitize_key(trim($_POST['search_page_id']));
         $possibleSearchPageIDs = array_map(function ($page) {
             return $page->ID;
-        }, get_pages(['post_type' => 'page', 'post_status' => 'publish']));
+        }, get_pages(['post_type' => self::WP_POST_TYPE_PAGE, 'post_status' => 'publish']));
         $possibleSearchPageIDs[] = -1;
         if (!in_array($searchPageId, $possibleSearchPageIDs)) {
             wp_send_json(['status' => false, 'message' => __( 'Search result page is not valid.', 'chilisearch' )]);
@@ -287,7 +302,7 @@ final class ChiliSearch
 		    'post_content' => '[chilisearch_search_page]',
 		    'post_status'  => 'publish',
 		    'post_author'  => get_current_user_id(),
-		    'post_type'    => 'page',
+		    'post_type'    => self::WP_POST_TYPE_PAGE,
 	    ] );
 	    update_option('chilisearch_settings', $this->settings);
         wp_send_json(['status' => true]);
@@ -303,48 +318,30 @@ final class ChiliSearch
 
 	public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed()
     {
-        $documents = [];
-
         $active_post_types = [];
         if (!empty($this->settings['index_documents_posts'])) {
-		    $active_post_types[] = 'post';
+		    $active_post_types[] = self::WP_POST_TYPE_POST;
         }
 		if (!empty($this->settings['index_documents_pages'])) {
-		    $active_post_types[] = 'page';
+		    $active_post_types[] = self::WP_POST_TYPE_PAGE;
 		}
 		if (!empty($this->settings['index_documents_media'])) {
-		    $active_post_types[] = 'attachment';
+		    $active_post_types[] = self::WP_POST_TYPE_ATTACHMENT;
 		}
 		if (!empty($this->settings['index_documents_woocommerce_products'])) {
-		    $active_post_types[] = 'product';
-		    $active_post_types[] = 'product_variation';
+		    $active_post_types[] = self::WP_POST_TYPE_PRODUCT;
+		    $active_post_types[] = self::WP_POST_TYPE_PRODUCT_VARIATION;
 		}
 		if (!empty($this->settings['index_documents_bbpress'])) {
-		    $active_post_types[] = 'topic';
+		    $active_post_types[] = self::WP_POST_TYPE_TOPIC;
 		}
 
-        $query = new WP_Query([
-            'post_type' => $active_post_types,
-            'post_status' => 'inherit,publish',
-            'posts_per_page' => -1,
-            'orderby' => 'ID',
-            'order' => 'ASC',
-        ]);
-        $posts = array_filter($query->posts, function ($post) {
-            if ($post->post_status === 'inherit') {
-                $post_parent = get_post($post->post_parent);
-                if ($post_parent === null || $post_parent->post_status !== 'publish') {
-                    return false;
-                }
-            }
-            return true;
-        });
-        $posts = array_map(function ($post) {
+        $posts = $this->admin_get_active_posts($active_post_types);
+        $documentIDs = array_map(function ($post) {
             return sprintf('%s-%d', $post->post_type, $post->ID);
         }, $posts);
-        $documents = array_merge($documents, $posts);
 
-        wp_send_json(['status' => true, 'documents' => $documents]);
+        wp_send_json(['status' => true, 'documents' => $documentIDs]);
     }
 
 	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
@@ -384,6 +381,32 @@ final class ChiliSearch
         }
         $message = !empty($putDocumentResult->message) ? $putDocumentResult->message : '';
         wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
+    }
+
+	public function wp_ajax_admin_ajax_get_posts_count() {
+        $post_type_count = [
+            self::WP_POST_TYPE_POST => 0,
+            self::WP_POST_TYPE_PAGE => 0,
+            self::WP_POST_TYPE_ATTACHMENT => 0,
+            self::WP_POST_TYPE_PRODUCT => 0,
+            self::WP_POST_TYPE_PRODUCT_VARIATION => 0,
+            self::WP_POST_TYPE_TOPIC => 0,
+            'post_comments' => 0,
+            'page_comments' => 0,
+            'attachment_comments' => 0,
+            'attachment_docs' => 0,
+        ];
+        $admin_get_active_posts = $this->admin_get_active_posts(self::WP_POST_TYPES);
+        foreach ($admin_get_active_posts as $post) {
+            $post_type_count[$post->post_type]++;
+            if ($post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT) {
+                $post_type_count[$post->post_type . '_comments'] += wp_count_comments($post->ID)->approved;
+            }
+            if ($post->post_type === self::WP_POST_TYPE_ATTACHMENT && array_key_exists($post->post_mime_type, self::MIME_TYPES_DOCS)) {
+                $post_type_count['attachment_docs']++;
+            }
+        }
+        wp_send_json(['status' => true, 'posts_count' => $post_type_count]);
     }
 
 	public function activation()
@@ -550,10 +573,10 @@ final class ChiliSearch
         }
         $active_post_types = [];
         if (!empty($this->settings['index_documents_posts'])) {
-            $active_post_types[] = 'post';
+            $active_post_types[] = self::WP_POST_TYPE_POST;
         }
         if (!empty($this->settings['index_documents_pages'])) {
-            $active_post_types[] = 'page';
+            $active_post_types[] = self::WP_POST_TYPE_PAGE;
         }
         if (!in_array($post->post_type, $active_post_types, true)) {
             return true;
@@ -602,12 +625,12 @@ final class ChiliSearch
             'publishedAt' => !empty($post->post_date_gmt) ? $post->post_date_gmt : null,
         ];
         switch ($post->post_type) {
-            case 'post':
-            case 'page':
-            case 'product':
+            case self::WP_POST_TYPE_POST:
+            case self::WP_POST_TYPE_PAGE:
+            case self::WP_POST_TYPE_PRODUCT:
                 $document['image'] = !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null;
                 break;
-            case 'attachment':
+            case self::WP_POST_TYPE_ATTACHMENT:
                 $document['type'] = 'media';
                 $document['title'] = str_replace('-', ' ', $document['title']);
                 if (array_key_exists($post->post_mime_type, self::MIME_TYPES_IMAGES)) {
@@ -624,15 +647,35 @@ final class ChiliSearch
                 return null; // Type not defined!
         }
         if (
-            ($post->post_type === 'post' && !empty($this->settings['index_documents_posts_approved_comments'])) ||
-            ($post->post_type === 'page' && !empty($this->settings['index_documents_pages_approved_comments'])) ||
-            ($post->post_type === 'attachment' && !empty($this->settings['index_documents_media_approved_comments']))
+            ($post->post_type === self::WP_POST_TYPE_POST && !empty($this->settings['index_documents_posts_approved_comments'])) ||
+            ($post->post_type === self::WP_POST_TYPE_PAGE && !empty($this->settings['index_documents_pages_approved_comments'])) ||
+            ($post->post_type === self::WP_POST_TYPE_ATTACHMENT && !empty($this->settings['index_documents_media_approved_comments']))
         ) {
             $document['comments'] = array_map(function ($comment) {
                 return (string)$comment->comment_content;
             }, get_comments(['post_id' => $post->ID]));
         }
         return $document;
+    }
+
+    protected function admin_get_active_posts($active_post_types)
+    {
+        $query = new WP_Query([
+            'post_type' => $active_post_types,
+            'post_status' => 'inherit,publish',
+            'posts_per_page' => -1,
+            'orderby' => 'ID',
+            'order' => 'ASC',
+        ]);
+        return array_filter($query->posts, function ($post) {
+            if ($post->post_status === 'inherit') {
+                $post_parent = get_post($post->post_parent);
+                if ($post_parent === null || $post_parent->post_status !== 'publish') {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 }
 
