@@ -132,9 +132,16 @@ final class ChiliSearch
     private function get_settings()
     {
         $this->settings = array_merge($this->settings, get_option('chilisearch_settings'));
-        $this->settings['index_documents_woocommerce_products'] = $this->settings['index_documents_woocommerce_products'] && is_plugin_active('woocommerce/woocommerce.php');
-        $this->settings['index_documents_bbpress'] = $this->settings['index_documents_bbpress'] && is_plugin_active('bbpress/bbpress.php');
         return $this->settings;
+    }
+
+    private function set_settings()
+    {
+        if (function_exists('is_plugin_active')) {
+            $this->settings['index_documents_woocommerce_products'] = $this->settings['index_documents_woocommerce_products'] && is_plugin_active('woocommerce/woocommerce.php');
+            $this->settings['index_documents_bbpress'] = $this->settings['index_documents_bbpress'] && is_plugin_active('bbpress/bbpress.php');
+        }
+        update_option('chilisearch_settings', $this->settings);
     }
 
     private function setup_client_actions()
@@ -228,7 +235,7 @@ final class ChiliSearch
             $this->settings['site_api_secret'] = sanitize_key(trim($getSiteInfoResult->apiSecret));
             $this->settings['site_api_key'] = sanitize_key(trim($getSiteInfoResult->apiKey));
             $this->settings['get_started_api_finished'] = true;
-            update_option('chilisearch_settings', $this->settings);
+            $this->set_settings();
             wp_send_json(['status' => true, 'apiKey' => $getSiteInfoResult->apiKey]);
         }
         if ($getSiteInfoResponseCode == 401) {
@@ -261,7 +268,7 @@ final class ChiliSearch
         $this->settings['index_documents_woocommerce_products'] = $index_documents_woocommerce_products;
         $this->settings['index_documents_bbpress'] = $index_documents_bbpress;
         $this->settings['get_started_config_finished'] = true;
-        update_option('chilisearch_settings', $this->settings);
+        $this->set_settings();
         wp_send_json(['status' => true]);
     }
 
@@ -291,7 +298,7 @@ final class ChiliSearch
         $this->settings['sayt_page_size'] = (int)sanitize_key(trim($_POST['sayt_page_size']));
         $this->settings['search_input_selector'] = sanitize_text_field(stripslashes($_POST['search_input_selector']));
         $this->settings['search_page_id'] = $searchPageId;
-        update_option('chilisearch_settings', $this->settings);
+        $this->set_settings();
         wp_send_json(['status' => true]);
     }
 
@@ -304,7 +311,7 @@ final class ChiliSearch
 		    'post_author'  => get_current_user_id(),
 		    'post_type'    => self::WP_POST_TYPE_PAGE,
 	    ] );
-	    update_option('chilisearch_settings', $this->settings);
+        $this->set_settings();
         wp_send_json(['status' => true]);
     }
 
@@ -457,7 +464,7 @@ final class ChiliSearch
             } else {
 	            $this->settings = $this->get_settings();
                 $this->settings['search_page_id'] = -1;
-                update_option('chilisearch_settings', $this->settings);
+                $this->set_settings();
             }
         }
 	    return get_site_url();
@@ -544,7 +551,7 @@ final class ChiliSearch
         if ($getSiteInfoResponseCode === 401) {
             $this->settings = $this->get_settings();
             unset($this->settings['site_api_secret'], $this->settings['get_started_config_finished']);
-            update_option('chilisearch_settings', $this->settings);
+            $this->set_settings();
             return null;
         }
         if ($getSiteInfoResponseCode !== 200) {
@@ -556,7 +563,7 @@ final class ChiliSearch
         }
         $this->settings['website_info'] = (array)$siteInfo;
         $this->settings['website_info']['last_check'] = microtime(true);
-        update_option('chilisearch_settings', $this->settings);
+        $this->set_settings();
         return $this->settings['website_info'];
     }
 
