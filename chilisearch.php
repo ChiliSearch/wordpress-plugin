@@ -73,14 +73,18 @@ final class ChiliSearch
     const WP_POST_TYPE_ATTACHMENT = 'attachment';
     const WP_POST_TYPE_PRODUCT = 'product';
     const WP_POST_TYPE_PRODUCT_VARIATION = 'product_variation';
-    const WP_POST_TYPE_TOPIC = 'topic';
+    const WP_POST_TYPE_FORUM_FORUM = 'forum';
+    const WP_POST_TYPE_FORUM_TOPIC = 'topic';
+    const WP_POST_TYPE_FORUM_REPLY = 'reply';
     const WP_POST_TYPES = [
         self::WP_POST_TYPE_POST,
         self::WP_POST_TYPE_PAGE,
         self::WP_POST_TYPE_ATTACHMENT,
         self::WP_POST_TYPE_PRODUCT,
         self::WP_POST_TYPE_PRODUCT_VARIATION,
-        self::WP_POST_TYPE_TOPIC,
+        self::WP_POST_TYPE_FORUM_FORUM,
+        self::WP_POST_TYPE_FORUM_TOPIC,
+        self::WP_POST_TYPE_FORUM_REPLY,
     ];
 
     private static $instance = null;
@@ -102,7 +106,9 @@ final class ChiliSearch
         'index_documents_media_doc_files' => false,
         'index_documents_media_approved_comments' => false,
         'index_documents_woocommerce_products' => false,
-        'index_documents_bbpress' => false,
+        'index_documents_bbpress_forum' => false,
+        'index_documents_bbpress_topic' => false,
+        'index_documents_bbpress_reply' => false,
         'website_info' => null,
     ];
 
@@ -139,7 +145,9 @@ final class ChiliSearch
     {
         if (function_exists('is_plugin_active')) {
             $this->settings['index_documents_woocommerce_products'] = $this->settings['index_documents_woocommerce_products'] && is_plugin_active('woocommerce/woocommerce.php');
-            $this->settings['index_documents_bbpress'] = $this->settings['index_documents_bbpress'] && is_plugin_active('bbpress/bbpress.php');
+            $this->settings['index_documents_bbpress_forum'] = $this->settings['index_documents_bbpress_forum'] && is_plugin_active('bbpress/bbpress.php');
+            $this->settings['index_documents_bbpress_topic'] = $this->settings['index_documents_bbpress_topic'] && is_plugin_active('bbpress/bbpress.php');
+            $this->settings['index_documents_bbpress_reply'] = $this->settings['index_documents_bbpress_reply'] && is_plugin_active('bbpress/bbpress.php');
         }
         update_option('chilisearch_settings', $this->settings);
     }
@@ -252,9 +260,11 @@ final class ChiliSearch
         $index_documents_media = isset($_POST['index_documents_media']) && $_POST['index_documents_media'] == 'true';
         $index_documents_media_approved_comments = isset($_POST['index_documents_media_approved_comments']) && $_POST['index_documents_media_approved_comments'] == 'true';
         $index_documents_woocommerce_products = isset($_POST['index_documents_woocommerce_products']) && $_POST['index_documents_woocommerce_products'] == 'true';
-        $index_documents_bbpress = isset($_POST['index_documents_bbpress']) && $_POST['index_documents_bbpress'] == 'true';
+        $index_documents_bbpress_forum = isset($_POST['index_documents_bbpress_forum']) && $_POST['index_documents_bbpress_forum'] == 'true';
+        $index_documents_bbpress_topic = isset($_POST['index_documents_bbpress_topic']) && $_POST['index_documents_bbpress_topic'] == 'true';
+        $index_documents_bbpress_reply = isset($_POST['index_documents_bbpress_reply']) && $_POST['index_documents_bbpress_reply'] == 'true';
         $index_documents_media_doc_files = isset($_POST['index_documents_media_doc_files']) && $_POST['index_documents_media_doc_files'] == 'true';
-        if (!($index_documents_posts || $index_documents_pages || $index_documents_media || $index_documents_woocommerce_products || $index_documents_bbpress)) {
+        if (!($index_documents_posts || $index_documents_pages || $index_documents_media || $index_documents_woocommerce_products || $index_documents_bbpress_forum)) {
             wp_send_json(['status' => false, 'message' => __('Choose at least one option.')]);
         }
         $this->settings = $this->get_settings();
@@ -266,7 +276,9 @@ final class ChiliSearch
         $this->settings['index_documents_media_doc_files'] = $index_documents_media_doc_files;
         $this->settings['index_documents_media_approved_comments'] = $index_documents_media_approved_comments;
         $this->settings['index_documents_woocommerce_products'] = $index_documents_woocommerce_products;
-        $this->settings['index_documents_bbpress'] = $index_documents_bbpress;
+        $this->settings['index_documents_bbpress_forum'] = $index_documents_bbpress_forum;
+        $this->settings['index_documents_bbpress_topic'] = $index_documents_bbpress_topic;
+        $this->settings['index_documents_bbpress_reply'] = $index_documents_bbpress_reply;
         $this->settings['get_started_config_finished'] = true;
         $this->set_settings();
         wp_send_json(['status' => true]);
@@ -325,28 +337,9 @@ final class ChiliSearch
 
 	public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed()
     {
-        $active_post_types = [];
-        if (!empty($this->settings['index_documents_posts'])) {
-		    $active_post_types[] = self::WP_POST_TYPE_POST;
-        }
-		if (!empty($this->settings['index_documents_pages'])) {
-		    $active_post_types[] = self::WP_POST_TYPE_PAGE;
-		}
-		if (!empty($this->settings['index_documents_media'])) {
-		    $active_post_types[] = self::WP_POST_TYPE_ATTACHMENT;
-		}
-		if (!empty($this->settings['index_documents_woocommerce_products'])) {
-		    $active_post_types[] = self::WP_POST_TYPE_PRODUCT;
-		    $active_post_types[] = self::WP_POST_TYPE_PRODUCT_VARIATION;
-		}
-		if (!empty($this->settings['index_documents_bbpress'])) {
-		    $active_post_types[] = self::WP_POST_TYPE_TOPIC;
-		}
-
+        $active_post_types = $this->get_active_post_types();
         $posts = $this->admin_get_active_posts($active_post_types);
-        $documentIDs = array_map(function ($post) {
-            return sprintf('%s-%d', $post->post_type, $post->ID);
-        }, $posts);
+        $documentIDs = array_map([$this, 'get_document_id_from_post'], $posts);
 
         wp_send_json(['status' => true, 'documents' => $documentIDs]);
     }
@@ -397,7 +390,9 @@ final class ChiliSearch
             self::WP_POST_TYPE_ATTACHMENT => 0,
             self::WP_POST_TYPE_PRODUCT => 0,
             self::WP_POST_TYPE_PRODUCT_VARIATION => 0,
-            self::WP_POST_TYPE_TOPIC => 0,
+            self::WP_POST_TYPE_FORUM_FORUM => 0,
+            self::WP_POST_TYPE_FORUM_TOPIC => 0,
+            self::WP_POST_TYPE_FORUM_REPLY => 0,
             'post_comments' => 0,
             'page_comments' => 0,
             'attachment_comments' => 0,
@@ -578,13 +573,7 @@ final class ChiliSearch
         if (empty($this->settings['site_api_secret'])) {
             return true;
         }
-        $active_post_types = [];
-        if (!empty($this->settings['index_documents_posts'])) {
-            $active_post_types[] = self::WP_POST_TYPE_POST;
-        }
-        if (!empty($this->settings['index_documents_pages'])) {
-            $active_post_types[] = self::WP_POST_TYPE_PAGE;
-        }
+        $active_post_types = $this->get_active_post_types();
         if (!in_array($post->post_type, $active_post_types, true)) {
             return true;
         }
@@ -603,19 +592,16 @@ final class ChiliSearch
                     return true;
                 }
             } else {
-                list($putDocumentResponseCode) = $this->send_request('DELETE', 'documents');
-                if ($putDocumentResponseCode == 200) {
-                    return true;
-                }
+                $this->send_request('DELETE', 'documents/' . $this->get_document_id_from_post($post));
             }
         } catch (\Exception $exception) {}
-        return false;
+        return true;
     }
 
     public function transform_post_to_document($post)
     {
         $document = [
-            'id' => sprintf('%s-%d', $post->post_type, $post->ID),
+            'id' => $this->get_document_id_from_post($post),
             'type' => $post->post_type,
             'title' => !empty($post->post_title) ? $post->post_title : '',
             'link' => get_permalink($post->ID),
@@ -650,8 +636,17 @@ final class ChiliSearch
                     $document['docFileBody'] = @base64_encode(file_get_contents(get_attached_file($post->ID)));
                 }
                 break;
-            default:
-                return null; // Type not defined!
+            case self::WP_POST_TYPE_FORUM_REPLY:
+                $topic = get_post($post->post_parent);
+                if (empty($topic)) {
+                    return null; // should be skipped
+                }
+                $document['title'] = $topic->post_title;
+            case self::WP_POST_TYPE_FORUM_FORUM:
+            case self::WP_POST_TYPE_FORUM_TOPIC:
+                $document['type'] = 'forum_post';
+                $document['excerpt'] = substr($document['body'], 0, 300);
+                break;
         }
         if (
             ($post->post_type === self::WP_POST_TYPE_POST && !empty($this->settings['index_documents_posts_approved_comments'])) ||
@@ -683,6 +678,39 @@ final class ChiliSearch
             }
             return true;
         });
+    }
+
+    protected function get_active_post_types()
+    {
+        $active_post_types = [];
+        if (!empty($this->settings['index_documents_posts'])) {
+            $active_post_types[] = self::WP_POST_TYPE_POST;
+        }
+        if (!empty($this->settings['index_documents_pages'])) {
+            $active_post_types[] = self::WP_POST_TYPE_PAGE;
+        }
+        if (!empty($this->settings['index_documents_media'])) {
+            $active_post_types[] = self::WP_POST_TYPE_ATTACHMENT;
+        }
+        if (!empty($this->settings['index_documents_woocommerce_products'])) {
+            $active_post_types[] = self::WP_POST_TYPE_PRODUCT;
+            $active_post_types[] = self::WP_POST_TYPE_PRODUCT_VARIATION;
+        }
+        if (!empty($this->settings['index_documents_bbpress_forum'])) {
+            $active_post_types[] = self::WP_POST_TYPE_FORUM_FORUM;
+            if (!empty($this->settings['index_documents_bbpress_topic'])) {
+                $active_post_types[] = self::WP_POST_TYPE_FORUM_TOPIC;
+            }
+            if (!empty($this->settings['index_documents_bbpress_reply'])) {
+                $active_post_types[] = self::WP_POST_TYPE_FORUM_REPLY;
+            }
+        }
+        return $active_post_types;
+    }
+
+    protected function get_document_id_from_post($post)
+    {
+        return sprintf('%s-%d', $post->post_type, $post->ID);
     }
 }
 

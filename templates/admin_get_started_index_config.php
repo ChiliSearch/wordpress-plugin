@@ -81,10 +81,27 @@
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="index_documents_bbpress">
-                                        <input type="checkbox" name="index_documents_bbpress" id="index_documents_bbpress" <?= $this->settings['index_documents_bbpress'] ? 'checked' : '' ?> <?= !is_plugin_active('bbpress/bbpress.php') ? 'disabled' : '' ?>>
-                                        <?= __('bbPress', 'chilisearch') ?> <?= !is_plugin_active('bbpress/bbpress.php') ? '<small>' . __('(bbPress plugin is not installed)', 'chilisearch') . '</small>' : '' ?>
+                                    <label for="index_documents_bbpress_forum">
+                                        <input type="checkbox" name="index_documents_bbpress_forum" id="index_documents_bbpress_forum" <?= $this->settings['index_documents_bbpress_forum'] ? 'checked' : '' ?> <?= !is_plugin_active('bbpress/bbpress.php') ? 'disabled' : '' ?>>
+                                        <?= __('bbPress Forums', 'chilisearch') ?> <?= !is_plugin_active('bbpress/bbpress.php') ? '<small>' . __('(bbPress plugin is not installed)', 'chilisearch') . '</small>' : '' ?>
+                                        <small><a href="<?= esc_url(admin_url('edit.php?post_status=publish&post_type=forum')) ?>"></a></small>
                                     </label>
+                                    <ul>
+                                        <li>
+                                            <label class="mb-0" for="index_documents_bbpress_topic">
+                                                <input type="checkbox" name="index_documents_bbpress_topic" id="index_documents_bbpress_topic" <?= $this->settings['index_documents_bbpress_topic'] ? 'checked' : '' ?> disabled="disabled">
+                                                <?= __('bbPress Topics', 'chilisearch') ?>
+                                                <small><a href="<?= esc_url(admin_url('edit.php?post_status=publish&post_type=topic')) ?>"></a></small>
+                                            </label>
+                                        </li>
+                                        <li class="mb-0">
+                                            <label class="mb-0" for="index_documents_bbpress_reply">
+                                                <input type="checkbox" name="index_documents_bbpress_reply" id="index_documents_bbpress_reply" <?= $this->settings['index_documents_bbpress_reply'] ? 'checked' : '' ?> disabled="disabled">
+                                                <?= __('bbPress Replies', 'chilisearch') ?>
+                                                <small><a href="<?= esc_url(admin_url('edit.php?post_status=publish&post_type=reply')) ?>"></a></small>
+                                            </label>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +147,17 @@
                     jQuery('label[for="index_documents_media_approved_comments"] small a').text(
                         "(" + (wordpressPostsCount.attachment_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.attachment_comments, entity: "<?= __('Comments', 'chilisearch') ?>"})) + ")"
                     )
+                    if ('forum' in wordpressPostsCount && 'topic' in wordpressPostsCount && 'reply' in wordpressPostsCount) {
+                        jQuery('label[for="index_documents_bbpress_forum"] small a').text(
+                            "(" + (wordpressPostsCount.forum === 1 ? "<?= __('1 Forum', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.forum, entity: "<?= __('Forums', 'chilisearch') ?>"})) + ")"
+                        )
+                        jQuery('label[for="index_documents_bbpress_topic"] small a').text(
+                            "(" + (wordpressPostsCount.topic === 1 ? "<?= __('1 Topic', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.topic, entity: "<?= __('Topics', 'chilisearch') ?>"})) + ")"
+                        )
+                        jQuery('label[for="index_documents_bbpress_reply"] small a').text(
+                            "(" + (wordpressPostsCount.reply === 1 ? "<?= __('1 Reply', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.reply, entity: "<?= __('Replies', 'chilisearch') ?>"})) + ")"
+                        )
+                    }
                     return;
                 }
                 alert(response.message);
@@ -158,9 +186,19 @@
                 $('#index_documents_media_approved_comments').attr('disabled', 'disabled');
             }
         });
+        jQuery('#index_documents_bbpress_forum').change(function () {
+            if (this.checked) {
+                $('#index_documents_bbpress_topic').removeAttr('disabled');
+                $('#index_documents_bbpress_reply').removeAttr('disabled');
+            } else {
+                $('#index_documents_bbpress_topic').attr('disabled', 'disabled');
+                $('#index_documents_bbpress_reply').attr('disabled', 'disabled');
+            }
+        });
         jQuery('#index_documents_posts').trigger('change');
         jQuery('#index_documents_pages').trigger('change');
         jQuery('#index_documents_media').trigger('change');
+        jQuery('#index_documents_bbpress_forum').trigger('change');
         jQuery('#site_index_config').submit(function (e) {
             e.preventDefault();
             jQuery('#site_index_config button[type="submit"]').prop('disabled', true)
@@ -175,7 +213,9 @@
                     'index_documents_media': jQuery('#site_index_config #index_documents_media').is(":checked"),
                     'index_documents_media_approved_comments': jQuery('#site_index_config #index_documents_media_approved_comments').is(":checked"),
                     'index_documents_woocommerce_products': jQuery('#site_index_config #index_documents_woocommerce_products').is(":checked"),
-                    'index_documents_bbpress': jQuery('#site_index_config #index_documents_bbpress').is(":checked"),
+                    'index_documents_bbpress_forum': jQuery('#site_index_config #index_documents_bbpress_forum').is(":checked"),
+                    'index_documents_bbpress_topic': jQuery('#site_index_config #index_documents_bbpress_topic').is(":checked"),
+                    'index_documents_bbpress_reply': jQuery('#site_index_config #index_documents_bbpress_reply').is(":checked"),
                     'index_documents_media_doc_files': jQuery('#site_index_config #index_documents_media_doc_files').is(":checked"),
                 },
                 function (response) {
