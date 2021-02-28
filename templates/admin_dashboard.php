@@ -115,7 +115,6 @@ $siteInfo = ChiliSearch::getInstance()->get_website_info();
                             </tbody>
                         </table>
                         <button type="submit" class="btn btn-primary"><?= __('Submit', 'chilisearch'); ?></button>
-                        <a href="<?= esc_url(admin_url('admin.php?page=chilisearch&indexConfig')) ?>" class="btn btn-warning float-right"><?= __('update index config', 'chilisearch'); ?></a>
                         <div class="clearfix"></div>
                     </form>
                 </div>

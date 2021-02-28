@@ -206,11 +206,19 @@ final class ChiliSearch
             );
             add_submenu_page(
                 'chilisearch',
+                __('Where to Search', 'chilisearch'),
+                __('Where to Search', 'chilisearch'),
+                'manage_options',
+                'chilisearch-index-config',
+                [$this, 'admin_chilisearch_options_page_wts']
+            );
+            add_submenu_page(
+                'chilisearch',
                 __('Indexing', 'chilisearch'),
                 __('Indexing', 'chilisearch'),
                 'manage_options',
                 'chilisearch-indexing',
-                [$this, 'admin_chilisearch_indexing_options_page']
+                [$this, 'admin_chilisearch_options_page_indexing']
             );
         });
 		add_action('admin_init', function() {
@@ -535,7 +543,32 @@ final class ChiliSearch
         }
     }
 
-    public function admin_chilisearch_indexing_options_page()
+	public function admin_chilisearch_options_page()
+	{
+		wp_enqueue_style('chilisearch-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], CHILISEARCH_VERSION);
+		wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
+		wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
+		if (empty($this->settings['site_api_secret']) || empty($this->settings['get_started_api_finished'])) {
+			return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
+		}
+		if (empty($this->settings['get_started_config_finished'])) {
+			wp_redirect(esc_url(admin_url('admin.php?page=chilisearch-index-config')));
+		}
+		return require CHILISEARCH_DIR . '/templates/admin_dashboard.php';
+	}
+
+	public function admin_chilisearch_options_page_wts()
+	{
+		if (empty($this->settings['site_api_secret']) || empty($this->settings['get_started_api_finished'])) {
+			wp_redirect(esc_url(admin_url('admin.php?page=chilisearch')));
+		}
+		wp_enqueue_style('chilisearch-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], CHILISEARCH_VERSION);
+		wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
+		wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
+		return require CHILISEARCH_DIR . '/templates/admin_get_started_index_config.php';
+	}
+
+    public function admin_chilisearch_options_page_indexing()
     {
 	    if (empty($this->settings['site_api_secret']) || empty($this->settings['get_started_api_finished'])) {
 		    wp_redirect(esc_url(admin_url('admin.php?page=chilisearch')));
@@ -544,21 +577,6 @@ final class ChiliSearch
         wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
         wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
         return require CHILISEARCH_DIR . '/templates/admin_index.php';
-    }
-
-    public function admin_chilisearch_options_page()
-    {
-        wp_enqueue_style('chilisearch-css-roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons', [], CHILISEARCH_VERSION);
-        wp_enqueue_style('chilisearch-css-material-dashboard', CHILISEARCH_URL . 'assets/css/material-dashboard.css', [], CHILISEARCH_VERSION);
-        wp_enqueue_style('chilisearch-css-material-dashboard-rtl', CHILISEARCH_URL . 'assets/css/material-dashboard-rtl.css', [], CHILISEARCH_VERSION);
-
-        if (empty($this->settings['site_api_secret']) || empty($this->settings['get_started_api_finished'])) {
-            return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
-        }
-        if (empty($this->settings['get_started_config_finished']) || isset($_GET['indexConfig'])) {
-            return require CHILISEARCH_DIR . '/templates/admin_get_started_index_config.php';
-        }
-        return require CHILISEARCH_DIR . '/templates/admin_dashboard.php';
     }
 
     public function get_website_info()
