@@ -641,7 +641,8 @@ final class ChiliSearch
                 if (empty($topic)) {
                     return null; // should be skipped
                 }
-                $document['title'] = $topic->post_title;
+                $document['title'] = __('In reply to:', 'chilisearch') . ' ' . $topic->post_title;
+	            $document['link'] = get_permalink($topic->ID) . "#post-" . $post->ID;
             case self::WP_POST_TYPE_FORUM_FORUM:
             case self::WP_POST_TYPE_FORUM_TOPIC:
                 $document['type'] = 'forum_post';
