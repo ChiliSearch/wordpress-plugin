@@ -72,7 +72,7 @@ $siteInfo = ChiliSearch::getInstance()->get_website_info();
                                         <select name="search_page_id" id="search_page_id" class="regular-text">
                                             <option value="-1" <?= !isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1 ? 'selected' : '' ?>><?= __('Chili Search result page (not recommended)', 'chilisearch'); ?></option>
 				                            <?php foreach (get_pages(['post_type' => 'page', 'post_status' => 'publish']) as $page): ?>
-                                            <option value="<?= $page->ID ?>" <?= isset($this->settings['search_page_id']) && $this->settings['search_page_id'] == $page->ID ? 'selected' : '' ?>><?= sprintf('%s (%s) ', $page->post_title, $page->guid) ?></option>
+                                            <option value="<?= $page->ID ?>" <?= isset($this->settings['search_page_id']) && $this->settings['search_page_id'] == $page->ID ? 'selected' : '' ?>><?= sprintf('%s (%s) ', $page->post_title, get_permalink($page->ID)) ?></option>
 				                            <?php endforeach; ?>
                                         </select>
                                     </label>

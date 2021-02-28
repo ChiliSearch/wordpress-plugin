@@ -357,7 +357,7 @@ final class ChiliSearch
         $posts = $this->admin_get_active_posts($active_post_types);
         $documentIDs = array_map([$this, 'get_document_id_from_post'], $posts);
 
-        wp_send_json(['status' => true, 'documents' => $documentIDs]);
+        wp_send_json(['status' => true, 'documents' => array_values($documentIDs)]);
     }
 
 	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
@@ -490,7 +490,7 @@ final class ChiliSearch
         if (isset($this->settings['search_page_id']) && $this->settings['search_page_id'] > 1) {
 	        $search_page = get_post($this->settings['search_page_id']);
 	        if (!empty($search_page) && $search_page->post_status === 'publish') {
-	            return $search_page->guid;
+	            return get_permalink($search_page->ID);
             } else {
 	            $this->settings = $this->get_settings();
                 $this->settings['search_page_id'] = -1;
