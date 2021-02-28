@@ -78,7 +78,24 @@
                                     <label for="index_documents_woocommerce_products">
                                         <input type="checkbox" name="index_documents_woocommerce_products" id="index_documents_woocommerce_products" <?= $this->settings['index_documents_woocommerce_products'] ? 'checked' : '' ?> <?= !is_plugin_active('woocommerce/woocommerce.php') ? 'disabled' : '' ?>>
                                         <?= __('wooCommerce products', 'chilisearch') ?> <?= !is_plugin_active('woocommerce/woocommerce.php') ? '<small>' . __('(wooCommerce plugin is not installed)', 'chilisearch') . '</small>' : '' ?>
+                                        <small><a href="<?= esc_url(admin_url('edit.php?post_status=publish&post_type=product&stock_status=instock')) ?>"></a></small>
                                     </label>
+                                    <ul>
+                                        <li>
+                                            <label class="mb-0" for="index_documents_woocommerce_products_approved_comments">
+                                                <input type="checkbox" name="index_documents_woocommerce_products_approved_comments" id="index_documents_woocommerce_products_approved_comments" <?= $this->settings['index_documents_woocommerce_products_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
+				                                <?= __('Approved comments', 'chilisearch') ?>
+                                                <small><a href="<?= esc_url(admin_url('edit-comments.php?comment_status=approved&post_type=product')) ?>"></a></small>
+                                            </label>
+                                        </li>
+                                        <li class="mb-0">
+                                            <label class="mb-0" for="index_documents_woocommerce_products_outofstock">
+                                                <input type="checkbox" name="index_documents_woocommerce_products_outofstock" id="index_documents_woocommerce_products_outofstock" <?= $this->settings['index_documents_woocommerce_products_outofstock'] ? 'checked' : '' ?> disabled="disabled">
+				                                <?= __('Out-of-stock products', 'chilisearch') ?>
+                                                <small><a href="<?= esc_url(admin_url('edit.php?post_status=publish&post_type=product&stock_status=outofstock')) ?>"></a></small>
+                                            </label>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="form-group">
                                     <label for="index_documents_bbpress_forum">
@@ -127,35 +144,46 @@
                     wordpressPostsCount = response.posts_count
                     jQuery('#get_post_counts_spinner').remove();
                     jQuery('label[for="index_documents_posts"] small a').text(
-                        "(" + (wordpressPostsCount.post === 1 ? "<?= __('1 Post', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.post, entity: "<?= __('Posts', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.post === 1 ? "<?= __('1 Post', 'chilisearch') ?>" : "<?= __('{n} Posts', 'chilisearch') ?>".csf({n: wordpressPostsCount.post})) + ")"
                     )
                     jQuery('label[for="index_documents_posts_approved_comments"] small a').text(
-                        "(" + (wordpressPostsCount.post_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.post_comments, entity: "<?= __('Comments', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.post_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "<?= __('{n} Comments', 'chilisearch') ?>".csf({n: wordpressPostsCount.post_comments})) + ")"
                     )
                     jQuery('label[for="index_documents_pages"] small a').text(
-                        "(" + (wordpressPostsCount.page === 1 ? "<?= __('1 Post', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.page, entity: "<?= __('Pages', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.page === 1 ? "<?= __('1 Post', 'chilisearch') ?>" : "<?= __('{n} Pages', 'chilisearch') ?>".csf({n: wordpressPostsCount.page})) + ")"
                     )
                     jQuery('label[for="index_documents_pages_approved_comments"] small a').text(
-                        "(" + (wordpressPostsCount.page_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.page_comments, entity: "<?= __('Comments', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.page_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "<?= __('{n} Comments', 'chilisearch') ?>".csf({n: wordpressPostsCount.page_comments})) + ")"
                     )
                     jQuery('label[for="index_documents_media"] small a').text(
-                        "(" + (wordpressPostsCount.attachment === 1 ? "<?= __('1 Media', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.attachment, entity: "<?= __('Media', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.attachment === 1 ? "<?= __('1 Media', 'chilisearch') ?>" : "<?= __('{n} Media', 'chilisearch') ?>".csf({n: wordpressPostsCount.attachment})) + ")"
                     )
                     jQuery('label[for="index_documents_media_doc_files"] small a').text(
-                        "(" + (wordpressPostsCount.attachment_docs === 1 ? "<?= __('1 Documents', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.attachment_docs, entity: "<?= __('Documents', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.attachment_docs === 1 ? "<?= __('1 Documents', 'chilisearch') ?>" : "<?= __('{n} Documents', 'chilisearch') ?>".csf({n: wordpressPostsCount.attachment_docs})) + ")"
                     )
                     jQuery('label[for="index_documents_media_approved_comments"] small a').text(
-                        "(" + (wordpressPostsCount.attachment_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.attachment_comments, entity: "<?= __('Comments', 'chilisearch') ?>"})) + ")"
+                        "(" + (wordpressPostsCount.attachment_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "<?= __('{n} Comments', 'chilisearch') ?>".csf({n: wordpressPostsCount.attachment_comments})) + ")"
                     )
+                    if ('product' in wordpressPostsCount && 'product_comments' in wordpressPostsCount && 'product_outofstock' in wordpressPostsCount) {
+                        jQuery('label[for="index_documents_woocommerce_products"] small a').text(
+                            "(" + (wordpressPostsCount.product === 1 ? "<?= __('1 Product', 'chilisearch') ?>" : "<?= __('{n} Products', 'chilisearch') ?>".csf({n: wordpressPostsCount.product})) + ")"
+                        )
+                        jQuery('label[for="index_documents_woocommerce_products_approved_comments"] small a').text(
+                            "(" + (wordpressPostsCount.product_comments === 1 ? "<?= __('1 Comment', 'chilisearch') ?>" : "<?= __('{n} Comments', 'chilisearch') ?>".csf({n: wordpressPostsCount.product_comments})) + ")"
+                        )
+                        jQuery('label[for="index_documents_woocommerce_products_outofstock"] small a').text(
+                            "(" + (wordpressPostsCount.product_outofstock === 1 ? "<?= __('1 Product', 'chilisearch') ?>" : "<?= __('{n} Products', 'chilisearch') ?>".csf({n: wordpressPostsCount.product_outofstock})) + ")"
+                        )
+                    }
                     if ('forum' in wordpressPostsCount && 'topic' in wordpressPostsCount && 'reply' in wordpressPostsCount) {
                         jQuery('label[for="index_documents_bbpress_forum"] small a').text(
-                            "(" + (wordpressPostsCount.forum === 1 ? "<?= __('1 Forum', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.forum, entity: "<?= __('Forums', 'chilisearch') ?>"})) + ")"
+                            "(" + (wordpressPostsCount.forum === 1 ? "<?= __('1 Forum', 'chilisearch') ?>" : "<?= __('{n} Forums', 'chilisearch') ?>".csf({n: wordpressPostsCount.forum})) + ")"
                         )
                         jQuery('label[for="index_documents_bbpress_topic"] small a').text(
-                            "(" + (wordpressPostsCount.topic === 1 ? "<?= __('1 Topic', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.topic, entity: "<?= __('Topics', 'chilisearch') ?>"})) + ")"
+                            "(" + (wordpressPostsCount.topic === 1 ? "<?= __('1 Topic', 'chilisearch') ?>" : "<?= __('{n} Topics', 'chilisearch') ?>".csf({n: wordpressPostsCount.topic})) + ")"
                         )
                         jQuery('label[for="index_documents_bbpress_reply"] small a').text(
-                            "(" + (wordpressPostsCount.reply === 1 ? "<?= __('1 Reply', 'chilisearch') ?>" : "{count} {entity}".ChiliSearchFormat({count: wordpressPostsCount.reply, entity: "<?= __('Replies', 'chilisearch') ?>"})) + ")"
+                            "(" + (wordpressPostsCount.reply === 1 ? "<?= __('1 Reply', 'chilisearch') ?>" : "<?= __('{n} Replies', 'chilisearch') ?>".csf({n: wordpressPostsCount.reply})) + ")"
                         )
                     }
                     return;
@@ -186,6 +214,15 @@
                 $('#index_documents_media_approved_comments').attr('disabled', 'disabled');
             }
         });
+        jQuery('#index_documents_woocommerce_products').change(function () {
+            if (this.checked) {
+                $('#index_documents_woocommerce_products_approved_comments').removeAttr('disabled');
+                $('#index_documents_woocommerce_products_outofstock').removeAttr('disabled');
+            } else {
+                $('#index_documents_woocommerce_products_approved_comments').attr('disabled', 'disabled');
+                $('#index_documents_woocommerce_products_outofstock').attr('disabled', 'disabled');
+            }
+        });
         jQuery('#index_documents_bbpress_forum').change(function () {
             if (this.checked) {
                 $('#index_documents_bbpress_topic').removeAttr('disabled');
@@ -198,6 +235,7 @@
         jQuery('#index_documents_posts').trigger('change');
         jQuery('#index_documents_pages').trigger('change');
         jQuery('#index_documents_media').trigger('change');
+        jQuery('#index_documents_woocommerce_products').trigger('change');
         jQuery('#index_documents_bbpress_forum').trigger('change');
         jQuery('#site_index_config').submit(function (e) {
             e.preventDefault();
@@ -213,6 +251,8 @@
                     'index_documents_media': jQuery('#site_index_config #index_documents_media').is(":checked"),
                     'index_documents_media_approved_comments': jQuery('#site_index_config #index_documents_media_approved_comments').is(":checked"),
                     'index_documents_woocommerce_products': jQuery('#site_index_config #index_documents_woocommerce_products').is(":checked"),
+                    'index_documents_woocommerce_products_approved_comments': jQuery('#site_index_config #index_documents_woocommerce_products_approved_comments').is(":checked"),
+                    'index_documents_woocommerce_products_outofstock': jQuery('#site_index_config #index_documents_woocommerce_products_outofstock').is(":checked"),
                     'index_documents_bbpress_forum': jQuery('#site_index_config #index_documents_bbpress_forum').is(":checked"),
                     'index_documents_bbpress_topic': jQuery('#site_index_config #index_documents_bbpress_topic').is(":checked"),
                     'index_documents_bbpress_reply': jQuery('#site_index_config #index_documents_bbpress_reply').is(":checked"),
@@ -229,7 +269,7 @@
             );
             return false;
         });
-        String.prototype.ChiliSearchFormat = String.prototype.ChiliSearchFormat || function () {
+        String.prototype.csf = String.prototype.csf || function () {
             let str = this.toString();
             if (arguments.length) {
                 let t = typeof arguments[0], args = ("string" === t || "number" === t) ? Array.prototype.slice.call(arguments) : arguments[0];
