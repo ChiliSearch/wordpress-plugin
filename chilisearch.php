@@ -238,22 +238,6 @@ final class ChiliSearch
                 'chilisearch',
                 [$this, 'admin_chilisearch_options_page']
             );
-            add_submenu_page(
-                'chilisearch',
-                __('Where to Search', 'chilisearch'),
-                __('Where to Search', 'chilisearch'),
-                'manage_options',
-                'chilisearch-index-config',
-                [$this, 'admin_chilisearch_options_page_wts']
-            );
-            add_submenu_page(
-                'chilisearch',
-                __('Indexing', 'chilisearch'),
-                __('Indexing', 'chilisearch'),
-                'manage_options',
-                'chilisearch-indexing',
-                [$this, 'admin_chilisearch_options_page_indexing']
-            );
         });
 		add_action('admin_init', function() {
             register_setting('chilisearch_settings_group', 'chilisearch_settings');
@@ -601,27 +585,13 @@ final class ChiliSearch
 				return require CHILISEARCH_DIR . '/templates/admin_tab_settings.php';
 			case 'where-to-search':
 				return require CHILISEARCH_DIR . '/templates/admin_tab_wts.php';
+			case 'indexing':
+				return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
 			case 'analytics':
 			default:
 				return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
 		}
 	}
-
-	public function admin_chilisearch_options_page_wts()
-	{
-		if (empty($this->configs['site_api_secret']) || empty($this->configs['get_started_api_finished'])) {
-			wp_redirect(esc_url(admin_url('admin.php?page=chilisearch')));
-		}
-		return require CHILISEARCH_DIR . '/templates/admin_tab_wts.php';
-	}
-
-    public function admin_chilisearch_options_page_indexing()
-    {
-	    if (empty($this->configs['site_api_secret']) || empty($this->configs['get_started_api_finished'])) {
-		    wp_redirect(esc_url(admin_url('admin.php?page=chilisearch')));
-	    }
-        return require CHILISEARCH_DIR . '/templates/admin_index.php';
-    }
 
     public function get_website_info()
     {
