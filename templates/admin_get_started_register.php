@@ -16,7 +16,7 @@
 <iframe id="chilisearch_terms_and_conditions_holder" src="https://chilisearch.com/terms.php"></iframe>
 <div id="chilisearch_terms_and_conditions_consent">
     <p>
-		<?= sprintf(__('By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChiliSearch%s.', 'chilisearch'), '<a href="https://chilisearch.com/" target="_blank">', '</a>'); ?>
+        <?= sprintf(__('By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChiliSearch%s.', 'chilisearch'), '<a href="https://chilisearch.com/" target="_blank">', '</a>'); ?>
     </p>
     <form method="post" action="" id="form_terms_and_conditions">
         <p class="text-center">

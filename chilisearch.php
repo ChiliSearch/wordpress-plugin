@@ -87,10 +87,10 @@ final class ChiliSearch
     private static $instance = null;
 
     private $settings = [
-	    'search_page_id' => -1,
+        'search_page_id' => -1,
         'search_page_size' => 15,
         'sayt_page_size' => 5,
-	    'search_input_selector' => 'input[name="s"]',
+        'search_input_selector' => 'input[name="s"]',
     ];
     private $wts_settings = [
         'posts' => true,
@@ -108,11 +108,11 @@ final class ChiliSearch
         'bbpress_reply' => false,
     ];
     private $configs = [
-	    'site_api_key' => null,
-	    'site_api_secret' => null,
-	    'get_started_api_finished' => false,
-	    'get_started_config_finished' => false,
-	    'website_info' => null,
+        'site_api_key' => null,
+        'site_api_secret' => null,
+        'get_started_api_finished' => false,
+        'get_started_config_finished' => false,
+        'website_info' => null,
     ];
 
     public static function getInstance()
@@ -142,28 +142,28 @@ final class ChiliSearch
 
     private function get_settings()
     {
-	    $settings = get_option('chilisearch_settings');
-	    if (!empty($settings)) {
-		    $this->settings = array_merge($this->settings, $settings);
-	    }
+        $settings = get_option('chilisearch_settings');
+        if (!empty($settings)) {
+            $this->settings = array_merge($this->settings, $settings);
+        }
         return $this->settings;
     }
 
     private function get_wts_settings()
     {
-	    $wts_settings = get_option('chilisearch_wts_settings');
-	    if (!empty($wts_settings)) {
-		    $this->wts_settings = array_merge($this->wts_settings, $wts_settings);
-	    }
+        $wts_settings = get_option('chilisearch_wts_settings');
+        if (!empty($wts_settings)) {
+            $this->wts_settings = array_merge($this->wts_settings, $wts_settings);
+        }
         return $this->wts_settings;
     }
 
     private function get_configs()
     {
-	    $configs = get_option('chilisearch_configs');
-	    if (!empty($configs)) {
-		    $this->configs = array_merge($this->configs, $configs);
-	    }
+        $configs = get_option('chilisearch_configs');
+        if (!empty($configs)) {
+            $this->configs = array_merge($this->configs, $configs);
+        }
         return $this->configs;
     }
 
@@ -185,10 +185,10 @@ final class ChiliSearch
         update_option('chilisearch_wts_settings', $this->wts_settings);
     }
 
-	private function set_configs()
-	{
-		update_option('chilisearch_configs', $this->configs);
-	}
+    private function set_configs()
+    {
+        update_option('chilisearch_configs', $this->configs);
+    }
 
     private function setup_client_actions()
     {
@@ -199,29 +199,29 @@ final class ChiliSearch
     }
 
     private function setup_admin_actions()
-	{
+    {
         add_action('save_post', [$this, 'admin_save_post_hook'], 10, 3);
-		if (!is_admin()) {
-			return;
-		}
-		add_action('wp_ajax_admin_ajax_register_website', [$this, 'admin_ajax_register_website'] );
-		add_action('wp_ajax_admin_ajax_index_config', [$this, 'wp_ajax_admin_ajax_index_config'] );
-		add_action('wp_ajax_admin_ajax_config_update', [$this, 'wp_ajax_admin_ajax_config_update'] );
-		add_action('wp_ajax_admin_ajax_create_set_search_page', [$this, 'wp_ajax_admin_ajax_create_set_search_page'] );
-		add_action('wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch', [$this, 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch'] );
-		add_action('wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed', [$this, 'wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed'] );
-		add_action('wp_ajax_admin_ajax_delete_content_should_not_be_indexed', [$this, 'wp_ajax_admin_ajax_delete_content_should_not_be_indexed'] );
-		add_action('wp_ajax_admin_ajax_index_missing_content', [$this, 'wp_ajax_admin_ajax_index_missing_content'] );
-		add_action('wp_ajax_admin_ajax_get_posts_count', [$this, 'wp_ajax_admin_ajax_get_posts_count'] );
-		add_filter('plugin_action_links_' . plugin_basename(__FILE__), function($links) {
-			array_unshift($links, sprintf(
-				'<a href="%s">%s</a>',
-				esc_url(add_query_arg(array('page' => 'chilisearch'), admin_url('options-general.php'))),
-				__('Settings', 'chilisearch')
-			));
-			return $links;
-		});
-		add_action('admin_menu', function() {
+        if (!is_admin()) {
+            return;
+        }
+        add_action('wp_ajax_admin_ajax_register_website', [$this, 'admin_ajax_register_website'] );
+        add_action('wp_ajax_admin_ajax_index_config', [$this, 'wp_ajax_admin_ajax_index_config'] );
+        add_action('wp_ajax_admin_ajax_config_update', [$this, 'wp_ajax_admin_ajax_config_update'] );
+        add_action('wp_ajax_admin_ajax_create_set_search_page', [$this, 'wp_ajax_admin_ajax_create_set_search_page'] );
+        add_action('wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch', [$this, 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch'] );
+        add_action('wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed', [$this, 'wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed'] );
+        add_action('wp_ajax_admin_ajax_delete_content_should_not_be_indexed', [$this, 'wp_ajax_admin_ajax_delete_content_should_not_be_indexed'] );
+        add_action('wp_ajax_admin_ajax_index_missing_content', [$this, 'wp_ajax_admin_ajax_index_missing_content'] );
+        add_action('wp_ajax_admin_ajax_get_posts_count', [$this, 'wp_ajax_admin_ajax_get_posts_count'] );
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), function($links) {
+            array_unshift($links, sprintf(
+                '<a href="%s">%s</a>',
+                esc_url(add_query_arg(array('page' => 'chilisearch'), admin_url('options-general.php'))),
+                __('Settings', 'chilisearch')
+            ));
+            return $links;
+        });
+        add_action('admin_menu', function() {
             add_menu_page(
                 __('Chili Search Settings', 'chilisearch'),
                 __('Chili Search', 'chilisearch'),
@@ -239,29 +239,29 @@ final class ChiliSearch
                 [$this, 'admin_chilisearch_options_page']
             );
         });
-		add_action('admin_init', function() {
+        add_action('admin_init', function() {
             register_setting('chilisearch_settings_group', 'chilisearch_settings');
         });
-//		add_action('admin_notices', function () {
-//		    if (empty($this->settings['site_api_key'])) {
+//        add_action('admin_notices', function () {
+//            if (empty($this->settings['site_api_key'])) {
 //                echo '<div class="error"><p>'
 //                    . sprintf(__('Chili Search: Enter site API Key in %ssettings%s page to enable Chili Search.', 'chilisearch'),
 //                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
 //                    . '</p></div>';
 //            }
-//		    if (empty($this->settings['site_api_secret']) && !empty($this->settings['site_api_key'])) {
+//            if (empty($this->settings['site_api_secret']) && !empty($this->settings['site_api_key'])) {
 //                echo '<div class="error"><p>'
 //                    . sprintf(__('Chili Search: Enter site API secret in %ssettings%s page to enable indexing your content into Chili Search.', 'chilisearch'),
 //                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
 //                    . '</p></div>';
 //            }
-//		});
-		register_activation_hook(__FILE__, function () {
-		    ChiliSearch::getInstance()->activation();
-		});
-	}
+//        });
+        register_activation_hook(__FILE__, function () {
+            ChiliSearch::getInstance()->activation();
+        });
+    }
 
-	public function admin_ajax_register_website() {
+    public function admin_ajax_register_website() {
         list($getSiteInfoResponseCode, $getSiteInfoResult) = $this->send_request('PUT', 'website', [
             'name' => get_bloginfo('name'),
             'email' => get_bloginfo('admin_email'),
@@ -282,7 +282,7 @@ final class ChiliSearch
         wp_send_json(['status' => false, 'message' => __( 'Request failed. Try again.', 'chilisearch' )]);
     }
 
-	public function wp_ajax_admin_ajax_index_config() {
+    public function wp_ajax_admin_ajax_index_config() {
         $posts = isset($_POST['posts']) && $_POST['posts'] == 'true';
         $posts_approved_comments = isset($_POST['posts_approved_comments']) && $_POST['posts_approved_comments'] == 'true';
         $pages = isset($_POST['pages']) && $_POST['pages'] == 'true';
@@ -313,14 +313,14 @@ final class ChiliSearch
         $this->wts_settings['bbpress_forum'] = $bbpress_forum;
         $this->wts_settings['bbpress_topic'] = $bbpress_topic;
         $this->wts_settings['bbpress_reply'] = $bbpress_reply;
-		$this->set_wts_settings();
-		$this->get_configs();
-		$this->configs['get_started_config_finished'] = true;
-		$this->set_configs();
-		wp_send_json(['status' => true]);
+        $this->set_wts_settings();
+        $this->get_configs();
+        $this->configs['get_started_config_finished'] = true;
+        $this->set_configs();
+        wp_send_json(['status' => true]);
     }
 
-	public function wp_ajax_admin_ajax_config_update() {
+    public function wp_ajax_admin_ajax_config_update() {
         if (empty($_POST['search_page_size']) || $_POST['search_page_size'] != (int)$_POST['search_page_size'] || $_POST['search_page_size'] < 1 || $_POST['search_page_size'] > 20) {
             wp_send_json(['status' => false, 'message' => __( 'Search page size must be between 1 to 20', 'chilisearch' )]);
         }
@@ -350,20 +350,20 @@ final class ChiliSearch
         wp_send_json(['status' => true]);
     }
 
-	public function wp_ajax_admin_ajax_create_set_search_page() {
+    public function wp_ajax_admin_ajax_create_set_search_page() {
         $this->get_settings();
         $this->settings['search_page_id'] = wp_insert_post( [
-		    'post_title'   => wp_strip_all_tags(__('Search')),
-		    'post_content' => '[chilisearch_search_page]',
-		    'post_status'  => 'publish',
-		    'post_author'  => get_current_user_id(),
-		    'post_type'    => self::WP_POST_TYPE_PAGE,
-	    ] );
+            'post_title'   => wp_strip_all_tags(__('Search')),
+            'post_content' => '[chilisearch_search_page]',
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+            'post_type'    => self::WP_POST_TYPE_PAGE,
+        ] );
         $this->set_settings();
         wp_send_json(['status' => true]);
     }
 
-	public function wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch() {
+    public function wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch() {
         list($allDocumentsResponseCode, $allDocumentsResult) = $this->send_request('GET', 'documents');
         if ($allDocumentsResponseCode == 200) {
             wp_send_json(['status' => true, 'documents' => $allDocumentsResult]);
@@ -371,16 +371,23 @@ final class ChiliSearch
         wp_send_json(['status' => false, 'payload' => $allDocumentsResult]);
     }
 
-	public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed()
+    public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed()
     {
         $active_post_types = $this->get_active_post_types();
         $posts = $this->admin_get_active_posts($active_post_types);
+        $posts = array_filter($posts, function ($post) {
+            if ($post->post_type === self::WP_POST_TYPE_PRODUCT && !$this->wts_settings['woocommerce_products_outofstock']) {
+                $product = wc_get_product($post->ID);
+                return $product->get_stock_status() === 'instock';
+            }
+            return true;
+        });
         $documentIDs = array_map([$this, 'get_document_id_from_post'], $posts);
 
         wp_send_json(['status' => true, 'documents' => array_values($documentIDs)]);
     }
 
-	public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
+    public function wp_ajax_admin_ajax_delete_content_should_not_be_indexed() {
         if (empty($_POST['documentId'])) {
             wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
@@ -393,7 +400,7 @@ final class ChiliSearch
         wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
     }
 
-	public function wp_ajax_admin_ajax_index_missing_content() {
+    public function wp_ajax_admin_ajax_index_missing_content() {
         if (empty($_POST['documentId'])) {
             wp_send_json(['status' => false, 'message' => __( 'DocumentId is not entered!', 'chilisearch' )]);
         }
@@ -419,7 +426,7 @@ final class ChiliSearch
         wp_send_json(['status' => false, 'message' => esc_html__( $message, 'chilisearch' )]);
     }
 
-	public function wp_ajax_admin_ajax_get_posts_count() {
+    public function wp_ajax_admin_ajax_get_posts_count() {
         $post_type_count = [
             self::WP_POST_TYPE_POST => 0,
             self::WP_POST_TYPE_PAGE => 0,
@@ -430,23 +437,23 @@ final class ChiliSearch
             'attachment_docs' => 0,
         ];
         if ($this->is_bbpress_active()) {
-        	$post_type_count += [
-		        self::WP_POST_TYPE_FORUM_FORUM => 0,
-		        self::WP_POST_TYPE_FORUM_TOPIC => 0,
-		        self::WP_POST_TYPE_FORUM_REPLY => 0,
-	        ];
+            $post_type_count += [
+                self::WP_POST_TYPE_FORUM_FORUM => 0,
+                self::WP_POST_TYPE_FORUM_TOPIC => 0,
+                self::WP_POST_TYPE_FORUM_REPLY => 0,
+            ];
         }
         if ($this->is_woocommerce_active()) {
-        	$post_type_count += [
-		        self::WP_POST_TYPE_PRODUCT => 0,
-		        'product_comments' => 0,
-		        'product_outofstock' => 0,
-	        ];
+            $post_type_count += [
+                self::WP_POST_TYPE_PRODUCT => 0,
+                'product_comments' => 0,
+                'product_outofstock' => 0,
+            ];
         }
         $admin_get_active_posts = $this->admin_get_active_posts(self::WP_POST_TYPES);
         foreach ($admin_get_active_posts as $post) {
             if ($post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT) {
-	            $post_type_count[ $post->post_type ] ++;
+                $post_type_count[ $post->post_type ] ++;
             }
             if ($post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT || $post->post_type === self::WP_POST_TYPE_PRODUCT) {
                 $post_type_count[$post->post_type . '_comments'] += wp_count_comments($post->ID)->approved;
@@ -455,20 +462,20 @@ final class ChiliSearch
                 $post_type_count['attachment_docs']++;
             }
             if ($post->post_type === self::WP_POST_TYPE_PRODUCT) {
-	            $product = wc_get_product($post->ID);
-	            if ($product->get_stock_status() === 'instock') {
-		            $post_type_count[self::WP_POST_TYPE_PRODUCT]++;
-	            } elseif ($product->get_stock_status() === 'outofstock') {
-		            $post_type_count['product_outofstock']++;
-	            }
+                $product = wc_get_product($post->ID);
+                if ($product->get_stock_status() === 'instock') {
+                    $post_type_count[self::WP_POST_TYPE_PRODUCT]++;
+                } elseif ($product->get_stock_status() === 'outofstock') {
+                    $post_type_count['product_outofstock']++;
+                }
             }
         }
         wp_send_json(['status' => true, 'posts_count' => $post_type_count]);
     }
 
-	public function activation()
-	{
-	}
+    public function activation()
+    {
+    }
 
     public function client_enqueue_scripts()
     {
@@ -486,10 +493,10 @@ final class ChiliSearch
         $searchPage = $this->get_or_create_search_page();
         $apiKey = $this->configs['site_api_key'];
         $searchInputSelector = addslashes($this->settings['search_input_selector']);
-	    $searchPageSize = $this->settings['search_page_size'];
-	    $saytPageSize = $this->settings['sayt_page_size'];
+        $searchPageSize = $this->settings['search_page_size'];
+        $saytPageSize = $this->settings['sayt_page_size'];
         $isRTL = is_rtl() ? 'true' : 'false';
-	    $phrases = json_encode([
+        $phrases = json_encode([
             'powered-by' => __('powered by', 'chilisearch'),
             'search-powered-by' => __('search powered by', 'chilisearch'),
             'no-result-message' => __('Couldn\'t find anything related …', 'chilisearch'),
@@ -508,16 +515,16 @@ final class ChiliSearch
     public function get_or_create_search_page()
     {
         if (isset($this->settings['search_page_id']) && $this->settings['search_page_id'] > 1) {
-	        $search_page = get_post($this->settings['search_page_id']);
-	        if (!empty($search_page) && $search_page->post_status === 'publish') {
-	            return get_permalink($search_page->ID);
+            $search_page = get_post($this->settings['search_page_id']);
+            if (!empty($search_page) && $search_page->post_status === 'publish') {
+                return get_permalink($search_page->ID);
             } else {
-	            $this->get_settings();
+                $this->get_settings();
                 $this->settings['search_page_id'] = -1;
                 $this->set_settings();
             }
         }
-	    return get_site_url();
+        return get_site_url();
     }
 
     private function send_request($method, $endpoint, $data = [])
@@ -563,40 +570,40 @@ final class ChiliSearch
         }
     }
 
-	public function admin_chilisearch_options_page()
-	{
+    public function admin_chilisearch_options_page()
+    {
         $this->get_configs();
         if (empty($this->configs['site_api_secret']) || empty($this->configs['get_started_api_finished'])) {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
-		$tab = !empty($_GET['tab']) ? $_GET['tab'] : 'analytics';
+        $tab = !empty($_GET['tab']) ? $_GET['tab'] : 'analytics';
         if (empty($this->configs['get_started_config_finished']) && $tab !== 'where-to-search') {
-		    wp_redirect(admin_url('admin.php?page=chilisearch&tab=where-to-search&get-started'));
-		}
+            wp_redirect(admin_url('admin.php?page=chilisearch&tab=where-to-search&get-started'));
+        }
         ?>
-		<h1><?= __('Chili Search', 'chilisearch') ?></h1>
-		<h2 class="nav-tab-wrapper">
-			<a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=analytics')) ?>" class="nav-tab <?=$tab==='analytics'?'nav-tab-active':''?>">Analytics</a>
-			<a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=settings')) ?>" class="nav-tab <?=$tab==='settings'?'nav-tab-active':''?>">Settings</a>
-			<a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=where-to-search')) ?>" class="nav-tab <?=$tab==='where-to-search'?'nav-tab-active':''?>">Where to Search</a>
-		</h2>
-		<?php
-		switch ($tab) {
-			case 'settings':
-				return require CHILISEARCH_DIR . '/templates/admin_tab_settings.php';
-			case 'where-to-search':
-				return require CHILISEARCH_DIR . '/templates/admin_tab_wts.php';
-			case 'indexing':
-				return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
-			case 'analytics':
-			default:
-				return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
-		}
-	}
+        <h1><?= __('Chili Search', 'chilisearch') ?></h1>
+        <h2 class="nav-tab-wrapper">
+            <a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=analytics')) ?>" class="nav-tab <?=$tab==='analytics'?'nav-tab-active':''?>">Analytics</a>
+            <a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=settings')) ?>" class="nav-tab <?=$tab==='settings'?'nav-tab-active':''?>">Settings</a>
+            <a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=where-to-search')) ?>" class="nav-tab <?=$tab==='where-to-search'?'nav-tab-active':''?>">Where to Search</a>
+        </h2>
+        <?php
+        switch ($tab) {
+            case 'settings':
+                return require CHILISEARCH_DIR . '/templates/admin_tab_settings.php';
+            case 'where-to-search':
+                return require CHILISEARCH_DIR . '/templates/admin_tab_wts.php';
+            case 'indexing':
+                return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
+            case 'analytics':
+            default:
+                return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
+        }
+    }
 
     public function get_website_info()
     {
-	    if (empty($this->configs['site_api_secret'])) {
+        if (empty($this->configs['site_api_secret'])) {
             return null;
         }
         if (!empty($this->configs['website_info']['last_check']) && !isset($_GET['fresh'])) {
@@ -679,39 +686,39 @@ final class ChiliSearch
             'publishedAt' => !empty($post->post_date_gmt) ? $post->post_date_gmt : null,
         ];
         switch ($post->post_type) {
-	        case self::WP_POST_TYPE_PRODUCT:
-		        $product = wc_get_product($post->ID);
-	        	$document['categories'] = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'names']);
-	        	$document['tags'] = wp_get_post_terms($post->ID, 'product_tag', ['fields' => 'names']);
-	        	$document['excerpt'] = $product->get_short_description();
-	        	$document['price'] = (int)$product->get_price();
-	        	$document['sku'] = $product->get_sku();
-	        	$document['attributes'] = [];
-	        	/** @var WC_Product_Attribute $attribute */
-		        foreach ($product->get_attributes() as $attributeKey => $attribute) {
-		        	if (!$attribute->get_visible()) {
-		        		continue;
-			        }
-			        $terms = $attribute->get_terms();
-			        if (!empty($terms)) {
-				        foreach ( $terms as $term) {
-					        $document['attributes'][] = [
-						        'attribute' => wc_attribute_label($attributeKey),
-						        'value' => $term->name,
-					        ];
-				        }
-			        } else {
-				        foreach ( $attribute->get_options() as $option) {
-					        $document['attributes'][] = [
-						        'attribute' => wc_attribute_label($attributeKey),
-						        'value' => $option,
-					        ];
-				        }
-			        }
-	        	}
-	        	$document['status'] = $product->get_stock_status() === 'instock' ? 1 : 0;
-	        case self::WP_POST_TYPE_POST:
-	        case self::WP_POST_TYPE_PAGE:
+            case self::WP_POST_TYPE_PRODUCT:
+                $product = wc_get_product($post->ID);
+                $document['categories'] = wp_get_post_terms($post->ID, 'product_cat', ['fields' => 'names']);
+                $document['tags'] = wp_get_post_terms($post->ID, 'product_tag', ['fields' => 'names']);
+                $document['excerpt'] = $product->get_short_description();
+                $document['price'] = (int)$product->get_price();
+                $document['sku'] = $product->get_sku();
+                $document['attributes'] = [];
+                /** @var WC_Product_Attribute $attribute */
+                foreach ($product->get_attributes() as $attributeKey => $attribute) {
+                    if (!$attribute->get_visible()) {
+                        continue;
+                    }
+                    $terms = $attribute->get_terms();
+                    if (!empty($terms)) {
+                        foreach ( $terms as $term) {
+                            $document['attributes'][] = [
+                                'attribute' => wc_attribute_label($attributeKey),
+                                'value' => $term->name,
+                            ];
+                        }
+                    } else {
+                        foreach ( $attribute->get_options() as $option) {
+                            $document['attributes'][] = [
+                                'attribute' => wc_attribute_label($attributeKey),
+                                'value' => $option,
+                            ];
+                        }
+                    }
+                }
+                $document['status'] = $product->get_stock_status() === 'instock' ? 1 : 0;
+            case self::WP_POST_TYPE_POST:
+            case self::WP_POST_TYPE_PAGE:
                 $document['image'] = !empty($thumbnail = get_the_post_thumbnail_url($post->ID)) ? $thumbnail : null;
                 break;
             case self::WP_POST_TYPE_ATTACHMENT:
@@ -733,7 +740,7 @@ final class ChiliSearch
                     return null; // should be skipped
                 }
                 $document['title'] = __('In reply to:', 'chilisearch') . ' ' . $topic->post_title;
-	            $document['link'] = get_permalink($topic->ID) . "#post-" . $post->ID;
+                $document['link'] = get_permalink($topic->ID) . "#post-" . $post->ID;
             case self::WP_POST_TYPE_FORUM_FORUM:
             case self::WP_POST_TYPE_FORUM_TOPIC:
                 $document['type'] = 'forum_post';
@@ -805,13 +812,13 @@ final class ChiliSearch
         return sprintf('%s-%d', $post->post_type, $post->ID);
     }
 
-	protected function is_bbpress_active() {
-		return is_plugin_active( 'bbpress/bbpress.php' );
-	}
+    protected function is_bbpress_active() {
+        return is_plugin_active( 'bbpress/bbpress.php' );
+    }
 
-	protected function is_woocommerce_active() {
-		return is_plugin_active( 'woocommerce/woocommerce.php' );
-	}
+    protected function is_woocommerce_active() {
+        return is_plugin_active( 'woocommerce/woocommerce.php' );
+    }
 }
 
 ChiliSearch::getInstance();

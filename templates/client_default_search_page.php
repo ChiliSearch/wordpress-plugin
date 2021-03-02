@@ -2,9 +2,9 @@
 get_header();
 ?>
 <div class="wrap">
-	<main id="main" class="chilisearch-container" role="main">
+    <main id="main" class="chilisearch-container" role="main">
         <?= do_shortcode( '[chilisearch_search_page]' ); ?>
-	</main>
+    </main>
 </div>
 
 <style>

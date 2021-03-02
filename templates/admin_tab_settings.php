@@ -16,7 +16,7 @@
                                 <option value="<?= $page->ID ?>" <?= isset($this->settings['search_page_id']) && $this->settings['search_page_id'] == $page->ID ? 'selected' : '' ?>><?= sprintf('%s (%s) ', $page->post_title, get_permalink($page->ID)) ?></option>
                             <?php endforeach; ?>
                         </select>
-	                    <?php if (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1): ?><button type="button" class="button button-primary" id="create_set_search_page"><?= __('Create Search Page (recommended)', 'chilisearch'); ?></button><?php endif; ?>
+                        <?php if (!isset($this->settings['search_page_id']) || $this->settings['search_page_id'] == -1): ?><button type="button" class="button button-primary" id="create_set_search_page"><?= __('Create Search Page (recommended)', 'chilisearch'); ?></button><?php endif; ?>
                         <p class="description"><?= __('Choose the search result page', 'chilisearch') ?></p>
                     </label>
                 </td>
