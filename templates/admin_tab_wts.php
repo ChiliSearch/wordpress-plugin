@@ -252,7 +252,7 @@
                 },
                 function (response) {
                     if (response.status) {
-                        window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=indexing') ?>");
+                        window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=indexing' . (isset($_GET['get-started']) ? '&get-started' : '')) ?>");
                         return;
                     }
                     jQuery('#site_index_config button[type="submit"]').prop('disabled', false)

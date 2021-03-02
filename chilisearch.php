@@ -569,10 +569,11 @@ final class ChiliSearch
         if (empty($this->configs['site_api_secret']) || empty($this->configs['get_started_api_finished'])) {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
-        if (empty($this->configs['get_started_config_finished'])) {
-		    wp_redirect(esc_url(admin_url('admin.php?page=chilisearch-index-config')));
+		$tab = !empty($_GET['tab']) ? $_GET['tab'] : 'analytics';
+        if (empty($this->configs['get_started_config_finished']) && $tab !== 'where-to-search') {
+		    wp_redirect(admin_url('admin.php?page=chilisearch&tab=where-to-search&get-started'));
 		}
-		$tab = !empty($_GET['tab']) ? $_GET['tab'] : 'analytics'; ?>
+        ?>
 		<h1><?= __('Chili Search', 'chilisearch') ?></h1>
 		<h2 class="nav-tab-wrapper">
 			<a href="<?= esc_url(admin_url('admin.php?page=chilisearch&tab=analytics')) ?>" class="nav-tab <?=$tab==='analytics'?'nav-tab-active':''?>">Analytics</a>
@@ -598,7 +599,7 @@ final class ChiliSearch
 	    if (empty($this->configs['site_api_secret'])) {
             return null;
         }
-        if (!empty($this->configs['website_info']['last_check'])) {
+        if (!empty($this->configs['website_info']['last_check']) && !isset($_GET['fresh'])) {
             $seconds_ago = microtime(true) - $this->configs['website_info']['last_check'];
             if ($seconds_ago < 10 * 60) {
                 return $this->configs['website_info'];

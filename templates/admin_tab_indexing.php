@@ -148,7 +148,7 @@
     }
     function reindexExistingContent() {
         if (!reindex) {
-            window.location.replace("<?= esc_url(admin_url('admin.php?page=chilisearch')) ?>");
+            window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=analytics&fresh' . (isset($_GET['get-started']) ? '&get-started' : '')) ?>");
             return
         }
         setProgressPercentage(100)
@@ -156,7 +156,7 @@
         function indexDocumentInChiliSearch(index, retry = 0) {
             if (!(index in alreadyIndexedDocuments)) {
                 setProgressPercentage(200)
-                window.location.replace("<?= esc_url(admin_url('admin.php?page=chilisearch')) ?>");
+                window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=analytics&fresh' . (isset($_GET['get-started']) ? '&get-started' : '')) ?>");
                 return
             }
             jQuery.post(

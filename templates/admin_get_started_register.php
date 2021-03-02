@@ -43,7 +43,7 @@
                 },
                 function(response) {
                     if (response.status) {
-                        window.location.replace("<?= esc_url(admin_url('admin.php?page=chilisearch')) ?>");
+                        window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=where-to-search&get-started') ?>");
                         return;
                     }
                     jQuery('#form_terms_and_conditions button[type="submit"]').prop('disabled', false)
