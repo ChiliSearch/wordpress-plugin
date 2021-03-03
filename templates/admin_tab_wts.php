@@ -116,6 +116,16 @@
                     </div>
                 </td>
             </tr>
+            <tr valign="top">
+                <th scope="row"><label><?= __( 'Reindex', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="reindex" id="reindex">
+                        <?= __( 'Reindex all documents', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Used when shown documents in search result are not updated.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
             </tbody>
         </table>
         <span style="float: left;" id="get_post_counts_spinner" class="spinner is-active"></span>
@@ -231,6 +241,7 @@
         jQuery('#bbpress_forum').trigger('change');
         jQuery('#site_index_config').submit(function (e) {
             e.preventDefault();
+            let reindex = jQuery('#site_index_config #reindex').is(":checked")
             jQuery('#site_index_config button[type="submit"]').prop('disabled', true)
             jQuery.post(
                 ajaxurl,
@@ -252,7 +263,7 @@
                 },
                 function (response) {
                     if (response.status) {
-                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=indexing' . ( isset( $_GET['get-started'] ) ? '&get-started' : '' ) ) ?>");
+                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=indexing' . ( isset( $_GET['get-started'] ) ? '&get-started' : '' ) ) ?>" + (reindex ? '&reindex' : ''));
                         return;
                     }
                     jQuery('#site_index_config button[type="submit"]').prop('disabled', false)
