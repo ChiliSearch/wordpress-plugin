@@ -102,13 +102,14 @@ final class ChiliSearch {
     private static $instance = null;
 
     private $settings = [
-        'search_page_id'        => - 1,
-        'search_page_size'      => 15,
-        'sayt_page_size'        => 5,
-        'search_word_type'      => self::SEARCH_WORD_TYPE_BOTH,
-        'sort_by'               => self::SORT_BY_RELEVANCY,
-        'display_result_image'  => true,
-        'search_input_selector' => 'input[name="s"]',
+        'search_page_id'               => - 1,
+        'search_page_size'             => 15,
+        'sayt_page_size'               => 5,
+        'search_word_type'             => self::SEARCH_WORD_TYPE_BOTH,
+        'sort_by'                      => self::SORT_BY_RELEVANCY,
+        'display_result_image'         => true,
+        'display_result_product_price' => true,
+        'search_input_selector'        => 'input[name="s"]',
     ];
     private $wts_settings = [
         'posts'                                  => true,
@@ -415,13 +416,14 @@ final class ChiliSearch {
             wp_send_json( [ 'status' => false, 'message' => __( 'Search result page is not valid.', 'chilisearch' ) ] );
         }
         $this->get_settings();
-        $this->settings['search_page_size']      = (int) sanitize_key( trim( $_POST['search_page_size'] ) );
-        $this->settings['sayt_page_size']        = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
-        $this->settings['search_input_selector'] = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
-        $this->settings['search_page_id']        = $searchPageId;
-        $this->settings['search_word_type']      = sanitize_key( trim( $_POST['search_word_type'] ) );
-        $this->settings['sort_by']               = sanitize_key( trim( $_POST['sort_by'] ) );
-        $this->settings['display_result_image']  = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
+        $this->settings['search_page_size']             = (int) sanitize_key( trim( $_POST['search_page_size'] ) );
+        $this->settings['sayt_page_size']               = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
+        $this->settings['search_input_selector']        = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
+        $this->settings['search_page_id']               = $searchPageId;
+        $this->settings['search_word_type']             = sanitize_key( trim( $_POST['search_word_type'] ) );
+        $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
+        $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
+        $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
