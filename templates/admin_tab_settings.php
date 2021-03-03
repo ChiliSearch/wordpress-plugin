@@ -6,6 +6,19 @@
         <table class="form-table">
             <tbody>
             <tr valign="top">
+                <th scope="row"><label><?= __( 'Search Type', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <select name="chilisearch_settings[search_word_type]" id="search_word_type" class="regular-text">
+                            <?php foreach ( ChiliSearch::get_word_types() as $search_word_type => $search_word_type_name ): ?>
+                                <option value="<?= $search_word_type ?>" <?= $this->settings['search_word_type'] === $search_word_type ? 'selected' : '' ?>><?= $search_word_type_name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="description"><?= __( 'Select if you want to match the whole word, partial word or both.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -65,6 +78,7 @@
                     'sayt_page_size': jQuery('#site_config_update #sayt_page_size').val(),
                     'search_input_selector': jQuery('#site_config_update #search_input_selector').val(),
                     'search_page_id': jQuery('#site_config_update #search_page_id').val(),
+                    'search_word_type': jQuery('#site_config_update #search_word_type').val(),
                 },
                 function (response) {
                     if (response.status) {

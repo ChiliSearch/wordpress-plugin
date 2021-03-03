@@ -82,6 +82,9 @@ final class ChiliSearch {
         self::WP_POST_TYPE_FORUM_TOPIC,
         self::WP_POST_TYPE_FORUM_REPLY,
     ];
+    const SEARCH_WORD_TYPE_BOTH = 'both';
+    const SEARCH_WORD_TYPE_WHOLE_WORD = 'whole_word';
+    const SEARCH_WORD_TYPE_PARTIAL_WORD = 'partial_word';
 
     private static $instance = null;
 
@@ -89,6 +92,7 @@ final class ChiliSearch {
         'search_page_id'        => - 1,
         'search_page_size'      => 15,
         'sayt_page_size'        => 5,
+        'search_word_type'      => self::SEARCH_WORD_TYPE_BOTH,
         'search_input_selector' => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -136,6 +140,14 @@ final class ChiliSearch {
         }
 
         return self::$instance;
+    }
+
+    public static function get_word_types() {
+        return [
+            self::SEARCH_WORD_TYPE_BOTH => __('Both', 'chilisearch'),
+            self::SEARCH_WORD_TYPE_WHOLE_WORD => __('Whole Word', 'chilisearch'),
+            self::SEARCH_WORD_TYPE_PARTIAL_WORD => __('Partial Word', 'chilisearch'),
+        ];
     }
 
     private function get_settings() {
@@ -361,6 +373,10 @@ final class ChiliSearch {
         if ( empty( $_POST['search_page_id'] ) ) {
             wp_send_json( [ 'status'  => false, 'message' => __( 'Search result page is not selected.', 'chilisearch' ) ] );
         }
+        $word_types = self::get_word_types();
+        if ( empty( $_POST['search_word_type'] ) || !isset($word_types[$_POST['search_word_type']])) {
+            wp_send_json( [ 'status'  => false, 'message' => __( 'Search type is invalid.', 'chilisearch' ) ] );
+        }
         $searchPageId            = (int) sanitize_key( trim( $_POST['search_page_id'] ) );
         $possibleSearchPageIDs   = array_map( function ( $page ) {
             return $page->ID;
@@ -374,6 +390,7 @@ final class ChiliSearch {
         $this->settings['sayt_page_size']        = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
         $this->settings['search_input_selector'] = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
         $this->settings['search_page_id']        = $searchPageId;
+        $this->settings['search_word_type']      = sanitize_key( trim( $_POST['search_word_type'] ) );
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
