@@ -27,7 +27,7 @@
                                 <option value="<?= $sort_by ?>" <?= $this->settings['sort_by'] === $sort_by ? 'selected' : '' ?> <?= ($sort_by === self::SORT_BY_PRICE_DESC || $sort_by === self::SORT_BY_PRICE_ASC) && empty( $this->wts_settings['woocommerce_products'] ) ? 'disabled="disabled"' : '' ?>><?= $sort_by_name ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <p class="description"><?= __( 'Select if you want to match the whole word, partial word or both.', 'chilisearch' ) ?></p>
+                        <p class="description"><?= __( 'Sort search result by.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
@@ -42,7 +42,7 @@
                             <?php endforeach; ?>
                         </select>
                         <?php if ( ! isset( $this->settings['search_page_id'] ) || $this->settings['search_page_id'] == - 1 ): ?><button type="button" class="button button-primary" id="create_set_search_page"><?= __( 'Create Search Page (recommended)', 'chilisearch' ); ?></button><?php endif; ?>
-                        <p class="description"><?= __( 'Choose the search result page', 'chilisearch' ) ?></p>
+                        <p class="description"><?= __( 'Choose the search result page.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
