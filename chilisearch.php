@@ -107,6 +107,7 @@ final class ChiliSearch {
         'sayt_page_size'        => 5,
         'search_word_type'      => self::SEARCH_WORD_TYPE_BOTH,
         'sort_by'               => self::SORT_BY_RELEVANCY,
+        'display_result_image'  => true,
         'search_input_selector' => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -420,6 +421,7 @@ final class ChiliSearch {
         $this->settings['search_page_id']        = $searchPageId;
         $this->settings['search_word_type']      = sanitize_key( trim( $_POST['search_word_type'] ) );
         $this->settings['sort_by']               = sanitize_key( trim( $_POST['sort_by'] ) );
+        $this->settings['display_result_image']  = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }

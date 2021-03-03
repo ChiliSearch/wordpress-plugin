@@ -32,6 +32,15 @@
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label><?= __( 'Display Image in Result', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label for="display_result_image">
+                        <input type="checkbox" name="chilisearch_settings[display_result_image]" id="display_result_image" value="true" <?= $this->settings['display_result_image'] ? 'checked' : '' ?>>
+                        <?= __( 'Display', 'chilisearch' ) ?>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -93,6 +102,7 @@
                     'search_page_id': jQuery('#site_config_update #search_page_id').val(),
                     'search_word_type': jQuery('#site_config_update #search_word_type').val(),
                     'sort_by': jQuery('#site_config_update #sort_by').val(),
+                    'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                 },
                 function (response) {
                     if (response.status) {
