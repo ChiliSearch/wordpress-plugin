@@ -191,7 +191,7 @@ final class ChiliSearch {
         add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $links ) {
             array_unshift( $links, sprintf(
                 '<a href="%s">%s</a>',
-                esc_url( add_query_arg( array( 'page' => 'chilisearch' ), admin_url( 'options-general.php' ) ) ),
+                esc_url( add_query_arg( array( 'page' => 'chilisearch' ), admin_url( 'admin.php' ) ) ),
                 __( 'Settings', 'chilisearch' )
             ) );
             return $links;
@@ -217,20 +217,15 @@ final class ChiliSearch {
         add_action( 'admin_init', function () {
             register_setting( 'chilisearch_settings_group', 'chilisearch_settings' );
         } );
-//        add_action('admin_notices', function () {
-//            if (empty($this->settings['site_api_key'])) {
-//                echo '<div class="error"><p>'
-//                    . sprintf(__('Chili Search: Enter site API Key in %ssettings%s page to enable Chili Search.', 'chilisearch'),
-//                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
-//                    . '</p></div>';
-//            }
-//            if (empty($this->settings['site_api_secret']) && !empty($this->settings['site_api_key'])) {
-//                echo '<div class="error"><p>'
-//                    . sprintf(__('Chili Search: Enter site API secret in %ssettings%s page to enable indexing your content into Chili Search.', 'chilisearch'),
-//                        '<a href="' . esc_url(admin_url('options-general.php?page=chilisearch')) . '">', '</a>')
-//                    . '</p></div>';
-//            }
-//        });
+        add_action('admin_notices', function () {
+            if (empty($this->settings['site_api_secret']) && (!isset($_GET['page']) || $_GET['page'] !== 'chilisearch')) {
+                echo '<div class="notice notice-warning is-dismissible"><p>
+                         <strong>' . __('Chili Search Setup', 'chilisearch') . '</strong><br>'
+                    . sprintf(__('Setup your Chili Search %shere%s to empower your website\'s search!', 'chilisearch'),
+                        '<a href="' . esc_url(admin_url('admin.php?page=chilisearch')) . '">', '</a>')
+                    . '</p></div>';
+            }
+        });
         register_activation_hook( __FILE__, function () {
             ChiliSearch::getInstance()->activation();
         } );

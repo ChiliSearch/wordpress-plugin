@@ -1,6 +1,6 @@
 <style>
     #chilisearch_terms_and_conditions_holder {
-        height: 500px;
+        height: 600px;
         border: 1px solid #ccc;
         padding: 10px;
         margin: 0 auto;
@@ -10,13 +10,14 @@
     }
     #chilisearch_terms_and_conditions_consent {
         margin-top: 15px;
+        text-align: center;
     }
 </style>
-<h2>Terms and Conditions:</h2>
+<h1>Terms and Conditions:</h1>
 <iframe id="chilisearch_terms_and_conditions_holder" src="https://chilisearch.com/terms.php"></iframe>
 <div id="chilisearch_terms_and_conditions_consent">
     <p>
-        <?= sprintf( __( 'By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChiliSearch%s.', 'chilisearch' ), '<a href="https://chilisearch.com/" target="_blank">', '</a>' ); ?>
+        <?= sprintf( __( 'By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChili Search%s.', 'chilisearch' ), '<a href="https://chilisearch.com/" target="_blank">', '</a>' ); ?>
     </p>
     <form method="post" action="" id="form_terms_and_conditions">
         <p class="text-center">
