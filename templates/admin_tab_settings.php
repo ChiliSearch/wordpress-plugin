@@ -41,10 +41,19 @@
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label><?= __( 'Display Short Description in Result', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label for="display_result_excerpt">
+                        <input type="checkbox" name="chilisearch_settings[display_result_excerpt]" id="display_result_excerpt" value="true" <?= $this->settings['display_result_excerpt'] ? 'checked' : '' ?>>
+                        <?= __( 'Display', 'chilisearch' ) ?>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label><?= __( 'Display Product Price in Result', 'chilisearch' ) ?></label></th>
                 <td>
                     <label for="display_result_product_price">
-                        <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->settings['display_result_product_price'] ? 'checked' : '' ?>>
+                        <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->wts_settings['woocommerce_products'] && $this->settings['display_result_product_price'] ? 'checked' : '' ?> <?= !$this->wts_settings['woocommerce_products'] ? 'disabled="disabled"' : '' ?>>
                         <?= __( 'Display', 'chilisearch' ) ?>
                     </label>
                 </td>
@@ -113,6 +122,7 @@
                     'sort_by': jQuery('#site_config_update #sort_by').val(),
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
+                    'display_result_excerpt': jQuery('#site_config_update #display_result_excerpt').is(":checked"),
                 },
                 function (response) {
                     if (response.status) {

@@ -109,6 +109,7 @@ final class ChiliSearch {
         'sort_by'                      => self::SORT_BY_RELEVANCY,
         'display_result_image'         => true,
         'display_result_product_price' => true,
+        'display_result_excerpt'       => true,
         'search_input_selector'        => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -424,6 +425,7 @@ final class ChiliSearch {
         $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
         $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
         $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
+        $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
