@@ -1,3 +1,16 @@
+<style>
+    #weights label {
+        display: block;
+        margin: 5px;
+    }
+    #weights label span {
+        width: 100px;
+        display: inline-block;
+    }
+    #weights label input {
+        width: 50px;
+    }
+</style>
 <div class="wrap">
     <h2><?php _e( 'Settings', 'chilisearch' ); ?></h2>
     <form method="post" action="options.php" id="site_config_update">
@@ -56,6 +69,32 @@
                         <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->wts_settings['woocommerce_products'] && $this->settings['display_result_product_price'] ? 'checked' : '' ?> <?= !$this->wts_settings['woocommerce_products'] ? 'disabled="disabled"' : '' ?>>
                         <?= __( 'Display', 'chilisearch' ) ?>
                     </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label><?= __( 'Search Weight', 'chilisearch' ) ?></label></th>
+                <td id="weights">
+                    <label for="weight_title">
+                        <span><?= __( 'Title', 'chilisearch' ) ?>: </span>
+                        <input type="number" name="chilisearch_settings[weight_title]" id="weight_title" class="regular-text" min="1" max="10" value="<?= $this->settings['weight_title'] ?>"/>
+                    </label>
+                    <label for="weight_excerpt">
+                        <span><?= __( 'Excerpt', 'chilisearch' ) ?>: </span>
+                        <input type="number" name="chilisearch_settings[weight_excerpt]" id="weight_excerpt" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_excerpt'] ?>"/>
+                    </label>
+                    <label for="weight_body">
+                        <span><?= __( 'Body', 'chilisearch' ) ?>: </span>
+                        <input type="number" name="chilisearch_settings[weight_body]" id="weight_body" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_body'] ?>"/>
+                    </label>
+                    <label for="weight_tags">
+                        <span><?= __( 'Tags', 'chilisearch' ) ?>: </span>
+                        <input type="number" name="chilisearch_settings[weight_tags]" id="weight_tags" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_tags'] ?>"/>
+                    </label>
+                    <label for="weight_categories">
+                        <span><?= __( 'Category', 'chilisearch' ) ?>: </span>
+                        <input type="number" name="chilisearch_settings[weight_categories]" id="weight_categories" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_categories'] ?>"/>
+                    </label>
+                    <p class="description"><?= __( 'Define weight for each field of the document.', 'chilisearch' ) ?></p>
                 </td>
             </tr>
             <tr valign="top">
@@ -123,6 +162,11 @@
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
                     'display_result_excerpt': jQuery('#site_config_update #display_result_excerpt').is(":checked"),
+                    'weight_title': jQuery('#site_config_update #weight_title').val(),
+                    'weight_excerpt': jQuery('#site_config_update #weight_excerpt').val(),
+                    'weight_body': jQuery('#site_config_update #weight_body').val(),
+                    'weight_tags': jQuery('#site_config_update #weight_tags').val(),
+                    'weight_categories': jQuery('#site_config_update #weight_categories').val(),
                 },
                 function (response) {
                     if (response.status) {

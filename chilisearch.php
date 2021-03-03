@@ -110,6 +110,11 @@ final class ChiliSearch {
         'display_result_image'         => true,
         'display_result_product_price' => true,
         'display_result_excerpt'       => true,
+        'weight_title'                 => 3,
+        'weight_excerpt'               => 2,
+        'weight_body'                  => 1,
+        'weight_tags'                  => 5,
+        'weight_categories'            => 3,
         'search_input_selector'        => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -400,6 +405,21 @@ final class ChiliSearch {
         if ( empty( $_POST['search_page_id'] ) ) {
             wp_send_json( [ 'status'  => false, 'message' => __( 'Search result page is not selected.', 'chilisearch' ) ] );
         }
+        if ( !isset( $_POST['weight_title'] ) ) {
+            wp_send_json( [ 'status'  => false, 'message' => __( 'Weight for title is not selected.', 'chilisearch' ) ] );
+        }
+        if ( !isset( $_POST['weight_excerpt'] ) ) {
+            wp_send_json( [ 'status'  => false, 'message' => __( 'Weight for excerpt is not selected.', 'chilisearch' ) ] );
+        }
+        if ( !isset( $_POST['weight_body'] ) ) {
+            wp_send_json( [ 'status'  => false, 'message' => __( 'Weight for body is not selected.', 'chilisearch' ) ] );
+        }
+        if ( !isset( $_POST['weight_tags'] ) ) {
+            wp_send_json( [ 'status'  => false, 'message' => __( 'Weight for tags is not selected.', 'chilisearch' ) ] );
+        }
+        if ( !isset( $_POST['weight_categories'] ) ) {
+            wp_send_json( [ 'status'  => false, 'message' => __( 'Weight for category is not selected.', 'chilisearch' ) ] );
+        }
         $word_types = self::get_word_types();
         if ( empty( $_POST['search_word_type'] ) || ! isset( $word_types[ $_POST['search_word_type'] ] ) ) {
             wp_send_json( [ 'status' => false, 'message' => __( 'Search type is invalid.', 'chilisearch' ) ] );
@@ -426,6 +446,11 @@ final class ChiliSearch {
         $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
         $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
         $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
+        $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
+        $this->settings['weight_excerpt']               = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
+        $this->settings['weight_body']                  = (int) sanitize_key( trim( $_POST['weight_body'] ) );
+        $this->settings['weight_tags']                  = (int) sanitize_key( trim( $_POST['weight_tags'] ) );
+        $this->settings['weight_categories']            = (int) sanitize_key( trim( $_POST['weight_categories'] ) );
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
