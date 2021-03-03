@@ -16,21 +16,21 @@
 <iframe id="chilisearch_terms_and_conditions_holder" src="https://chilisearch.com/terms.php"></iframe>
 <div id="chilisearch_terms_and_conditions_consent">
     <p>
-        <?= sprintf(__('By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChiliSearch%s.', 'chilisearch'), '<a href="https://chilisearch.com/" target="_blank">', '</a>'); ?>
+        <?= sprintf( __( 'By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChiliSearch%s.', 'chilisearch' ), '<a href="https://chilisearch.com/" target="_blank">', '</a>' ); ?>
     </p>
     <form method="post" action="" id="form_terms_and_conditions">
         <p class="text-center">
             <input type="hidden" name="accept_terms_and_conditions" value="1"/>
-            <button type="submit" class="button button-primary"><?= __('I accept Terms and Conditions', 'chilisearch') ?></button>
+            <button type="submit" class="button button-primary"><?= __( 'I accept Terms and Conditions', 'chilisearch' ) ?></button>
         </p>
         <div class="clearfix"></div>
     </form>
     <div class="clearfix"></div>
 </div>
-<script type="text/javascript" >
-    jQuery(document).ready(function($) {
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
         jQuery('#form_terms_and_conditions button[type="submit"]').prop('disabled', true)
-        jQuery('#chilisearch_terms_and_conditions_holder').load(function(){
+        jQuery('#chilisearch_terms_and_conditions_holder').load(function () {
             jQuery('#form_terms_and_conditions button[type="submit"]').prop('disabled', false)
         });
         jQuery('#form_terms_and_conditions').submit(function (e) {
@@ -41,9 +41,9 @@
                 {
                     'action': 'admin_ajax_register_website',
                 },
-                function(response) {
+                function (response) {
                     if (response.status) {
-                        window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=where-to-search&get-started') ?>");
+                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=where-to-search&get-started' ) ?>");
                         return;
                     }
                     jQuery('#form_terms_and_conditions button[type="submit"]').prop('disabled', false)

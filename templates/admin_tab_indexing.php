@@ -14,7 +14,9 @@
             </g>
         </g>
     </svg>
-    <div class="media-progress-bar" id="progress"><div class="progress-bar" style="width: 0%"></div></div>
+    <div class="media-progress-bar" id="progress">
+        <div class="progress-bar" style="width: 0%"></div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -43,6 +45,7 @@
             alert('Failed to load list of indexed content in Chili Search. please refresh the page and try again.');
         });
     }
+
     function getListOfContentNeedToBeIndexed() {
         jQuery.post(
             ajaxurl,
@@ -53,7 +56,7 @@
                 if (status === "success" && response.status) {
                     setProgressPercentage(10)
                     wordpressPublicDocuments = wordpressPublicDocuments.concat(response.documents)
-                    setTimeout(function() {
+                    setTimeout(function () {
                         deleteContentShouldNotBeIndexed();
                     }, 100);
                 } else {
@@ -64,9 +67,11 @@
             alert('Failed to load list of content need to be indexed in Chili Search. please refresh the page and try again.');
         });
     }
+
     function deleteContentShouldNotBeIndexed() {
         let needToBeDeletedDocuments = alreadyIndexedDocuments.filter(x => !wordpressPublicDocuments.includes(x));
         let successfulDeletes = 0;
+
         function deleteDocumentFromChiliSearch(index, retry = 0) {
             if (!(index in needToBeDeletedDocuments)) {
                 setProgressPercentage(50)
@@ -85,28 +90,31 @@
                         successfulDeletes++
                         let progressPercentage = ((index / needToBeDeletedDocuments.length) * 30) + 20
                         setProgressPercentage(progressPercentage)
-                        deleteDocumentFromChiliSearch(index+1)
+                        deleteDocumentFromChiliSearch(index + 1)
                     } else {
                         if (retry < 2) {
-                            deleteDocumentFromChiliSearch(index, retry+1)
+                            deleteDocumentFromChiliSearch(index, retry + 1)
                         } else {
-                            deleteDocumentFromChiliSearch(index+1)
+                            deleteDocumentFromChiliSearch(index + 1)
                         }
                     }
                 }
             ).fail(function () {
                 if (retry < 2) {
-                    deleteDocumentFromChiliSearch(index, retry+1)
+                    deleteDocumentFromChiliSearch(index, retry + 1)
                 } else {
-                    deleteDocumentFromChiliSearch(index+1)
+                    deleteDocumentFromChiliSearch(index + 1)
                 }
             });
         }
+
         deleteDocumentFromChiliSearch(0)
     }
+
     function indexMissingContent() {
         let needToBeIndexedDocuments = wordpressPublicDocuments.filter(x => !alreadyIndexedDocuments.includes(x));
         let successfulIndexed = 0;
+
         function indexDocumentInChiliSearch(index, retry = 0) {
             if (!(index in needToBeIndexedDocuments)) {
                 setProgressPercentage(100)
@@ -125,13 +133,16 @@
                         successfulIndexed++
                         let progressPercentage = ((index / needToBeIndexedDocuments.length) * 50) + 50;
                         setProgressPercentage(progressPercentage)
-                        indexDocumentInChiliSearch(index+1)
+                        indexDocumentInChiliSearch(index + 1)
                     } else {
                         if (retry < 2) {
                             indexDocumentInChiliSearch(index, retry + 1)
                         } else {
-                            console.log('Failed to index #{documentId}: {message}'.csf({documentId: needToBeIndexedDocuments[index], message: ('message' in response?response.message:'')}))
-                            indexDocumentInChiliSearch(index+1)
+                            console.log('Failed to index #{documentId}: {message}'.csf({
+                                documentId: needToBeIndexedDocuments[index],
+                                message: ('message' in response ? response.message : '')
+                            }))
+                            indexDocumentInChiliSearch(index + 1)
                         }
                     }
                 }
@@ -140,23 +151,26 @@
                     indexDocumentInChiliSearch(index, retry + 1)
                 } else {
                     console.log('Failed to index #{documentId}: server error!'.csf({documentId: needToBeIndexedDocuments[index]}))
-                    indexDocumentInChiliSearch(index+1)
+                    indexDocumentInChiliSearch(index + 1)
                 }
             });
         }
+
         indexDocumentInChiliSearch(0)
     }
+
     function reindexExistingContent() {
         if (!reindex) {
-            window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=analytics&fresh' . (isset($_GET['get-started']) ? '&get-started' : '')) ?>");
+            window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=analytics&fresh' . ( isset( $_GET['get-started'] ) ? '&get-started' : '' ) ) ?>");
             return
         }
         setProgressPercentage(100)
         let successfulIndexed = 0;
+
         function indexDocumentInChiliSearch(index, retry = 0) {
             if (!(index in alreadyIndexedDocuments)) {
                 setProgressPercentage(200)
-                window.location.replace("<?= admin_url('admin.php?page=chilisearch&tab=analytics&fresh' . (isset($_GET['get-started']) ? '&get-started' : '')) ?>");
+                window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=analytics&fresh' . ( isset( $_GET['get-started'] ) ? '&get-started' : '' ) ) ?>");
                 return
             }
             jQuery.post(
@@ -170,13 +184,16 @@
                         successfulIndexed++
                         let progressPercentage = ((index / alreadyIndexedDocuments.length) * 100) + 100
                         setProgressPercentage(progressPercentage)
-                        indexDocumentInChiliSearch(index+1)
+                        indexDocumentInChiliSearch(index + 1)
                     } else {
                         if (retry < 2) {
                             indexDocumentInChiliSearch(index, retry + 1)
                         } else {
-                            console.log('Failed to index #{documentId}: {message}'.csf({documentId: alreadyIndexedDocuments[index], message: ('message' in response?response.message:'')}))
-                            indexDocumentInChiliSearch(index+1)
+                            console.log('Failed to index #{documentId}: {message}'.csf({
+                                documentId: alreadyIndexedDocuments[index],
+                                message: ('message' in response ? response.message : '')
+                            }))
+                            indexDocumentInChiliSearch(index + 1)
                         }
                     }
                 }
@@ -185,27 +202,31 @@
                     indexDocumentInChiliSearch(index, retry + 1)
                 } else {
                     console.log('Failed to index #{documentId}: server error!'.csf({documentId: alreadyIndexedDocuments[index]}))
-                    indexDocumentInChiliSearch(index+1)
+                    indexDocumentInChiliSearch(index + 1)
                 }
             });
         }
+
         indexDocumentInChiliSearch(0)
     }
-    function setProgressPercentage(percentage)
-    {
+
+    function setProgressPercentage(percentage) {
         if (reindex) {
-            percentage = percentage/2
+            percentage = percentage / 2
         }
         progressbar.css('width', percentage + '%')
     }
+
     String.prototype.csf = String.prototype.csf || function () {
         let str = this.toString();
         if (arguments.length) {
-            let t = typeof arguments[0], args = ("string" === t || "number" === t) ? Array.prototype.slice.call(arguments) : arguments[0];
+            let t = typeof arguments[0],
+                args = ("string" === t || "number" === t) ? Array.prototype.slice.call(arguments) : arguments[0];
             for (let arg in args) {
                 str = str.replace(new RegExp("\\{" + arg + "\\}", "gi"), args[arg]);
             }
-        };
+        }
+
         return str;
     };
     jQuery(document).ready(function ($) {
