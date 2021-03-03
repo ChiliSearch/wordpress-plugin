@@ -19,6 +19,19 @@
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label><?= __( 'Sort by', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <select name="chilisearch_settings[sort_by]" id="sort_by" class="regular-text">
+                            <?php foreach ( ChiliSearch::get_sort_bys() as $sort_by => $sort_by_name ): ?>
+                                <option value="<?= $sort_by ?>" <?= $this->settings['sort_by'] === $sort_by ? 'selected' : '' ?> <?= ($sort_by === self::SORT_BY_PRICE_DESC || $sort_by === self::SORT_BY_PRICE_ASC) && empty( $this->wts_settings['woocommerce_products'] ) ? 'disabled="disabled"' : '' ?>><?= $sort_by_name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="description"><?= __( 'Select if you want to match the whole word, partial word or both.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -79,6 +92,7 @@
                     'search_input_selector': jQuery('#site_config_update #search_input_selector').val(),
                     'search_page_id': jQuery('#site_config_update #search_page_id').val(),
                     'search_word_type': jQuery('#site_config_update #search_word_type').val(),
+                    'sort_by': jQuery('#site_config_update #sort_by').val(),
                 },
                 function (response) {
                     if (response.status) {

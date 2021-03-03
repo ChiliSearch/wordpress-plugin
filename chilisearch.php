@@ -86,6 +86,19 @@ final class ChiliSearch {
     const SEARCH_WORD_TYPE_WHOLE_WORD = 'whole_word';
     const SEARCH_WORD_TYPE_PARTIAL_WORD = 'partial_word';
 
+    const SORT_BY_RELEVANCY = 'relevancy';
+    const SORT_BY_PUBLISHED_AT_DESC = 'publishedat-desc';
+    const SORT_BY_PUBLISHED_AT_ASC = 'publishedat-asc';
+    const SORT_BY_PRICE_DESC = 'price-desc';
+    const SORT_BY_PRICE_ASC = 'price-asc';
+    const SORT_BYS = [
+        self::SORT_BY_RELEVANCY         => '',
+        self::SORT_BY_PUBLISHED_AT_DESC => '-publishedAt',
+        self::SORT_BY_PUBLISHED_AT_ASC  => '+publishedAt',
+        self::SORT_BY_PRICE_DESC        => '+price',
+        self::SORT_BY_PRICE_ASC         => '-price',
+    ];
+
     private static $instance = null;
 
     private $settings = [
@@ -93,6 +106,7 @@ final class ChiliSearch {
         'search_page_size'      => 15,
         'sayt_page_size'        => 5,
         'search_word_type'      => self::SEARCH_WORD_TYPE_BOTH,
+        'sort_by'               => self::SORT_BY_RELEVANCY,
         'search_input_selector' => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -147,6 +161,16 @@ final class ChiliSearch {
             self::SEARCH_WORD_TYPE_BOTH => __('Both', 'chilisearch'),
             self::SEARCH_WORD_TYPE_WHOLE_WORD => __('Whole Word', 'chilisearch'),
             self::SEARCH_WORD_TYPE_PARTIAL_WORD => __('Partial Word', 'chilisearch'),
+        ];
+    }
+
+    public static function get_sort_bys() {
+        return [
+            self::SORT_BY_RELEVANCY         => __( 'Relevancy', 'chilisearch' ),
+            self::SORT_BY_PUBLISHED_AT_DESC => __( 'PublishedAt DESC', 'chilisearch' ),
+            self::SORT_BY_PUBLISHED_AT_ASC  => __( 'PublishedAt ASC', 'chilisearch' ),
+            self::SORT_BY_PRICE_DESC        => __( 'Price DESC', 'chilisearch' ),
+            self::SORT_BY_PRICE_ASC         => __( 'Price ASC', 'chilisearch' ),
         ];
     }
 
@@ -374,8 +398,12 @@ final class ChiliSearch {
             wp_send_json( [ 'status'  => false, 'message' => __( 'Search result page is not selected.', 'chilisearch' ) ] );
         }
         $word_types = self::get_word_types();
-        if ( empty( $_POST['search_word_type'] ) || !isset($word_types[$_POST['search_word_type']])) {
-            wp_send_json( [ 'status'  => false, 'message' => __( 'Search type is invalid.', 'chilisearch' ) ] );
+        if ( empty( $_POST['search_word_type'] ) || ! isset( $word_types[ $_POST['search_word_type'] ] ) ) {
+            wp_send_json( [ 'status' => false, 'message' => __( 'Search type is invalid.', 'chilisearch' ) ] );
+        }
+        $sort_bys = self::get_sort_bys();
+        if ( empty( $_POST['sort_by'] ) || ! isset( $sort_bys[ $_POST['sort_by'] ] ) ) {
+            wp_send_json( [ 'status' => false, 'message' => __( 'Sort by is invalid.', 'chilisearch' ) ] );
         }
         $searchPageId            = (int) sanitize_key( trim( $_POST['search_page_id'] ) );
         $possibleSearchPageIDs   = array_map( function ( $page ) {
@@ -391,6 +419,7 @@ final class ChiliSearch {
         $this->settings['search_input_selector'] = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
         $this->settings['search_page_id']        = $searchPageId;
         $this->settings['search_word_type']      = sanitize_key( trim( $_POST['search_word_type'] ) );
+        $this->settings['sort_by']               = sanitize_key( trim( $_POST['sort_by'] ) );
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
