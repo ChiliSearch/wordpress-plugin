@@ -19,7 +19,7 @@
         <table class="form-table">
             <tbody>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Search Type', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="search_word_type"><?= __( 'Search type', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <select name="chilisearch_settings[search_word_type]" id="search_word_type" class="regular-text">
@@ -27,12 +27,12 @@
                                 <option value="<?= $search_word_type ?>" <?= $this->settings['search_word_type'] === $search_word_type ? 'selected' : '' ?>><?= $search_word_type_name ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <p class="description"><?= __( 'Select if you want to match the whole word, partial word or both.', 'chilisearch' ) ?></p>
+                        <p class="description"><?= __( 'Match the whole word, partial word or both.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Sort by', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="sort_by"><?= __( 'Sort by', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <select name="chilisearch_settings[sort_by]" id="sort_by" class="regular-text">
@@ -45,34 +45,37 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Display Image in Result', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="display_result_image"><?= __( 'Display thumbnail', 'chilisearch' ) ?></label></th>
                 <td>
-                    <label for="display_result_image">
+                    <label>
                         <input type="checkbox" name="chilisearch_settings[display_result_image]" id="display_result_image" value="true" <?= $this->settings['display_result_image'] ? 'checked' : '' ?>>
                         <?= __( 'Display', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Display thumbnail in search result.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Display Short Description in Result', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="display_result_excerpt"><?= __( 'Display excerpt', 'chilisearch' ) ?></label></th>
                 <td>
-                    <label for="display_result_excerpt">
+                    <label>
                         <input type="checkbox" name="chilisearch_settings[display_result_excerpt]" id="display_result_excerpt" value="true" <?= $this->settings['display_result_excerpt'] ? 'checked' : '' ?>>
                         <?= __( 'Display', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Display excerpt in search result.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Display Product Price in Result', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="display_result_product_price"><?= __( 'Display product price', 'chilisearch' ) ?></label></th>
                 <td>
-                    <label for="display_result_product_price">
+                    <label>
                         <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->wts_settings['woocommerce_products'] && $this->settings['display_result_product_price'] ? 'checked' : '' ?> <?= !$this->wts_settings['woocommerce_products'] ? 'disabled="disabled"' : '' ?>>
                         <?= __( 'Display', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Display product price in search result.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Search Weight', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label><?= __( 'Field weights', 'chilisearch' ) ?></label></th>
                 <td id="weights">
                     <label for="weight_title">
                         <span><?= __( 'Title', 'chilisearch' ) ?>: </span>
@@ -98,7 +101,7 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="search_page_id"><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <select name="chilisearch_settings[search_page_id]" id="search_page_id" class="regular-text">
@@ -113,7 +116,7 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Search page results number', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="search_page_size"><?= __( 'Search page results number', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <input type="number" name="chilisearch_settings[search_page_size]" id="search_page_size" class="regular-text" min="1" max="20" value="<?= esc_attr( $this->settings['search_page_size'] ) ?>"/>
@@ -122,7 +125,7 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'SAYT (search as you type) results number', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="sayt_page_size"><?= __( 'SAYT (search as you type) results number', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <input type="number" name="chilisearch_settings[sayt_page_size]" id="sayt_page_size" class="regular-text" min="1" max="10" value="<?= esc_attr( $this->settings['sayt_page_size'] ) ?>"/>
@@ -131,7 +134,7 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Search input selector', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="search_input_selector"><?= __( 'Search input selector', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <input type="text" name="chilisearch_settings[search_input_selector]" id="search_input_selector" class="regular-text" value="<?php echo esc_attr( ! empty( $this->settings['search_input_selector'] ) ? $this->settings['search_input_selector'] : '' ); ?>"/>

@@ -108,7 +108,7 @@ final class ChiliSearch {
         'search_word_type'             => self::SEARCH_WORD_TYPE_BOTH,
         'sort_by'                      => self::SORT_BY_RELEVANCY,
         'display_result_image'         => true,
-        'display_result_product_price' => true,
+        'display_result_product_price' => false,
         'display_result_excerpt'       => true,
         'weight_title'                 => 3,
         'weight_excerpt'               => 2,
@@ -166,9 +166,9 @@ final class ChiliSearch {
 
     public static function get_word_types() {
         return [
-            self::SEARCH_WORD_TYPE_BOTH => __('Both', 'chilisearch'),
-            self::SEARCH_WORD_TYPE_WHOLE_WORD => __('Whole Word', 'chilisearch'),
-            self::SEARCH_WORD_TYPE_PARTIAL_WORD => __('Partial Word', 'chilisearch'),
+            self::SEARCH_WORD_TYPE_WHOLE_WORD   => __( 'Whole Word', 'chilisearch' ),
+            self::SEARCH_WORD_TYPE_PARTIAL_WORD => __( 'Partial Word', 'chilisearch' ),
+            self::SEARCH_WORD_TYPE_BOTH         => __( 'Both', 'chilisearch' ),
         ];
     }
 
