@@ -121,6 +121,7 @@ final class ChiliSearch {
         'filter_category'              => true,
         'filter_publishedat'           => true,
         'filter_price'                 => false,
+        'auto_search_detection'        => true,
         'search_input_selector'        => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -449,6 +450,7 @@ final class ChiliSearch {
         $this->get_settings();
         $this->settings['search_page_size']             = (int) sanitize_key( trim( $_POST['search_page_size'] ) );
         $this->settings['sayt_page_size']               = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
+        $this->settings['auto_search_detection']        = isset( $_POST['auto_search_detection'] ) && $_POST['auto_search_detection'] == 'true';
         $this->settings['search_input_selector']        = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
         $this->settings['search_page_id']               = $searchPageId;
         $this->settings['search_word_type']             = sanitize_key( trim( $_POST['search_word_type'] ) );
@@ -905,7 +907,7 @@ final class ChiliSearch {
             'apiKey'     => $this->configs['site_api_key'],
             'searchPage' => $this->get_or_create_search_page(),
             'configs'    => [
-                'extraInputSelector' => $this->settings['search_input_selector'],
+                'extraInputSelector' => $this->settings['auto_search_detection'] ? $this->settings['search_input_selector'] : '',
                 'searchPageSize'     => $this->settings['search_page_size'],
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],

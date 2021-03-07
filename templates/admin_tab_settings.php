@@ -200,7 +200,16 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label for="search_input_selector"><?= __( 'Search input selector', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="auto_search_detection"><?= __( 'Auto search input detection', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[auto_search_detection]" id="auto_search_detection" value="true" <?= $this->settings['auto_search_detection'] ? 'checked' : '' ?>>
+                        <?= __( 'Detect and replace all search inputs in website', 'chilisearch' ) ?>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="search_input_selector"><?= __( 'Auto search input selector', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <input type="text" name="chilisearch_settings[search_input_selector]" id="search_input_selector" class="regular-text" value="<?php echo esc_attr( ! empty( $this->settings['search_input_selector'] ) ? $this->settings['search_input_selector'] : '' ); ?>"/>
@@ -242,6 +251,7 @@
                     'filter_category': jQuery('#site_config_update #filter_category').is(":checked"),
                     'filter_publishedat': jQuery('#site_config_update #filter_publishedat').is(":checked"),
                     'filter_price': jQuery('#site_config_update #filter_price').is(":checked"),
+                    'auto_search_detection': jQuery('#site_config_update #auto_search_detection').is(":checked"),
                 },
                 function (response) {
                     if (response.status) {
