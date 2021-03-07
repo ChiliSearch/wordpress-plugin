@@ -46,29 +46,6 @@
                         </ul>
                     </div>
                     <div class="form-group">
-                        <label for="media">
-                            <input type="checkbox" name="chilisearch_wtf_settings[media]" id="media" <?= $this->wts_settings['media'] ? 'checked' : '' ?>>
-                            <?= __( 'Media', 'chilisearch' ) ?>
-                            <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=attachment' ) ) ?>" target="_blank"></a></small>
-                        </label>
-                        <ul>
-                            <li>
-                                <label class="mb-0" for="media_doc_files">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> disabled="disabled">
-                                    <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
-                                    <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
-                                </label>
-                            </li>
-                            <li class="mb-0">
-                                <label class="mb-0" for="media_approved_comments">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
-                                    <?= __( 'Approved comments', 'chilisearch' ) ?>
-                                    <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=attachment' ) ) ?>" target="_blank"></a></small>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="form-group">
                         <label for="woocommerce_products">
                             <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products]" id="woocommerce_products" <?= $this->wts_settings['woocommerce_products'] ? 'checked' : '' ?> <?= ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? 'disabled' : '' ?>>
                             <?= __( 'wooCommerce products', 'chilisearch' ) ?> <?= ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? '<small>' . __( '(wooCommerce plugin is not installed)', 'chilisearch' ) . '</small>' : '' ?>
@@ -110,6 +87,29 @@
                                     <input type="checkbox" name="chilisearch_wtf_settings[bbpress_reply]" id="bbpress_reply" <?= $this->wts_settings['bbpress_reply'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'bbPress Replies', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=reply' ) ) ?>" target="_blank"></a></small>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="media">
+                            <input type="checkbox" name="chilisearch_wtf_settings[media]" id="media" <?= $this->wts_settings['media'] ? 'checked' : '' ?>>
+                            <?= __( 'Media', 'chilisearch' ) ?>
+                            <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=attachment' ) ) ?>" target="_blank"></a></small>
+                        </label>
+                        <ul>
+                            <li>
+                                <label class="mb-0" for="media_doc_files">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> disabled="disabled">
+                                    <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
+                                    <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
+                                </label>
+                            </li>
+                            <li class="mb-0">
+                                <label class="mb-0" for="media_approved_comments">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
+                                    <?= __( 'Approved comments', 'chilisearch' ) ?>
+                                    <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=attachment' ) ) ?>" target="_blank"></a></small>
                                 </label>
                             </li>
                         </ul>

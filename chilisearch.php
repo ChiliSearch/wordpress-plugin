@@ -268,7 +268,7 @@ final class ChiliSearch {
             register_setting( 'chilisearch_settings_group', 'chilisearch_settings' );
         } );
         add_action('admin_notices', function () {
-            if (empty($this->settings['site_api_secret']) && (!isset($_GET['page']) || $_GET['page'] !== 'chilisearch')) {
+            if (empty($this->configs['site_api_secret']) && (!isset($_GET['page']) || $_GET['page'] !== 'chilisearch')) {
                 echo '<div class="notice notice-warning is-dismissible"><p>
                          <strong>' . __('Chili Search Setup', 'chilisearch') . '</strong><br>'
                     . sprintf(__('Setup your Chili Search %shere%s to empower your website\'s search!', 'chilisearch'),
@@ -333,6 +333,10 @@ final class ChiliSearch {
     }
 
     private function set_settings() {
+        if ( function_exists( 'is_plugin_active' ) ) {
+            $this->settings['display_result_product_price'] = $this->settings['display_result_product_price'] && $this->is_woocommerce_active();
+            $this->settings['filter_price']                 = $this->settings['filter_price'] && $this->is_woocommerce_active();
+        }
         update_option( 'chilisearch_settings', $this->settings );
     }
 
