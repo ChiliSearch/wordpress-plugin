@@ -117,11 +117,10 @@ final class ChiliSearch {
         'weight_body'                  => 1,
         'weight_tags'                  => 5,
         'weight_categories'            => 3,
-        'filter_type'                  => true,
-        'filter_author'                => true,
-        'filter_publishedat'           => true,
-        'filter_price'                 => true,
+        'filter_type'                  => false,
         'filter_category'              => true,
+        'filter_publishedat'           => true,
+        'filter_price'                 => false,
         'search_input_selector'        => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -451,6 +450,10 @@ final class ChiliSearch {
         $this->settings['search_word_type']             = sanitize_key( trim( $_POST['search_word_type'] ) );
         $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
         $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
+        $this->settings['filter_type']                  = isset( $_POST['filter_type'] ) && $_POST['filter_type'] == 'true';
+        $this->settings['filter_category']              = isset( $_POST['filter_category'] ) && $_POST['filter_category'] == 'true';
+        $this->settings['filter_publishedat']           = isset( $_POST['filter_publishedat'] ) && $_POST['filter_publishedat'] == 'true';
+        $this->settings['filter_price']                 = isset( $_POST['filter_price'] ) && $_POST['filter_price'] == 'true';
         $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
         $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
         $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';

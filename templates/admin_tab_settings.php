@@ -13,8 +13,14 @@
 </style>
 <div class="wrap">
     <h2><?php _e( 'Settings', 'chilisearch' ); ?></h2>
+    <?php if ( isset( $_GET['saved'] ) ): ?>
+        <div class="notice notice-success is-dismissible" style="margin-top: 20px;">
+            <p>
+                <strong><?= __( 'Settings saved.', 'chilisearch' ) ?></strong>
+            </p>
+        </div>
+    <?php endif ?>
     <form method="post" action="options.php" id="site_config_update">
-        <div class="message-box"></div>
         <?php settings_fields( 'chilisearch_settings_group' ); ?>
         <table class="form-table">
             <tbody>
@@ -121,6 +127,46 @@
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label for="filter_type"><?= __( 'Enable type filter', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[filter_type]" id="filter_type" value="true" <?= $this->settings['filter_type'] ? 'checked' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable filtering base on document type.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="filter_category"><?= __( 'Enable category filter', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[filter_category]" id="filter_category" value="true" <?= $this->settings['filter_category'] ? 'checked' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable filtering base on category.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="filter_publishedat"><?= __( 'Enable publish date filter', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[filter_publishedat]" id="filter_publishedat" value="true" <?= $this->settings['filter_publishedat'] ? 'checked' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable filtering base on publish date.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="filter_price"><?= __( 'Enable product price filter', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[filter_price]" id="filter_price" value="true" <?= $this->settings['filter_price'] ? 'checked' : '' ?>  <?= !$this->wts_settings['woocommerce_products'] ? 'disabled="disabled"' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable filtering base on product price.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label for="search_page_id"><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -192,10 +238,14 @@
                     'weight_body': jQuery('#site_config_update #weight_body').val(),
                     'weight_tags': jQuery('#site_config_update #weight_tags').val(),
                     'weight_categories': jQuery('#site_config_update #weight_categories').val(),
+                    'filter_type': jQuery('#site_config_update #filter_type').is(":checked"),
+                    'filter_category': jQuery('#site_config_update #filter_category').is(":checked"),
+                    'filter_publishedat': jQuery('#site_config_update #filter_publishedat').is(":checked"),
+                    'filter_price': jQuery('#site_config_update #filter_price').is(":checked"),
                 },
                 function (response) {
                     if (response.status) {
-                        jQuery('#site_config_update .message-box').html('<div class="notice notice-success is-dismissible"><p><strong><?= __( 'Settings saved.', 'chilisearch' ) ?></strong></p></div>')
+                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings&saved' ) ?>");
                         return;
                     }
                     jQuery('#site_config_update button[type="submit"]').prop('disabled', false)
@@ -213,7 +263,7 @@
                 },
                 function (response) {
                     if (response.status) {
-                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings' ) ?>");
+                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings&saved' ) ?>");
                         return;
                     }
                     jQuery(this).prop('disabled', false)
