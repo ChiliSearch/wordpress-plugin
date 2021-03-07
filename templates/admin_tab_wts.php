@@ -11,7 +11,7 @@
         <table class="form-table">
             <tbody>
             <tr valign="top">
-                <th scope="row"><label><?= __( 'Search between:', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label><?= __( 'Search between', 'chilisearch' ) ?>:</label></th>
                 <td>
                     <div class="form-group">
                         <label for="posts">
@@ -22,7 +22,7 @@
                         <ul>
                             <li class="mb-0">
                                 <label class="mb-0" for="posts_approved_comments">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[posts_approved_comments]" id="posts_approved_comments" <?= $this->wts_settings['posts_approved_comments'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[posts_approved_comments]" id="posts_approved_comments" <?= $this->wts_settings['posts_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=post' ) ) ?>" target="_blank"></a></small>
                                 </label>
@@ -38,7 +38,7 @@
                         <ul>
                             <li class="mb-0">
                                 <label class="mb-0" for="pages_approved_comments">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[pages_approved_comments]" id="pages_approved_comments" <?= $this->wts_settings['pages_approved_comments'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[pages_approved_comments]" id="pages_approved_comments" <?= $this->wts_settings['pages_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=page' ) ) ?>" target="_blank"></a></small>
                                 </label>
@@ -54,14 +54,14 @@
                         <ul>
                             <li>
                                 <label class="mb-0" for="media_doc_files">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
                                 </label>
                             </li>
                             <li class="mb-0">
                                 <label class="mb-0" for="media_approved_comments">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=attachment' ) ) ?>" target="_blank"></a></small>
                                 </label>
@@ -77,14 +77,14 @@
                         <ul>
                             <li>
                                 <label class="mb-0" for="woocommerce_products_approved_comments">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_approved_comments]" id="woocommerce_products_approved_comments" <?= $this->wts_settings['woocommerce_products_approved_comments'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_approved_comments]" id="woocommerce_products_approved_comments" <?= $this->wts_settings['woocommerce_products_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=product' ) ) ?>" target="_blank"></a></small>
                                 </label>
                             </li>
                             <li class="mb-0">
                                 <label class="mb-0" for="woocommerce_products_outofstock">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_outofstock]" id="woocommerce_products_outofstock" <?= $this->wts_settings['woocommerce_products_outofstock'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_outofstock]" id="woocommerce_products_outofstock" <?= $this->wts_settings['woocommerce_products_outofstock'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Out-of-stock products', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=product&stock_status=outofstock' ) ) ?>" target="_blank"></a></small>
                                 </label>
@@ -100,14 +100,14 @@
                         <ul>
                             <li>
                                 <label class="mb-0" for="bbpress_topic">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[bbpress_topic]" id="bbpress_topic" <?= $this->wts_settings['bbpress_topic'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[bbpress_topic]" id="bbpress_topic" <?= $this->wts_settings['bbpress_topic'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'bbPress Topics', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=topic' ) ) ?>" target="_blank"></a></small>
                                 </label>
                             </li>
                             <li class="mb-0">
                                 <label class="mb-0" for="bbpress_reply">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[bbpress_reply]" id="bbpress_reply" <?= $this->wts_settings['bbpress_reply'] ? 'checked' : '' ?>disabled="disabled">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[bbpress_reply]" id="bbpress_reply" <?= $this->wts_settings['bbpress_reply'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'bbPress Replies', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=reply' ) ) ?>" target="_blank"></a></small>
                                 </label>
