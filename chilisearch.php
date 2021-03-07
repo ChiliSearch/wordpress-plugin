@@ -92,7 +92,7 @@ final class ChiliSearch {
     const SORT_BY_PRICE_DESC = 'price-desc';
     const SORT_BY_PRICE_ASC = 'price-asc';
     const SORT_BYS = [
-        self::SORT_BY_RELEVANCY         => '',
+        self::SORT_BY_RELEVANCY         => '_score',
         self::SORT_BY_PUBLISHED_AT_DESC => '-publishedAt',
         self::SORT_BY_PUBLISHED_AT_ASC  => '+publishedAt',
         self::SORT_BY_PRICE_DESC        => '+price',
@@ -737,26 +737,9 @@ final class ChiliSearch {
             true
         );
 
-        $searchPage          = $this->get_or_create_search_page();
-        $apiKey              = $this->configs['site_api_key'];
-        $searchInputSelector = addslashes( $this->settings['search_input_selector'] );
-        $searchPageSize      = $this->settings['search_page_size'];
-        $saytPageSize        = $this->settings['sayt_page_size'];
-        $isRTL               = is_rtl() ? 'true' : 'false';
-        $phrases             = json_encode( [
-            'powered-by'                 => __( 'powered by', 'chilisearch' ),
-            'search-powered-by'          => __( 'search powered by', 'chilisearch' ),
-            'no-result-message'          => __( 'Couldn\'t find anything related …', 'chilisearch' ),
-            'error-message'              => __( 'Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch' ),
-            'input-placeholder'          => __( 'Search …', 'chilisearch' ),
-            'sayt-init-message'          => __( 'Search …', 'chilisearch' ),
-            'form-submit-value'          => __( 'Search', 'chilisearch' ),
-            'search-result-result-count' => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
-            'prev'                       => __( 'Prev', 'chilisearch' ),
-            'next'                       => __( 'Next', 'chilisearch' ),
-        ] );
+        $params = json_encode( $this->get_js_init_parameters() );
 
-        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init({apiKey:\"{$apiKey}\", searchPage:\"{$searchPage}\", searchPageSize: \"{$searchPageSize}\", saytPageSize: \"{$saytPageSize}\", searchInputSelector: \"{$searchInputSelector}\", isRTL: $isRTL, phrases: $phrases})" );
+        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params)" );
     }
 
     public function get_or_create_search_page() {
@@ -803,6 +786,7 @@ final class ChiliSearch {
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=analytics' ) ) ?>" class="nav-tab <?= $tab === 'analytics' ? 'nav-tab-active' : '' ?>">Analytics</a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=settings' ) ) ?>" class="nav-tab <?= $tab === 'settings' ? 'nav-tab-active' : '' ?>">Settings</a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ) ?>" class="nav-tab <?= $tab === 'where-to-search' ? 'nav-tab-active' : '' ?>">Where to Search</a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=demo' ) ) ?>" class="nav-tab <?= $tab === 'demo' ? 'nav-tab-active' : '' ?>">Demo</a>
         </h2>
         <?php
         switch ( $tab ) {
@@ -812,6 +796,20 @@ final class ChiliSearch {
                 return require CHILISEARCH_DIR . '/templates/admin_tab_wts.php';
             case 'indexing':
                 return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
+            case 'demo':
+                wp_enqueue_script(
+                    'chilisearch-settings-js',
+                    esc_url( self::CHILISEARCH_CDN_BASE_URI . 'js/app.js' ),
+                    [],
+                    CHILISEARCH_VERSION,
+                    true
+                );
+                $params = $this->get_js_init_parameters();
+                $params['searchPage'] = admin_url( 'admin.php?page=chilisearch&tab=demo' );
+                $params = json_encode( $params );
+                wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params)" );
+
+                return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
             default:
                 return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
@@ -884,6 +882,45 @@ final class ChiliSearch {
         }
 
         return true;
+    }
+
+    protected function get_js_init_parameters() {
+        return [
+            'apiKey'     => $this->configs['site_api_key'],
+            'searchPage' => $this->get_or_create_search_page(),
+            'configs'    => [
+                'extraInputSelector' => $this->settings['search_input_selector'],
+                'searchPageSize'     => $this->settings['search_page_size'],
+                'saytPageSize'       => $this->settings['sayt_page_size'],
+                'wordType'           => $this->settings['search_word_type'],
+                'sortBy'             => self::SORT_BYS[ $this->settings['sort_by'] ],
+                'displayInResult'    => [
+                    'thumbnail'    => $this->settings['display_result_image'] ? 'true' : 'false',
+                    'productPrice' => $this->settings['display_result_product_price'] ? 'true' : 'false',
+                    'except'       => $this->settings['display_result_excerpt'] ? 'true' : 'false',
+                ],
+                'weight'             => [
+                    'title'      => $this->settings['weight_title'],
+                    'excerpt'    => $this->settings['weight_excerpt'],
+                    'body'       => $this->settings['weight_body'],
+                    'tags'       => $this->settings['weight_tags'],
+                    'categories' => $this->settings['weight_categories'],
+                ],
+                'isRTL'              => is_rtl(),
+            ],
+            'phrases'    => [
+                'powered-by'                 => __( 'by', 'chilisearch' ),
+                'search-powered-by'          => __( 'search powered by', 'chilisearch' ),
+                'no-result-message'          => __( 'Couldn\'t find anything related …', 'chilisearch' ),
+                'error-message'              => __( 'Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch' ),
+                'input-placeholder'          => __( 'Search …', 'chilisearch' ),
+                'sayt-init-message'          => __( 'Search …', 'chilisearch' ),
+                'form-submit-value'          => __( 'Search', 'chilisearch' ),
+                'search-result-result-count' => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
+                'prev'                       => __( 'Prev', 'chilisearch' ),
+                'next'                       => __( 'Next', 'chilisearch' ),
+            ],
+        ];
     }
 }
 

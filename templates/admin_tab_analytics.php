@@ -4,13 +4,6 @@ $documentsCount        = isset( $siteInfo['documentsCount'] ) ? esc_html( $siteI
 $usedSpace             = isset( $siteInfo['usedSpace'] ) ? esc_html( $siteInfo['usedSpace'] ) : __( 'N/A', 'chilisearch' );
 $thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html( $siteInfo['thisMonthRequestCount'] ) : __( 'N/A', 'chilisearch' );
 ?>
-<?php if ( isset( $_GET['get-started'] ) ): ?>
-    <div class="notice notice-success is-dismissible" style="margin-top: 20px;">
-        <p>
-            <strong><?= sprintf( __( '%s documents are indexed and ready to be searched. Visit your website and try out the power of search!', 'chilisearch' ), $documentsCount ) ?></strong>
-        </p>
-    </div>
-<?php endif ?>
 <div class="card card-stats">
     <div class="card-header card-header-info card-header-icon">
         <p class="card-category"><?= __( 'Number of Indexed Documents', 'chilisearch' ) ?></p>
