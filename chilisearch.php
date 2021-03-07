@@ -117,6 +117,11 @@ final class ChiliSearch {
         'weight_body'                  => 1,
         'weight_tags'                  => 5,
         'weight_categories'            => 3,
+        'filter_type'                  => true,
+        'filter_author'                => true,
+        'filter_publishedat'           => true,
+        'filter_price'                 => true,
+        'filter_category'              => true,
         'search_input_selector'        => 'input[name="s"]',
     ];
     private $wts_settings = [
@@ -387,11 +392,11 @@ final class ChiliSearch {
     }
 
     protected function is_woocommerce_active() {
-        return is_plugin_active( 'woocommerce/woocommerce.php' );
+        return class_exists('WooCommerce');
     }
 
     protected function is_bbpress_active() {
-        return is_plugin_active( 'bbpress/bbpress.php' );
+        return class_exists( 'bbPress' );
     }
 
     public function wp_ajax_admin_ajax_config_update() {
@@ -595,7 +600,7 @@ final class ChiliSearch {
             'author'      => ! empty( $author = get_user_by( 'id', $post->post_author ) ) ? $author->display_name : null,
             'categories'  => array_map( function ( $catId ) {
                 $category = get_category( $catId );
-                return ! empty( $category->name ) ? $category->name : null;
+                return ! empty( $category->name ) ? htmlspecialchars_decode( $category->name ) : null;
             }, wp_get_post_categories( $post->ID ) ),
             'tags'        => array_map( function ( $term ) {
                 return ! empty( $term->name ) ? $term->name : null;
@@ -660,7 +665,7 @@ final class ChiliSearch {
                 $document['link']  = get_permalink( $topic->ID ) . "#post-" . $post->ID;
             case self::WP_POST_TYPE_FORUM_FORUM:
             case self::WP_POST_TYPE_FORUM_TOPIC:
-                $document['type']    = 'forum_post';
+                $document['type']    = 'forum';
                 $document['excerpt'] = substr( $document['body'], 0, 300 );
                 break;
         }
@@ -889,7 +894,7 @@ final class ChiliSearch {
     }
 
     protected function get_js_init_parameters() {
-        return [
+        $params = [
             'apiKey'     => $this->configs['site_api_key'],
             'searchPage' => $this->get_or_create_search_page(),
             'configs'    => [
@@ -897,13 +902,14 @@ final class ChiliSearch {
                 'searchPageSize'     => $this->settings['search_page_size'],
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],
+                'currency'           => '',
                 'sortBy'             => self::SORT_BYS[ $this->settings['sort_by'] ],
                 'displayInResult'    => [
-                    'thumbnail'    => (bool)$this->settings['display_result_image'],
-                    'productPrice' => (bool)$this->settings['display_result_product_price'],
-                    'except'       => (bool)$this->settings['display_result_excerpt'],
-                    'categories'   => (bool)$this->settings['display_result_categories'],
-                    'tags'         => (bool)$this->settings['display_result_tags'],
+                    'thumbnail'    => (bool) $this->settings['display_result_image'],
+                    'productPrice' => (bool) $this->settings['display_result_product_price'],
+                    'except'       => (bool) $this->settings['display_result_excerpt'],
+                    'categories'   => (bool) $this->settings['display_result_categories'],
+                    'tags'         => (bool) $this->settings['display_result_tags'],
                 ],
                 'weight'             => [
                     'title'      => $this->settings['weight_title'],
@@ -912,7 +918,8 @@ final class ChiliSearch {
                     'tags'       => $this->settings['weight_tags'],
                     'categories' => $this->settings['weight_categories'],
                 ],
-                'isRTL'              => (bool)is_rtl(),
+                'filters'            => [],
+                'isRTL'              => (bool) is_rtl(),
             ],
             'phrases'    => [
                 'powered-by'                 => __( 'by', 'chilisearch' ),
@@ -926,6 +933,114 @@ final class ChiliSearch {
                 'prev'                       => __( 'Prev', 'chilisearch' ),
                 'next'                       => __( 'Next', 'chilisearch' ),
             ],
+        ];
+        if ($this->is_woocommerce_active()) {
+            $params['configs']['currency'] = html_entity_decode(get_woocommerce_currency_symbol());
+        }
+        if ( $this->settings['filter_type'] ) {
+            $active_post_types = [];
+            if ( ! empty( $this->wts_settings['posts'] ) ) {
+                $active_post_types['post'] = __( 'Posts', 'chilisearch' );
+            }
+            if ( ! empty( $this->wts_settings['pages'] ) ) {
+                $active_post_types['page'] = __( 'Pages', 'chilisearch' );
+            }
+            if ( ! empty( $this->wts_settings['media'] ) ) {
+                $active_post_types['media'] = __( 'Media', 'chilisearch' );
+            }
+            if ( ! empty( $this->wts_settings['woocommerce_products'] ) ) {
+                $active_post_types['product'] = __( 'Products', 'chilisearch' );
+            }
+            if ( ! empty( $this->wts_settings['bbpress_forum'] ) ) {
+                $active_post_types['forum'] = __( 'Forums', 'chilisearch' );
+            }
+            if ( count( $active_post_types ) > 1 ) {
+                $params['configs']['filters']['type'] = $active_post_types;
+            }
+        }
+        if ( $this->settings['filter_category'] ) {
+            $params['configs']['filters']['categories'] = array_map( function ( $category ) {
+                return htmlspecialchars_decode( $category->name );
+            }, get_categories( [
+                'taxonomy' => 'category',
+                'orderby'  => 'count',
+                'order'    => 'DESC'
+            ] ) );
+            if ( $this->is_woocommerce_active() ) {
+                $params['configs']['filters']['categories'] = array_merge(
+                    array_map( function ( $category ) {
+                        return htmlspecialchars_decode( $category->name );
+                    }, get_categories( [
+                        'taxonomy' => 'product_cat',
+                        'orderby'  => 'count',
+                        'order'    => 'DESC'
+                    ] ) ),
+                    $params['configs']['filters']['categories']
+                );
+            }
+        }
+        if ( $this->settings['filter_price'] && $this->is_woocommerce_active()) {
+            $params['configs']['filters']['price'] = @$this->get_filtered_price();
+        }
+        if ( $this->settings['filter_publishedat']) {
+            $active_post_types = $this->get_active_post_types();
+            $min_post = new WP_Query( [
+                'post_type'      => $active_post_types,
+                'post_status'    => 'inherit,publish',
+                'posts_per_page' => 1,
+                'orderby'        => 'post_date',
+                'order'          => 'ASC',
+            ] );
+            if (!empty($min_post->post->post_date)) {
+                $params['configs']['filters']['publishedat']['from'] = date('Y-m-d', strtotime($min_post->post->post_date));
+            }
+            $max_post = new WP_Query( [
+                'post_type'      => $active_post_types,
+                'post_status'    => 'inherit,publish',
+                'posts_per_page' => 1,
+                'orderby'        => 'post_date',
+                'order'          => 'DESC',
+            ] );
+            if (!empty($max_post->post->post_date)) {
+                $params['configs']['filters']['publishedat']['to'] = date('Y-m-d', strtotime($max_post->post->post_date));
+            }
+        }
+        return $params;
+    }
+
+    protected function get_filtered_price() {
+        global $wpdb;
+
+        $args =  WC_Query::get_main_query();
+
+        $tax_query  = isset( $args->tax_query->queries ) ? $args->tax_query->queries : array();
+        $meta_query = isset( $args->query_vars['meta_query'] ) ? $args->query_vars['meta_query'] : array();
+
+        foreach ( $meta_query + $tax_query as $key => $query ) {
+            if ( ! empty( $query['price_filter'] ) || ! empty( $query['rating_filter'] ) ) {
+                unset( $meta_query[ $key ] );
+            }
+        }
+
+        $meta_query = new \WP_Meta_Query( $meta_query );
+        $tax_query  = new \WP_Tax_Query( $tax_query );
+
+        $meta_query_sql = $meta_query->get_sql( 'post', $wpdb->posts, 'ID' );
+        $tax_query_sql  = $tax_query->get_sql( $wpdb->posts, 'ID' );
+
+        $sql = "SELECT min( FLOOR( price_meta.meta_value ) ) as min_price, max( CEILING( price_meta.meta_value ) ) as max_price FROM {$wpdb->posts} ";
+        $sql .= " LEFT JOIN {$wpdb->postmeta} as price_meta ON {$wpdb->posts}.ID = price_meta.post_id " . $tax_query_sql['join'] . $meta_query_sql['join'];
+        $sql .= " 	WHERE {$wpdb->posts}.post_type IN ('product')
+			AND {$wpdb->posts}.post_status = 'publish'
+			AND price_meta.meta_key IN ('_price')
+			AND price_meta.meta_value > '' ";
+        $sql .= $tax_query_sql['where'] . $meta_query_sql['where'];
+
+        $prices = $wpdb->get_row( $sql );
+
+        return [
+            'min' => floor( $prices->min_price ),
+            'max' => ceil( $prices->max_price )
         ];
     }
 }
