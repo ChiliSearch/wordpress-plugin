@@ -65,6 +65,26 @@
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label for="display_result_categories"><?= __( 'Display categories', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[display_result_categories]" id="display_result_categories" value="true" <?= $this->settings['display_result_categories'] ? 'checked' : '' ?>>
+                        <?= __( 'Display', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Display categories in search result.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="display_result_tags"><?= __( 'Display tags', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[display_result_tags]" id="display_result_tags" value="true" <?= $this->settings['display_result_tags'] ? 'checked' : '' ?>>
+                        <?= __( 'Display', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Display tags in search result.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label for="display_result_product_price"><?= __( 'Display product price', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -165,6 +185,8 @@
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
                     'display_result_excerpt': jQuery('#site_config_update #display_result_excerpt').is(":checked"),
+                    'display_result_categories': jQuery('#site_config_update #display_result_categories').is(":checked"),
+                    'display_result_tags': jQuery('#site_config_update #display_result_tags').is(":checked"),
                     'weight_title': jQuery('#site_config_update #weight_title').val(),
                     'weight_excerpt': jQuery('#site_config_update #weight_excerpt').val(),
                     'weight_body': jQuery('#site_config_update #weight_body').val(),

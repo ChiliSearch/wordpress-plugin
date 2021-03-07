@@ -110,6 +110,8 @@ final class ChiliSearch {
         'display_result_image'         => true,
         'display_result_product_price' => false,
         'display_result_excerpt'       => true,
+        'display_result_categories'    => true,
+        'display_result_tags'          => true,
         'weight_title'                 => 3,
         'weight_excerpt'               => 2,
         'weight_body'                  => 1,
@@ -446,6 +448,8 @@ final class ChiliSearch {
         $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
         $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
         $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
+        $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';
+        $this->settings['display_result_tags']          = isset( $_POST['display_result_tags'] ) && $_POST['display_result_tags'] == 'true';
         $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
         $this->settings['weight_excerpt']               = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
         $this->settings['weight_body']                  = (int) sanitize_key( trim( $_POST['weight_body'] ) );
@@ -895,9 +899,11 @@ final class ChiliSearch {
                 'wordType'           => $this->settings['search_word_type'],
                 'sortBy'             => self::SORT_BYS[ $this->settings['sort_by'] ],
                 'displayInResult'    => [
-                    'thumbnail'    => $this->settings['display_result_image'] ? 'true' : 'false',
-                    'productPrice' => $this->settings['display_result_product_price'] ? 'true' : 'false',
-                    'except'       => $this->settings['display_result_excerpt'] ? 'true' : 'false',
+                    'thumbnail'    => (bool)$this->settings['display_result_image'],
+                    'productPrice' => (bool)$this->settings['display_result_product_price'],
+                    'except'       => (bool)$this->settings['display_result_excerpt'],
+                    'categories'   => (bool)$this->settings['display_result_categories'],
+                    'tags'         => (bool)$this->settings['display_result_tags'],
                 ],
                 'weight'             => [
                     'title'      => $this->settings['weight_title'],
@@ -906,7 +912,7 @@ final class ChiliSearch {
                     'tags'       => $this->settings['weight_tags'],
                     'categories' => $this->settings['weight_categories'],
                 ],
-                'isRTL'              => is_rtl(),
+                'isRTL'              => (bool)is_rtl(),
             ],
             'phrases'    => [
                 'powered-by'                 => __( 'by', 'chilisearch' ),
