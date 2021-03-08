@@ -46,6 +46,8 @@ define(
         str_replace( 'http://', 'https://', plugin_dir_url( __FILE__ ) ) : plugin_dir_url( __FILE__ )
 );
 
+require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
+
 final class ChiliSearch {
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
     const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
@@ -222,6 +224,9 @@ final class ChiliSearch {
         add_action( 'wp_enqueue_scripts', [ $this, 'client_enqueue_scripts' ] );
         add_shortcode( 'chilisearch_search_page', function () {
             return '<div id="chilisearch-search_page"></div>';
+        } );
+        add_action( 'widgets_init', function () {
+            register_widget( 'Widget_Search' );
         } );
     }
 
@@ -772,7 +777,7 @@ final class ChiliSearch {
             }
         }
 
-        return get_site_url();
+        return esc_url( home_url( '/' ) );
     }
 
     public function i18n() {
