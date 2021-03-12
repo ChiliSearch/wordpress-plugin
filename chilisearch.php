@@ -51,6 +51,7 @@ require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
 final class ChiliSearch {
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
     const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
+    const CHILISEARCH_APP_BASE_URI = 'https://app.chilisearch.com/';
 
     const MIME_TYPES_DOCS = [
         'application/msword'                                                        => 'doc',
@@ -145,6 +146,7 @@ final class ChiliSearch {
         'site_api_key'                => null,
         'site_api_secret'             => null,
         'get_started_api_finished'    => false,
+        'get_started_plan_finished'   => false,
         'get_started_config_finished' => false,
         'website_info'                => null,
     ];
@@ -799,6 +801,15 @@ final class ChiliSearch {
         if ( empty( $this->configs['site_api_secret'] ) || empty( $this->configs['get_started_api_finished'] ) ) {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
+        if ( empty( $this->configs['get_started_plan_finished'] ) ) {
+            if ( isset( $_GET['pass_get_started_plan_finished'] ) ) {
+                $this->get_configs();
+                $this->configs['get_started_plan_finished'] = true;
+                $this->set_configs();
+                wp_redirect( admin_url( 'admin.php?page=chilisearch' ) );
+            }
+            return require CHILISEARCH_DIR . '/templates/admin_choose_plan.php';
+        }
         $tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'analytics';
         if ( empty( $this->configs['get_started_config_finished'] ) && $tab !== 'where-to-search' ) {
             wp_redirect( admin_url( 'admin.php?page=chilisearch&tab=where-to-search&get-started' ) );
@@ -839,11 +850,11 @@ final class ChiliSearch {
         }
     }
 
-    public function get_website_info() {
+    public function get_website_info($forceFresh = false) {
         if ( empty( $this->configs['site_api_secret'] ) ) {
             return null;
         }
-        if ( ! empty( $this->configs['website_info']['last_check'] ) && ! isset( $_GET['fresh'] ) ) {
+        if ( ! empty( $this->configs['website_info']['last_check'] ) && ! isset( $_GET['fresh'] ) && empty( $forceFresh )) {
             $seconds_ago = microtime( true ) - $this->configs['website_info']['last_check'];
             if ( $seconds_ago < 10 * 60 ) {
                 return $this->configs['website_info'];
