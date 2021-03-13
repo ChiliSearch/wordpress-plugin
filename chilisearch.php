@@ -943,7 +943,7 @@ final class ChiliSearch {
                 'sortBy'             => $this->get_current_plan() === 'premium' ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [
                     'thumbnail'    => (bool) $this->settings['display_result_image'],
-                    'productPrice' => (bool) $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
+                    'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
                     'except'       => (bool) $this->settings['display_result_excerpt'],
                     'categories'   => (bool) $this->settings['display_result_categories'],
                     'tags'         => (bool) $this->settings['display_result_tags'],
@@ -957,7 +957,7 @@ final class ChiliSearch {
                 ],
                 'filters'            => [],
                 'isRTL'              => (bool) is_rtl(),
-                'removeBrand'        => (bool) $this->get_current_plan() === 'premium' && !$this->settings['display_chilisearch_brand'],
+                'removeBrand'        => $this->get_current_plan() === 'premium' && !$this->settings['display_chilisearch_brand'],
             ],
             'phrases'    => [
                 'powered-by'                 => __( 'by', 'chilisearch' ),
