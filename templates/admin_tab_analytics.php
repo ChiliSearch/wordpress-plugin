@@ -1,6 +1,6 @@
 <?php
 $siteInfo              = ChiliSearch::getInstance()->get_website_info();
-$plan                  = isset( $siteInfo['plan'] ) ? esc_html( $siteInfo['plan'] ) : __( 'basic', 'chilisearch' );
+$plan                  = ChiliSearch::getInstance()->get_current_plan();
 $planInfo              = isset( $siteInfo['planInfo'] ) ? esc_html( $siteInfo['planInfo'] ) : '';
 $documentsCount        = isset( $siteInfo['documentsCount'] ) ? esc_html( $siteInfo['documentsCount'] ) : __( 'N/A', 'chilisearch' );
 $usedSpace             = isset( $siteInfo['usedSpace'] ) ? esc_html( $siteInfo['usedSpace'] ) : __( 'N/A', 'chilisearch' );

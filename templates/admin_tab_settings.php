@@ -1,3 +1,6 @@
+<?php
+$plan = ChiliSearch::getInstance()->get_current_plan();
+?>
 <style>
     #weights label {
         display: block;
@@ -9,6 +12,11 @@
     }
     #weights label input {
         width: 50px;
+    }
+    .premium-box {
+        padding: 1px 15px;
+        background: #d7e8d8;
+        border-radius: 5px;
     }
 </style>
 <div class="wrap">
@@ -34,19 +42,6 @@
                             <?php endforeach; ?>
                         </select>
                         <p class="description"><?= __( 'Match the whole word, partial word or both.', 'chilisearch' ) ?></p>
-                    </label>
-                </td>
-            </tr>
-            <tr valign="top">
-                <th scope="row"><label for="sort_by"><?= __( 'Sort by', 'chilisearch' ) ?></label></th>
-                <td>
-                    <label>
-                        <select name="chilisearch_settings[sort_by]" id="sort_by" class="regular-text">
-                            <?php foreach ( ChiliSearch::get_sort_bys() as $sort_by => $sort_by_name ): ?>
-                                <option value="<?= $sort_by ?>" <?= $this->settings['sort_by'] === $sort_by ? 'selected' : '' ?> <?= ($sort_by === self::SORT_BY_PRICE_DESC || $sort_by === self::SORT_BY_PRICE_ASC) && empty( $this->wts_settings['woocommerce_products'] ) ? 'disabled="disabled"' : '' ?>><?= $sort_by_name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <p class="description"><?= __( 'Sort search result by.', 'chilisearch' ) ?></p>
                     </label>
                 </td>
             </tr>
@@ -91,42 +86,6 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label for="display_result_product_price"><?= __( 'Display product price', 'chilisearch' ) ?></label></th>
-                <td>
-                    <label>
-                        <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->wts_settings['woocommerce_products'] && $this->settings['display_result_product_price'] ? 'checked' : '' ?> <?= !$this->wts_settings['woocommerce_products'] ? 'disabled="disabled"' : '' ?>>
-                        <?= __( 'Display', 'chilisearch' ) ?>
-                        <p class="description"><?= __( 'Display product price in search result.', 'chilisearch' ) ?></p>
-                    </label>
-                </td>
-            </tr>
-            <tr valign="top">
-                <th scope="row"><label><?= __( 'Field weights', 'chilisearch' ) ?></label></th>
-                <td id="weights">
-                    <label for="weight_title">
-                        <span><?= __( 'Title', 'chilisearch' ) ?>: </span>
-                        <input type="number" name="chilisearch_settings[weight_title]" id="weight_title" class="regular-text" min="1" max="10" value="<?= $this->settings['weight_title'] ?>"/>
-                    </label>
-                    <label for="weight_excerpt">
-                        <span><?= __( 'Excerpt', 'chilisearch' ) ?>: </span>
-                        <input type="number" name="chilisearch_settings[weight_excerpt]" id="weight_excerpt" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_excerpt'] ?>"/>
-                    </label>
-                    <label for="weight_body">
-                        <span><?= __( 'Body', 'chilisearch' ) ?>: </span>
-                        <input type="number" name="chilisearch_settings[weight_body]" id="weight_body" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_body'] ?>"/>
-                    </label>
-                    <label for="weight_tags">
-                        <span><?= __( 'Tags', 'chilisearch' ) ?>: </span>
-                        <input type="number" name="chilisearch_settings[weight_tags]" id="weight_tags" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_tags'] ?>"/>
-                    </label>
-                    <label for="weight_categories">
-                        <span><?= __( 'Category', 'chilisearch' ) ?>: </span>
-                        <input type="number" name="chilisearch_settings[weight_categories]" id="weight_categories" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_categories'] ?>"/>
-                    </label>
-                    <p class="description"><?= __( 'Define weight for each field of the document.', 'chilisearch' ) ?></p>
-                </td>
-            </tr>
-            <tr valign="top">
                 <th scope="row"><label for="filter_type"><?= __( 'Enable type filter', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -160,7 +119,7 @@
                 <th scope="row"><label for="filter_price"><?= __( 'Enable product price filter', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
-                        <input type="checkbox" name="chilisearch_settings[filter_price]" id="filter_price" value="true" <?= $this->settings['filter_price'] ? 'checked' : '' ?>  <?= !$this->wts_settings['woocommerce_products'] ? 'disabled="disabled"' : '' ?>>
+                        <input type="checkbox" name="chilisearch_settings[filter_price]" id="filter_price" value="true" <?= $this->settings['filter_price'] ? 'checked' : '' ?>  <?= !$this->is_woocommerce_active() ? 'disabled="disabled"' : '' ?>>
                         <?= __( 'Enable', 'chilisearch' ) ?>
                         <p class="description"><?= __( 'Enable filtering base on product price.', 'chilisearch' ) ?></p>
                     </label>
@@ -219,6 +178,72 @@
             </tr>
             </tbody>
         </table>
+        <div class="<?= $plan !== 'premium' ? 'premium-box' : '' ?>">
+            <h3><?= __( 'Premium Features', 'chilisearch' ) ?>:</h3>
+            <table class="form-table">
+                <tbody>
+                <tr valign="top">
+                    <th scope="row"><label for="sort_by"><?= __( 'Sort by', 'chilisearch' ) ?></label></th>
+                    <td>
+                        <label>
+                            <select name="chilisearch_settings[sort_by]" id="sort_by" class="regular-text" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
+                                <?php foreach ( ChiliSearch::get_sort_bys() as $sort_by => $sort_by_name ): ?>
+                                <option value="<?= $sort_by ?>" <?= $this->settings['sort_by'] === $sort_by ? 'selected' : '' ?> <?= ($sort_by === self::SORT_BY_PRICE_DESC || $sort_by === self::SORT_BY_PRICE_ASC) && empty( $this->is_woocommerce_active() ) ? 'disabled="disabled"' : '' ?>><?= $sort_by_name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?= __( 'Sort search result by.', 'chilisearch' ) ?></p>
+                        </label>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label><?= __( 'Field weights', 'chilisearch' ) ?></label></th>
+                    <td id="weights">
+                        <label for="weight_title">
+                            <span><?= __( 'Title', 'chilisearch' ) ?>: </span>
+                            <input type="number" name="chilisearch_settings[weight_title]" id="weight_title" class="regular-text" min="1" max="10" value="<?= $this->settings['weight_title'] ?>" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="weight_excerpt">
+                            <span><?= __( 'Excerpt', 'chilisearch' ) ?>: </span>
+                            <input type="number" name="chilisearch_settings[weight_excerpt]" id="weight_excerpt" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_excerpt'] ?>" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="weight_body">
+                            <span><?= __( 'Body', 'chilisearch' ) ?>: </span>
+                            <input type="number" name="chilisearch_settings[weight_body]" id="weight_body" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_body'] ?>" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="weight_tags">
+                            <span><?= __( 'Tags', 'chilisearch' ) ?>: </span>
+                            <input type="number" name="chilisearch_settings[weight_tags]" id="weight_tags" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_tags'] ?>" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="weight_categories">
+                            <span><?= __( 'Category', 'chilisearch' ) ?>: </span>
+                            <input type="number" name="chilisearch_settings[weight_categories]" id="weight_categories" class="regular-text" min="0" max="10" value="<?= $this->settings['weight_categories'] ?>" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <p class="description"><?= __( 'Define weight for each field of the document.', 'chilisearch' ) ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="display_result_product_price"><?= __( 'Display product price', 'chilisearch' ) ?></label></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->is_woocommerce_active() && $this->settings['display_result_product_price'] ? 'checked' : '' ?> <?= $plan !== 'premium' || !$this->is_woocommerce_active() ? 'disabled="disabled"' : '' ?>>
+                            <?= __( 'Display', 'chilisearch' ) ?>
+                            <p class="description"><?= __( 'Display product price in search result.', 'chilisearch' ) ?></p>
+                        </label>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="display_chilisearch_brand"><?= __( 'Display Chili Search brand', 'chilisearch' ) ?></label></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="chilisearch_settings[display_chilisearch_brand]" id="display_chilisearch_brand" value="true" <?= $this->settings['display_chilisearch_brand'] ? 'checked' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
+                            <?= __( 'Display', 'chilisearch' ) ?>
+                            <p class="description"><?= __( 'Display Chili Search bran in search box and search result.', 'chilisearch' ) ?></p>
+                        </label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <?php submit_button(); ?>
     </form>
 </div>
@@ -239,6 +264,7 @@
                     'sort_by': jQuery('#site_config_update #sort_by').val(),
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
+                    'display_chilisearch_brand': jQuery('#site_config_update #display_chilisearch_brand').is(":checked"),
                     'display_result_excerpt': jQuery('#site_config_update #display_result_excerpt').is(":checked"),
                     'display_result_categories': jQuery('#site_config_update #display_result_categories').is(":checked"),
                     'display_result_tags': jQuery('#site_config_update #display_result_tags').is(":checked"),
