@@ -276,15 +276,18 @@ final class ChiliSearch {
         add_action( 'admin_init', function () {
             register_setting( 'chilisearch_settings_group', 'chilisearch_settings' );
         } );
-        add_action('admin_notices', function () {
-            if (empty($this->configs['site_api_secret']) && (!isset($_GET['page']) || $_GET['page'] !== 'chilisearch')) {
+        add_action( 'admin_notices', function () {
+            if ( empty( $this->configs['site_api_secret'] ) && ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'chilisearch' ) ) {
                 echo '<div class="notice notice-warning is-dismissible"><p>
-                         <strong>' . __('Chili Search Setup', 'chilisearch') . '</strong><br>'
-                    . sprintf(__('Setup your Chili Search %shere%s to empower your website\'s search!', 'chilisearch'),
-                        '<a href="' . esc_url(admin_url('admin.php?page=chilisearch')) . '">', '</a>')
-                    . '</p></div>';
+                         <strong>' . __( 'Chili Search Setup', 'chilisearch' ) . '</strong><br>'
+                     . sprintf( __( 'Setup your Chili Search %shere%s to empower your website\'s search!', 'chilisearch' ),
+                        '<a href="' . esc_url( admin_url( 'admin.php?page=chilisearch' ) ) . '">', '</a>' )
+                     . '</p></div>';
             }
-        });
+        } );
+        add_action( 'init', function () {
+            ob_start();
+        } );
         register_activation_hook( __FILE__, function () {
             ChiliSearch::getInstance()->activation();
         } );
