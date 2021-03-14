@@ -14,7 +14,7 @@
     }
 </style>
 <h1>Terms and Conditions:</h1>
-<iframe id="chilisearch_terms_and_conditions_holder" src="https://chilisearch.com/terms.php"></iframe>
+<iframe id="chilisearch_terms_and_conditions_holder" src="<?= ChiliSearch::CHILISEARCH_APP_BASE_URI ?>wordpress/terms"></iframe>
 <div id="chilisearch_terms_and_conditions_consent">
     <p>
         <?= sprintf( __( 'By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChili Search%s.', 'chilisearch' ), '<a href="https://chilisearch.com/" target="_blank">', '</a>' ); ?>
