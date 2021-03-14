@@ -139,6 +139,7 @@ final class ChiliSearch {
         'woocommerce_products'                   => false,
         'woocommerce_products_approved_comments' => false,
         'woocommerce_products_outofstock'        => false,
+        'woocommerce_products_sku'               => false,
         'bbpress_forum'                          => false,
         'bbpress_topic'                          => false,
         'bbpress_reply'                          => false,
@@ -360,6 +361,7 @@ final class ChiliSearch {
             $this->wts_settings['woocommerce_products']                   = $this->wts_settings['woocommerce_products'] && $this->is_woocommerce_active();
             $this->wts_settings['woocommerce_products_approved_comments'] = $this->wts_settings['woocommerce_products_approved_comments'] && $this->is_woocommerce_active();
             $this->wts_settings['woocommerce_products_outofstock']        = $this->wts_settings['woocommerce_products_outofstock'] && $this->is_woocommerce_active();
+            $this->wts_settings['woocommerce_products_sku']               = $this->wts_settings['woocommerce_products_sku'] && $this->is_woocommerce_active();
             $this->wts_settings['bbpress_forum']                          = $this->wts_settings['bbpress_forum'] && $this->is_bbpress_active();
             $this->wts_settings['bbpress_topic']                          = $this->wts_settings['bbpress_topic'] && $this->is_bbpress_active();
             $this->wts_settings['bbpress_reply']                          = $this->wts_settings['bbpress_reply'] && $this->is_bbpress_active();
@@ -381,6 +383,7 @@ final class ChiliSearch {
         $woocommerce_products                   = isset( $_POST['woocommerce_products'] ) && $_POST['woocommerce_products'] == 'true';
         $woocommerce_products_approved_comments = isset( $_POST['woocommerce_products_approved_comments'] ) && $_POST['woocommerce_products_approved_comments'] == 'true';
         $woocommerce_products_outofstock        = isset( $_POST['woocommerce_products_outofstock'] ) && $_POST['woocommerce_products_outofstock'] == 'true';
+        $woocommerce_products_sku               = isset( $_POST['woocommerce_products_sku'] ) && $_POST['woocommerce_products_sku'] == 'true';
         $bbpress_forum                          = isset( $_POST['bbpress_forum'] ) && $_POST['bbpress_forum'] == 'true';
         $bbpress_topic                          = isset( $_POST['bbpress_topic'] ) && $_POST['bbpress_topic'] == 'true';
         $bbpress_reply                          = isset( $_POST['bbpress_reply'] ) && $_POST['bbpress_reply'] == 'true';
@@ -399,6 +402,7 @@ final class ChiliSearch {
         $this->wts_settings['woocommerce_products']                   = $woocommerce_products;
         $this->wts_settings['woocommerce_products_approved_comments'] = $woocommerce_products_approved_comments;
         $this->wts_settings['woocommerce_products_outofstock']        = $woocommerce_products_outofstock;
+        $this->wts_settings['woocommerce_products_sku']               = $woocommerce_products_sku;
         $this->wts_settings['bbpress_forum']                          = $bbpress_forum;
         $this->wts_settings['bbpress_topic']                          = $bbpress_topic;
         $this->wts_settings['bbpress_reply']                          = $bbpress_reply;
@@ -640,7 +644,9 @@ final class ChiliSearch {
                 $document['tags']       = wp_get_post_terms( $post->ID, 'product_tag', [ 'fields' => 'names' ] );
                 $document['excerpt']    = $product->get_short_description();
                 $document['price']      = (int) $product->get_price();
-                $document['sku']        = $product->get_sku();
+                if ( $this->wts_settings['woocommerce_products_sku'] ) {
+                    $document['sku']        = $product->get_sku();
+                }
                 $document['attributes'] = [];
                 /** @var WC_Product_Attribute $attribute */
                 foreach ( $product->get_attributes() as $attributeKey => $attribute ) {

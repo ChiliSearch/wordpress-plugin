@@ -59,6 +59,13 @@
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=product' ) ) ?>" target="_blank"></a></small>
                                 </label>
                             </li>
+                            <li>
+                                <label class="mb-0" for="woocommerce_products_sku">
+                                    <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_sku]" id="woocommerce_products_sku" <?= $this->wts_settings['woocommerce_products_sku'] ? 'checked' : '' ?> disabled="disabled">
+                                    <?= __( 'Product SKU', 'chilisearch' ) ?>
+                                    <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=product&stock_status=instock' ) ) ?>" target="_blank"></a></small>
+                                </label>
+                            </li>
                             <li class="mb-0">
                                 <label class="mb-0" for="woocommerce_products_outofstock">
                                     <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_outofstock]" id="woocommerce_products_outofstock" <?= $this->wts_settings['woocommerce_products_outofstock'] ? 'checked' : '' ?> disabled="disabled">
@@ -219,9 +226,11 @@
         jQuery('#woocommerce_products').change(function () {
             if (this.checked) {
                 $('#woocommerce_products_approved_comments').removeAttr('disabled');
+                $('#woocommerce_products_sku').removeAttr('disabled');
                 $('#woocommerce_products_outofstock').removeAttr('disabled');
             } else {
                 $('#woocommerce_products_approved_comments').attr('disabled', 'disabled');
+                $('#woocommerce_products_sku').attr('disabled', 'disabled');
                 $('#woocommerce_products_outofstock').attr('disabled', 'disabled');
             }
         });
@@ -255,6 +264,7 @@
                     'media_approved_comments': jQuery('#site_index_config #media_approved_comments').is(":checked"),
                     'woocommerce_products': jQuery('#site_index_config #woocommerce_products').is(":checked"),
                     'woocommerce_products_approved_comments': jQuery('#site_index_config #woocommerce_products_approved_comments').is(":checked"),
+                    'woocommerce_products_sku': jQuery('#site_index_config #woocommerce_products_sku').is(":checked"),
                     'woocommerce_products_outofstock': jQuery('#site_index_config #woocommerce_products_outofstock').is(":checked"),
                     'bbpress_forum': jQuery('#site_index_config #bbpress_forum').is(":checked"),
                     'bbpress_topic': jQuery('#site_index_config #bbpress_topic').is(":checked"),
