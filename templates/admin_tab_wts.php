@@ -1,7 +1,19 @@
+<?php
+$plan = ChiliSearch::getInstance()->get_current_plan();
+?>
 <style>
+    .form-group {
+        padding: 0 15px;
+    }
     .form-group > ul {
-        padding: 0 40px;
-        margin: 0;
+        padding: 5px 40px;
+        margin: 5px 0;
+    }
+    .form-group label span {
+        background: #d7e8d8;
+        color: #005a05;
+        padding: 2px;
+        font-size: smaller;
     }
 </style>
 <div class="wrap">
@@ -25,6 +37,7 @@
                                     <input type="checkbox" name="chilisearch_wtf_settings[posts_approved_comments]" id="posts_approved_comments" <?= $this->wts_settings['posts_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=post' ) ) ?>" target="_blank"></a></small>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                         </ul>
@@ -41,6 +54,7 @@
                                     <input type="checkbox" name="chilisearch_wtf_settings[pages_approved_comments]" id="pages_approved_comments" <?= $this->wts_settings['pages_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=page' ) ) ?>" target="_blank"></a></small>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                         </ul>
@@ -57,13 +71,14 @@
                                     <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_approved_comments]" id="woocommerce_products_approved_comments" <?= $this->wts_settings['woocommerce_products_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=product' ) ) ?>" target="_blank"></a></small>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                             <li>
                                 <label class="mb-0" for="woocommerce_products_sku">
                                     <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_sku]" id="woocommerce_products_sku" <?= $this->wts_settings['woocommerce_products_sku'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Product SKU', 'chilisearch' ) ?>
-                                    <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=product&stock_status=instock' ) ) ?>" target="_blank"></a></small>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                             <li class="mb-0">
@@ -100,9 +115,10 @@
                     </div>
                     <div class="form-group">
                         <label for="media">
-                            <input type="checkbox" name="chilisearch_wtf_settings[media]" id="media" <?= $this->wts_settings['media'] ? 'checked' : '' ?>>
+                            <input type="checkbox" name="chilisearch_wtf_settings[media]" id="media" <?= $this->wts_settings['media'] ? 'checked' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
                             <?= __( 'Media', 'chilisearch' ) ?>
                             <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=attachment' ) ) ?>" target="_blank"></a></small>
+                            <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                         </label>
                         <ul>
                             <li>
@@ -110,6 +126,7 @@
                                     <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                             <li class="mb-0">
@@ -117,6 +134,7 @@
                                     <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=attachment' ) ) ?>" target="_blank"></a></small>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                         </ul>
@@ -201,21 +219,21 @@
             }
         );
         jQuery('#posts').change(function () {
-            if (this.checked) {
+            if (this.checked && <?= $plan === 'premium' ? 'true' : 'false' ?>) {
                 $('#posts_approved_comments').removeAttr('disabled');
             } else {
                 $('#posts_approved_comments').attr('disabled', 'disabled');
             }
         });
         jQuery('#pages').change(function () {
-            if (this.checked) {
+            if (this.checked && <?= $plan === 'premium' ? 'true' : 'false' ?>) {
                 $('#pages_approved_comments').removeAttr('disabled');
             } else {
                 $('#pages_approved_comments').attr('disabled', 'disabled');
             }
         });
         jQuery('#media').change(function () {
-            if (this.checked) {
+            if (this.checked && <?= $plan === 'premium' ? 'true' : 'false' ?>) {
                 $('#media_doc_files').removeAttr('disabled');
                 $('#media_approved_comments').removeAttr('disabled');
             } else {
@@ -226,10 +244,13 @@
         jQuery('#woocommerce_products').change(function () {
             if (this.checked) {
                 $('#woocommerce_products_approved_comments').removeAttr('disabled');
+            } else {
+                $('#woocommerce_products_approved_comments').attr('disabled', 'disabled');
+            }
+            if (this.checked && <?= $plan === 'premium' ? 'true' : 'false' ?>) {
                 $('#woocommerce_products_sku').removeAttr('disabled');
                 $('#woocommerce_products_outofstock').removeAttr('disabled');
             } else {
-                $('#woocommerce_products_approved_comments').attr('disabled', 'disabled');
                 $('#woocommerce_products_sku').attr('disabled', 'disabled');
                 $('#woocommerce_products_outofstock').attr('disabled', 'disabled');
             }

@@ -366,6 +366,15 @@ final class ChiliSearch {
             $this->wts_settings['bbpress_topic']                          = $this->wts_settings['bbpress_topic'] && $this->is_bbpress_active();
             $this->wts_settings['bbpress_reply']                          = $this->wts_settings['bbpress_reply'] && $this->is_bbpress_active();
         }
+        if ( $this->get_current_plan() !== 'premium' ) {
+            $this->wts_settings['woocommerce_products_approved_comments'] = false;
+            $this->wts_settings['woocommerce_products_sku']               = false;
+            $this->wts_settings['posts_approved_comments']                = false;
+            $this->wts_settings['pages_approved_comments']                = false;
+            $this->wts_settings['media']                                  = false;
+            $this->wts_settings['media_approved_comments']                = false;
+            $this->wts_settings['media_doc_files']                        = false;
+        }
         update_option( 'chilisearch_wts_settings', $this->wts_settings );
     }
 
@@ -407,9 +416,11 @@ final class ChiliSearch {
         $this->wts_settings['bbpress_topic']                          = $bbpress_topic;
         $this->wts_settings['bbpress_reply']                          = $bbpress_reply;
         $this->set_wts_settings();
-        $this->get_configs();
-        $this->configs['get_started_config_finished'] = true;
-        $this->set_configs();
+        if ( empty( $this->configs['get_started_config_finished'] ) ) {
+            $this->get_configs();
+            $this->configs['get_started_config_finished'] = true;
+            $this->set_configs();
+        }
         wp_send_json( [ 'status' => true ] );
     }
 
