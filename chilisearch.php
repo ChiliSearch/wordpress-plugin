@@ -980,7 +980,7 @@ final class ChiliSearch {
                 'removeBrand'        => $this->get_current_plan() === 'premium' && !$this->settings['display_chilisearch_brand'],
             ],
             'phrases'    => [
-                'powered-by'                 => __( 'by', 'chilisearch' ),
+                'powered-by'                 => __( 'powered by', 'chilisearch' ),
                 'search-powered-by'          => __( 'search powered by', 'chilisearch' ),
                 'no-result-message'          => __( 'Couldn\'t find anything related …', 'chilisearch' ),
                 'error-message'              => __( 'Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch' ),
