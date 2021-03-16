@@ -50,6 +50,11 @@ Sure! you can visit Chili Search setting page and manage your index policy and i
 
 ## Changelog
 
+### 2.0.0
+* major update
+* refactor and rewrite most parts
+* add premium features
+
 ### 1.1.1
 * fix isRtl bug
 * update contributors
