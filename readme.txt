@@ -4,7 +4,7 @@ Donate link: https://chilisearch.com/wp-plugin
 Contributors: chilisearch
 Tags: search, site search, custom search, autocomplete search, ajax search, typeahead, search-as-you-type, SAYT, search experience
 Requires at least: 3.9
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.6
 Stable tag: 2.0.0
 License: GPLv2 or later
