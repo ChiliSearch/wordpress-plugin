@@ -50,6 +50,11 @@ Sure! you can visit Chili Search setting page and manage your index policy and i
 
 ## Changelog
 
+### 2.0.1
+* add comma at the end of JS command to prevent minifiers crash
+* fix progressbar css
+* add link to review page
+
 ### 2.0.0
 * major update
 * refactor and rewrite most parts

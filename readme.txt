@@ -6,7 +6,7 @@ Tags: search, site search, custom search, autocomplete search, ajax search, type
 Requires at least: 3.9
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ Sure! you can visit Chili Search setting page and manage your index policy and i
 
 == Upgrade Notice ==
 
+= 2.0.1 =
+* Upgrade for latest changes
+
 = 2.0.0 =
 * major update
 * refactor and rewrite most parts
@@ -91,6 +94,11 @@ Sure! you can visit Chili Search setting page and manage your index policy and i
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 2.0.1 =
+* add comma at the end of JS command to prevent minifiers crash
+* fix progressbar css
+* add link to review page
 
 = 2.0.0 =
 * major update
