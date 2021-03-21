@@ -1,3 +1,22 @@
+<style>
+    .chili-progress-bar {
+        position: relative;
+        height: 10px;
+        width: 70%;
+        margin: 10px auto;
+        border-radius: 10px;
+        background: #dcdcde;
+        background: rgba(0,0,0,.1);
+    }
+    .chili-progress-bar div {
+        height: 10px;
+        min-width: 20px;
+        width: 0;
+        background: #2271b1;
+        border-radius: 10px;
+        transition: width .3s;
+    }
+</style>
 <div class="card" id="progressbar-holder" style="margin:150px auto 0;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;display: block;" width="150px" height="150px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
         <g transform="translate(50 50)">
@@ -14,7 +33,7 @@
             </g>
         </g>
     </svg>
-    <div class="media-progress-bar" id="progress">
+    <div class="chili-progress-bar" id="progress">
         <div class="progress-bar" style="width: 0%"></div>
     </div>
 </div>
