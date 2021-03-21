@@ -38,3 +38,4 @@ $thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html(
         <h3 class="card-title"><?= $usedSpace ?></h3>
     </div>
 </div>
+<a href="https://wordpress.org/support/plugin/chilisearch/reviews/?filter=5" target="_blank" style="margin-top:20px;display:block;"><?= __('Leave us a review', 'chilisearch') ?> →</a>
