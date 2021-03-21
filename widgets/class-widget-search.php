@@ -3,7 +3,7 @@
  * Search Widget.
  *
  * @package ChiliSearch\Widgets
- * @version 2.0.0
+ * @since 2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

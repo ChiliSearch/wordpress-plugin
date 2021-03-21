@@ -12,7 +12,7 @@
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
  * Description:       Chili Search is an easy-to-use AI-powered Search as a Service that provides a better search experience in your website.
- * Version:           2.0.0
+ * Version:           2.0.1
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '2.0.0' );
+define( 'CHILISEARCH_VERSION', '2.0.1' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
@@ -791,7 +791,7 @@ final class ChiliSearch {
 
         $params = json_encode( $this->get_js_init_parameters() );
 
-        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params)" );
+        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params);" );
     }
 
     public function get_or_create_search_page() {
@@ -868,7 +868,7 @@ final class ChiliSearch {
                 $params = $this->get_js_init_parameters();
                 $params['searchPage'] = admin_url( 'admin.php?page=chilisearch&tab=demo' );
                 $params = json_encode( $params );
-                wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params)" );
+                wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params);" );
 
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
