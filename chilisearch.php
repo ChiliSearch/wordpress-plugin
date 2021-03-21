@@ -791,7 +791,7 @@ final class ChiliSearch {
 
         $params = json_encode( $this->get_js_init_parameters() );
 
-        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params)" );
+        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params);" );
     }
 
     public function get_or_create_search_page() {
@@ -868,7 +868,7 @@ final class ChiliSearch {
                 $params = $this->get_js_init_parameters();
                 $params['searchPage'] = admin_url( 'admin.php?page=chilisearch&tab=demo' );
                 $params = json_encode( $params );
-                wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params)" );
+                wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params);" );
 
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
