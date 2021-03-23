@@ -71,7 +71,7 @@ There are multiple Chili Search Demo live on [chilisearch.com/demo](https://chil
 1. Install the plugin from within the Dashboard or upload the directory `chilisearch` and all its contents to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Go to `Chili Search` and accept terms and conditions.
-4. Enable `Auto search input detection` in Chili Search Setting tab or go to the `Appearance â Widgets` and choose `Search Form`
+4. Enable `Auto search input detection` in Chili Search Setting tab or go to the `Appearance → Widgets` and choose `Search Form`
 5. Everything is done, visit your website and enjoy searching!
 
 If you run into any trouble, feel free to shoot us an email at [support@chilisearch.com](mailto:support@chilisearch.com), we will reply as soon as possible!
