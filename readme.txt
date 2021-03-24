@@ -10,21 +10,21 @@ Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Power up discovery of Posts, Pages, Media, wooCommerce and bbPress using our AI-Powered Search Engine.
+Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
 
 == Description ==
 
 **Chili Search** replaces the WordPress default search with a lightning fast, full-ajax and accurate search.
 
-Using cloud technologies and AI computations on Documents, Chili Search provides a fast, accurate and reliable search solution.
+By the use of cloud technologies and AI computations on Documents, Chili Search provides a fast, accurate and reliable search solution.
 
-Search between Posts, Pages, Media, wooCommerce products, bbPress forums and topics as soon as you start typing.
+Search between Posts, Pages, Media, WooCommerce products, bbPress forums and topics as soon as you start typing.
 
-Guide your website visitors, boost sales, increase conversions and help your visitors find what they are looking for.
+Guide your website visitors, boost sales, increase conversions and help your visitors to find what they are looking for.
 
 Experience a Frictionless Search Experiences, regardless of the number of documents you have, **Chili Search** provides an incredibly fast search on your website backed by cloud servers.
 
-Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, wooCommerce products, bbPress forums and topics discoverable on your search.
+Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, WooCommerce products, bbPress forums and topics discoverable on your search.
 
 [Live Demo](https://chilisearch.com/demo/?utm_source=wp_readme&utm_medium=referral) | [More Info](https://chilisearch.com?utm_source=wp_readme&utm_medium=referral)
 
@@ -38,7 +38,7 @@ Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, w
 
 &#9989; **Phrase Match**. Match whole phrase, partial phrase or both at the sametime.
 
-&#9989; **wooCommerce Support**. Make your online shop products available on search.
+&#9989; **WooCommerce Support**. Make your online shop products available on search.
 
 &#9989; **bbPress Support**. Enable search and discovery in forums, topics and replies.
 
