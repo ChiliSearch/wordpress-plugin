@@ -81,6 +81,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 ## Changelog
 
+### 2.0.2
+* update readme files and banner
+
 ### 2.0.1
 * add comma at the end of JS command to prevent minifiers crash
 * fix progressbar css

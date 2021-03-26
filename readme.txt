@@ -6,7 +6,7 @@ Tags: search, woocommerce search, product search, autocomplete search, ajax sear
 Requires at least: 3.9
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 == Upgrade Notice ==
 
+= 2.0.2 =
+* Upgrade for latest changes
+
 = 2.0.1 =
 * Upgrade for latest changes
 
@@ -123,6 +126,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 2.0.2 =
+* update readme files and banner
 
 = 2.0.1 =
 * add comma at the end of JS command to prevent minifiers crash
