@@ -11,8 +11,8 @@
  * @wordpress-plugin
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
- * Description:       Chili Search is an easy-to-use AI-powered Search as a Service that provides a better search experience in your website.
- * Version:           2.0.1
+ * Description:       Power up discovery of Posts, Pages, Media, wooCommerce and bbPress using our AI-Powered Search Engine.
+ * Version:           2.0.2
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '2.0.1' );
+define( 'CHILISEARCH_VERSION', '2.0.2' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
