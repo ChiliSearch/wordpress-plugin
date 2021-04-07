@@ -81,6 +81,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 ## Changelog
 
+### 2.0.3
+* fix internationalization
+
 ### 2.0.2
 * update readme files and banner
 

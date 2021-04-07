@@ -62,7 +62,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     <div class="form-group">
                         <label for="woocommerce_products">
                             <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products]" id="woocommerce_products" <?= $this->wts_settings['woocommerce_products'] ? 'checked' : '' ?> <?= ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? 'disabled' : '' ?>>
-                            <?= __( 'wooCommerce products', 'chilisearch' ) ?> <?= ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? '<small>' . __( '(wooCommerce plugin is not installed)', 'chilisearch' ) . '</small>' : '' ?>
+                            <?= __( 'WooCommerce products', 'chilisearch' ) ?> <?= ! is_plugin_active( 'woocommerce/woocommerce.php' ) ? '<small>' . __( '(WooCommerce plugin is not installed)', 'chilisearch' ) . '</small>' : '' ?>
                             <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=product&stock_status=instock' ) ) ?>" target="_blank"></a></small>
                         </label>
                         <ul>
