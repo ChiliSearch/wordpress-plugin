@@ -237,7 +237,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                         <label>
                             <input type="checkbox" name="chilisearch_settings[display_chilisearch_brand]" id="display_chilisearch_brand" value="true" <?= $this->settings['display_chilisearch_brand'] ? 'checked' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
                             <?= __( 'Display', 'chilisearch' ) ?>
-                            <p class="description"><?= __( 'Display Chili Search bran in search box and search result.', 'chilisearch' ) ?></p>
+                            <p class="description"><?= __( 'Display Chili Search brand in search box and search result.', 'chilisearch' ) ?></p>
                         </label>
                     </td>
                 </tr>
