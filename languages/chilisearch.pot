@@ -1,0 +1,612 @@
+# Copyright (C) 2021 ChiliSearch
+# This file is distributed under the same license as the Chili Search plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Chili Search 2.0.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress-plugin-github\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-04-07T23:27:18+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: chilisearch\n"
+
+#. Plugin Name of the plugin
+#: chilisearch.php:262
+#: chilisearch.php:845
+msgid "Chili Search"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://chilisearch.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "Power up discovery of Posts, Pages, Media, wooCommerce and bbPress using our AI-Powered Search Engine."
+msgstr ""
+
+#. Author of the plugin
+msgid "ChiliSearch"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://chilisearch.com/"
+msgstr ""
+
+#: chilisearch.php:159
+msgid "Chili Search requires PHP version %s"
+msgstr ""
+
+#: chilisearch.php:160
+msgid "Error Activating"
+msgstr ""
+
+#: chilisearch.php:182
+msgid "Whole Word"
+msgstr ""
+
+#: chilisearch.php:183
+msgid "Partial Word"
+msgstr ""
+
+#: chilisearch.php:184
+msgid "Both"
+msgstr ""
+
+#: chilisearch.php:190
+msgid "Relevancy"
+msgstr ""
+
+#: chilisearch.php:191
+msgid "PublishedAt DESC"
+msgstr ""
+
+#: chilisearch.php:192
+msgid "PublishedAt ASC"
+msgstr ""
+
+#: chilisearch.php:193
+msgid "Price DESC"
+msgstr ""
+
+#: chilisearch.php:194
+msgid "Price ASC"
+msgstr ""
+
+#: chilisearch.php:255
+#: chilisearch.php:271
+#: chilisearch.php:848
+#: templates/admin_tab_settings.php:23
+msgid "Settings"
+msgstr ""
+
+#: chilisearch.php:261
+#: chilisearch.php:270
+msgid "Chili Search Settings"
+msgstr ""
+
+#: chilisearch.php:283
+msgid "Chili Search Setup"
+msgstr ""
+
+#: chilisearch.php:284
+msgid "Setup your Chili Search %shere%s to empower your website's search!"
+msgstr ""
+
+#: chilisearch.php:316
+msgid "API Secret is not valid!"
+msgstr ""
+
+#: chilisearch.php:318
+msgid "Request failed. Try again."
+msgstr ""
+
+#: chilisearch.php:437
+msgid "Search page size must be between 1 to 20"
+msgstr ""
+
+#: chilisearch.php:440
+msgid "SAYT size must be between 1 to 10"
+msgstr ""
+
+#: chilisearch.php:443
+msgid "Search input selector can not be empty."
+msgstr ""
+
+#: chilisearch.php:446
+msgid "Search result page is not selected."
+msgstr ""
+
+#: chilisearch.php:449
+msgid "Weight for title is not selected."
+msgstr ""
+
+#: chilisearch.php:452
+msgid "Weight for excerpt is not selected."
+msgstr ""
+
+#: chilisearch.php:455
+msgid "Weight for body is not selected."
+msgstr ""
+
+#: chilisearch.php:458
+msgid "Weight for tags is not selected."
+msgstr ""
+
+#: chilisearch.php:461
+msgid "Weight for category is not selected."
+msgstr ""
+
+#: chilisearch.php:465
+msgid "Search type is invalid."
+msgstr ""
+
+#: chilisearch.php:469
+msgid "Sort by is invalid."
+msgstr ""
+
+#: chilisearch.php:477
+msgid "Search result page is not valid."
+msgstr ""
+
+#: chilisearch.php:596
+#: chilisearch.php:609
+msgid "DocumentId is not entered!"
+msgstr ""
+
+#: chilisearch.php:614
+msgid "Post not found!"
+msgstr ""
+
+#: chilisearch.php:618
+msgid "Document type is invalid."
+msgstr ""
+
+#: chilisearch.php:707
+msgid "In reply to:"
+msgstr ""
+
+#: chilisearch.php:847
+msgid "Analytics"
+msgstr ""
+
+#: chilisearch.php:849
+msgid "Where to Search"
+msgstr ""
+
+#: chilisearch.php:850
+#: templates/admin_tab_demo.php:12
+msgid "Demo"
+msgstr ""
+
+#: chilisearch.php:983
+msgid "powered by"
+msgstr ""
+
+#: chilisearch.php:984
+msgid "search powered by"
+msgstr ""
+
+#: chilisearch.php:985
+msgid "Couldn't find anything related …"
+msgstr ""
+
+#: chilisearch.php:986
+msgid "Oops!<small>Sorry, there's some thing wrong. Please try again.</small>"
+msgstr ""
+
+#: chilisearch.php:987
+#: chilisearch.php:988
+msgid "Search …"
+msgstr ""
+
+#: chilisearch.php:989
+msgid "Search"
+msgstr ""
+
+#: chilisearch.php:990
+msgid "About {totalCount} results ({timeTook} seconds)"
+msgstr ""
+
+#: chilisearch.php:991
+msgid "Prev"
+msgstr ""
+
+#: chilisearch.php:992
+msgid "Next"
+msgstr ""
+
+#: chilisearch.php:993
+msgid "category"
+msgstr ""
+
+#: chilisearch.php:994
+msgid "price"
+msgstr ""
+
+#: chilisearch.php:995
+msgid "search-between"
+msgstr ""
+
+#: chilisearch.php:996
+msgid "to"
+msgstr ""
+
+#: chilisearch.php:997
+msgid "all"
+msgstr ""
+
+#: chilisearch.php:998
+msgid "published"
+msgstr ""
+
+#: chilisearch.php:1007
+#: templates/admin_tab_wts.php:31
+msgid "Posts"
+msgstr ""
+
+#: chilisearch.php:1010
+#: templates/admin_tab_wts.php:48
+msgid "Pages"
+msgstr ""
+
+#: chilisearch.php:1013
+#: templates/admin_tab_wts.php:119
+msgid "Media"
+msgstr ""
+
+#: chilisearch.php:1016
+msgid "Products"
+msgstr ""
+
+#: chilisearch.php:1019
+msgid "Forums"
+msgstr ""
+
+#: templates/admin_choose_plan.php:33
+msgid "Skip"
+msgstr ""
+
+#: templates/admin_get_started_register.php:20
+msgid "By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChili Search%s."
+msgstr ""
+
+#: templates/admin_get_started_register.php:25
+msgid "I accept Terms and Conditions"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:5
+#: templates/admin_tab_analytics.php:6
+#: templates/admin_tab_analytics.php:7
+#: templates/admin_tab_demo.php:3
+msgid "N/A"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:11
+msgid "Plan"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:13
+msgid "See Plans"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:15
+msgid "Manage"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:21
+msgid "Number of Indexed Documents"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:28
+msgid "Number of Searches since first of %s"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:29
+#: templates/admin_tab_analytics.php:37
+msgid "(updates every 10 minutes)"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:36
+msgid "Used Space"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:41
+msgid "Leave us a review"
+msgstr ""
+
+#: templates/admin_tab_demo.php:16
+msgid "%s documents are indexed and ready to be searched. Here you can try out the power of search!"
+msgstr ""
+
+#: templates/admin_tab_settings.php:27
+msgid "Settings saved."
+msgstr ""
+
+#: templates/admin_tab_settings.php:36
+msgid "Search type"
+msgstr ""
+
+#: templates/admin_tab_settings.php:44
+msgid "Match the whole word, partial word or both."
+msgstr ""
+
+#: templates/admin_tab_settings.php:49
+msgid "Display thumbnail"
+msgstr ""
+
+#: templates/admin_tab_settings.php:53
+#: templates/admin_tab_settings.php:63
+#: templates/admin_tab_settings.php:73
+#: templates/admin_tab_settings.php:83
+#: templates/admin_tab_settings.php:229
+#: templates/admin_tab_settings.php:239
+msgid "Display"
+msgstr ""
+
+#: templates/admin_tab_settings.php:54
+msgid "Display thumbnail in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:59
+msgid "Display excerpt"
+msgstr ""
+
+#: templates/admin_tab_settings.php:64
+msgid "Display excerpt in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:69
+msgid "Display categories"
+msgstr ""
+
+#: templates/admin_tab_settings.php:74
+msgid "Display categories in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:79
+msgid "Display tags"
+msgstr ""
+
+#: templates/admin_tab_settings.php:84
+msgid "Display tags in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:89
+msgid "Enable type filter"
+msgstr ""
+
+#: templates/admin_tab_settings.php:93
+#: templates/admin_tab_settings.php:103
+#: templates/admin_tab_settings.php:113
+#: templates/admin_tab_settings.php:123
+msgid "Enable"
+msgstr ""
+
+#: templates/admin_tab_settings.php:94
+msgid "Enable filtering base on document type."
+msgstr ""
+
+#: templates/admin_tab_settings.php:99
+msgid "Enable category filter"
+msgstr ""
+
+#: templates/admin_tab_settings.php:104
+msgid "Enable filtering base on category."
+msgstr ""
+
+#: templates/admin_tab_settings.php:109
+msgid "Enable publish date filter"
+msgstr ""
+
+#: templates/admin_tab_settings.php:114
+msgid "Enable filtering base on publish date."
+msgstr ""
+
+#: templates/admin_tab_settings.php:119
+msgid "Enable product price filter"
+msgstr ""
+
+#: templates/admin_tab_settings.php:124
+msgid "Enable filtering base on product price."
+msgstr ""
+
+#: templates/admin_tab_settings.php:129
+msgid "Search result page"
+msgstr ""
+
+#: templates/admin_tab_settings.php:133
+msgid "Chili Search result page (not recommended)"
+msgstr ""
+
+#: templates/admin_tab_settings.php:138
+msgid "Create Search Page (recommended)"
+msgstr ""
+
+#: templates/admin_tab_settings.php:139
+msgid "Choose the search result page."
+msgstr ""
+
+#: templates/admin_tab_settings.php:144
+msgid "Search page results number"
+msgstr ""
+
+#: templates/admin_tab_settings.php:148
+msgid "Number of results displayed in search page."
+msgstr ""
+
+#: templates/admin_tab_settings.php:153
+msgid "SAYT (search as you type) results number"
+msgstr ""
+
+#: templates/admin_tab_settings.php:157
+msgid "Number of results displayed in SAYT box."
+msgstr ""
+
+#: templates/admin_tab_settings.php:162
+msgid "Auto search input detection"
+msgstr ""
+
+#: templates/admin_tab_settings.php:166
+msgid "Detect and replace all search inputs in website"
+msgstr ""
+
+#: templates/admin_tab_settings.php:171
+msgid "Auto search input selector"
+msgstr ""
+
+#: templates/admin_tab_settings.php:175
+msgid "Search input selector, in case the search input is not detected automatically. Don't change it if search is working correctly."
+msgstr ""
+
+#: templates/admin_tab_settings.php:182
+msgid "Premium Features"
+msgstr ""
+
+#: templates/admin_tab_settings.php:186
+msgid "Sort by"
+msgstr ""
+
+#: templates/admin_tab_settings.php:194
+msgid "Sort search result by."
+msgstr ""
+
+#: templates/admin_tab_settings.php:199
+msgid "Field weights"
+msgstr ""
+
+#: templates/admin_tab_settings.php:202
+msgid "Title"
+msgstr ""
+
+#: templates/admin_tab_settings.php:206
+msgid "Excerpt"
+msgstr ""
+
+#: templates/admin_tab_settings.php:210
+msgid "Body"
+msgstr ""
+
+#: templates/admin_tab_settings.php:214
+msgid "Tags"
+msgstr ""
+
+#: templates/admin_tab_settings.php:218
+msgid "Category"
+msgstr ""
+
+#: templates/admin_tab_settings.php:221
+msgid "Define weight for each field of the document."
+msgstr ""
+
+#: templates/admin_tab_settings.php:225
+msgid "Display product price"
+msgstr ""
+
+#: templates/admin_tab_settings.php:230
+msgid "Display product price in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:235
+msgid "Display Chili Search brand"
+msgstr ""
+
+#: templates/admin_tab_settings.php:240
+msgid "Display Chili Search brand in search box and search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:306
+msgid "Something went wrong! please try again."
+msgstr ""
+
+#: templates/admin_tab_wts.php:20
+msgid "Choose where to search"
+msgstr ""
+
+#: templates/admin_tab_wts.php:26
+msgid "Search between"
+msgstr ""
+
+#: templates/admin_tab_wts.php:38
+#: templates/admin_tab_wts.php:55
+#: templates/admin_tab_wts.php:72
+#: templates/admin_tab_wts.php:135
+msgid "Approved comments"
+msgstr ""
+
+#: templates/admin_tab_wts.php:40
+#: templates/admin_tab_wts.php:57
+#: templates/admin_tab_wts.php:74
+#: templates/admin_tab_wts.php:81
+#: templates/admin_tab_wts.php:121
+#: templates/admin_tab_wts.php:129
+#: templates/admin_tab_wts.php:137
+msgid "premium only"
+msgstr ""
+
+#: templates/admin_tab_wts.php:65
+msgid "wooCommerce products"
+msgstr ""
+
+#: templates/admin_tab_wts.php:65
+msgid "(wooCommerce plugin is not installed)"
+msgstr ""
+
+#: templates/admin_tab_wts.php:80
+msgid "Product SKU"
+msgstr ""
+
+#: templates/admin_tab_wts.php:87
+msgid "Out-of-stock products"
+msgstr ""
+
+#: templates/admin_tab_wts.php:96
+msgid "bbPress Forums"
+msgstr ""
+
+#: templates/admin_tab_wts.php:96
+msgid "(bbPress plugin is not installed)"
+msgstr ""
+
+#: templates/admin_tab_wts.php:103
+msgid "bbPress Topics"
+msgstr ""
+
+#: templates/admin_tab_wts.php:110
+msgid "bbPress Replies"
+msgstr ""
+
+#: templates/admin_tab_wts.php:127
+msgid "Inside document files (doc, docx, pptx, pdf, xlsx, …)"
+msgstr ""
+
+#: templates/admin_tab_wts.php:145
+msgid "Reindex"
+msgstr ""
+
+#: templates/admin_tab_wts.php:149
+msgid "Reindex all documents"
+msgstr ""
+
+#: templates/admin_tab_wts.php:150
+msgid "Used when shown documents in search result are not updated."
+msgstr ""
+
+#: widgets/class-widget-search.php:18
+msgid "ChiliSearch Search Form Widget"
+msgstr ""
+
+#: widgets/class-widget-search.php:21
+msgid "Search Form"
+msgstr ""
+
+#: widgets/class-widget-search.php:56
+msgid "Title:"
+msgstr ""
+
+#: widgets/class-widget-search.php:65
+msgid "Display submit button"
+msgstr ""
