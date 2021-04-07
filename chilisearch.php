@@ -11,7 +11,7 @@
  * @wordpress-plugin
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
- * Description:       Power up discovery of Posts, Pages, Media, wooCommerce and bbPress using our AI-Powered Search Engine.
+ * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
  * Version:           2.0.2
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
