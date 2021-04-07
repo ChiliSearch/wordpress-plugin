@@ -810,7 +810,7 @@ final class ChiliSearch {
     }
 
     public function i18n() {
-        load_plugin_textdomain( 'chilisearch', false, CHILISEARCH_DIR . '/languages/' );
+        load_plugin_textdomain( 'chilisearch', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
     public function default_search_page() {
@@ -844,10 +844,10 @@ final class ChiliSearch {
         ?>
         <h1><?= __( 'Chili Search', 'chilisearch' ) ?></h1>
         <h2 class="nav-tab-wrapper">
-            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=analytics' ) ) ?>" class="nav-tab <?= $tab === 'analytics' ? 'nav-tab-active' : '' ?>">Analytics</a>
-            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=settings' ) ) ?>" class="nav-tab <?= $tab === 'settings' ? 'nav-tab-active' : '' ?>">Settings</a>
-            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ) ?>" class="nav-tab <?= $tab === 'where-to-search' ? 'nav-tab-active' : '' ?>">Where to Search</a>
-            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=demo' ) ) ?>" class="nav-tab <?= $tab === 'demo' ? 'nav-tab-active' : '' ?>">Demo</a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=analytics' ) ) ?>" class="nav-tab <?= $tab === 'analytics' ? 'nav-tab-active' : '' ?>"><?= __( 'Analytics', 'chilisearch' ) ?></a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=settings' ) ) ?>" class="nav-tab <?= $tab === 'settings' ? 'nav-tab-active' : '' ?>"><?= __( 'Settings', 'chilisearch' ) ?></a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ) ?>" class="nav-tab <?= $tab === 'where-to-search' ? 'nav-tab-active' : '' ?>"><?= __( 'Where to Search', 'chilisearch' ) ?></a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=demo' ) ) ?>" class="nav-tab <?= $tab === 'demo' ? 'nav-tab-active' : '' ?>"><?= __( 'Demo', 'chilisearch' ) ?></a>
         </h2>
         <?php
         switch ( $tab ) {
@@ -977,9 +977,9 @@ final class ChiliSearch {
                 ],
                 'filters'            => [],
                 'isRTL'              => (bool) is_rtl(),
-                'removeBrand'        => $this->get_current_plan() === 'premium' && !$this->settings['display_chilisearch_brand'],
+                'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
             ],
-            'phrases'    => [
+            'phraseBook' => [
                 'powered-by'                 => __( 'powered by', 'chilisearch' ),
                 'search-powered-by'          => __( 'search powered by', 'chilisearch' ),
                 'no-result-message'          => __( 'Couldn\'t find anything related …', 'chilisearch' ),
@@ -990,6 +990,12 @@ final class ChiliSearch {
                 'search-result-result-count' => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
                 'prev'                       => __( 'Prev', 'chilisearch' ),
                 'next'                       => __( 'Next', 'chilisearch' ),
+                'category'                   => __( 'category', 'chilisearch' ),
+                'price'                      => __( 'price', 'chilisearch' ),
+                'search-between'             => __( 'search-between', 'chilisearch' ),
+                'to'                         => __( 'to', 'chilisearch' ),
+                'all'                        => __( 'all', 'chilisearch' ),
+                'published'                  => __( 'published', 'chilisearch' ),
             ],
         ];
         if ($this->is_woocommerce_active()) {
