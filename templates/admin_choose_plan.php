@@ -22,7 +22,7 @@ $loginToken = isset($siteInfo['loginToken']) ? (string)$siteInfo['loginToken'] :
     eventer(messageEvent, function (e) {
         console.log(e);
         if (e.data === "goToNextStep" || e.message === "goToNextStep") {
-            window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&pass_get_started_plan_finished' ) ?>");
+            window.location.replace("<?= admin_url( 'admin.php?page=chilisearch' ) ?>");
         } else if (('key' in e.data && e.data.key === "setPageSize") || ('key' in e.message && e.message.key === "setPageSize")) {
             jQuery('#chilisearch_pricing_iframe').height(e.data.value)
         }
@@ -30,4 +30,4 @@ $loginToken = isset($siteInfo['loginToken']) ? (string)$siteInfo['loginToken'] :
 </script>
 <iframe id="chilisearch_pricing_iframe" src="<?= ChiliSearch::CHILISEARCH_APP_BASE_URI ?>wordpress/pricing?login-token=<?= $loginToken ?>"></iframe>
 
-<a href="<?= admin_url( 'admin.php?page=chilisearch&pass_get_started_plan_finished' ) ?>" class="button"><?= __( 'Skip', 'chilisearch' ) ?> →</a>
+<a href="<?= admin_url( 'admin.php?page=chilisearch' ) ?>" class="button"><?= __( 'Skip', 'chilisearch' ) ?> →</a>

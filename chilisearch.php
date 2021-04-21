@@ -148,7 +148,6 @@ final class ChiliSearch {
         'site_api_key'                => null,
         'site_api_secret'             => null,
         'get_started_api_finished'    => false,
-        'get_started_plan_finished'   => false,
         'get_started_config_finished' => false,
         'website_info'                => null,
     ];
@@ -829,13 +828,7 @@ final class ChiliSearch {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         $tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'analytics';
-        if ( empty( $this->configs['get_started_plan_finished'] ) || $tab === 'plans' ) {
-            if ( isset( $_GET['pass_get_started_plan_finished'] ) ) {
-                $this->get_configs();
-                $this->configs['get_started_plan_finished'] = true;
-                $this->set_configs();
-                wp_redirect( admin_url( 'admin.php?page=chilisearch' ) );
-            }
+        if ( $tab === 'plans' ) {
             return require CHILISEARCH_DIR . '/templates/admin_choose_plan.php';
         }
         if ( empty( $this->configs['get_started_config_finished'] ) && $tab !== 'where-to-search' ) {
