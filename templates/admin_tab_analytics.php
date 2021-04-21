@@ -11,9 +11,6 @@ $thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html(
         <p class="card-category"><?= __( 'Plan', 'chilisearch' ) ?>:</p>
         <h3 class="card-title"><?= ucfirst($plan) ?><?= !empty($planInfo) ? " <small style='font-weight: normal'>$planInfo</small>" : '' ?></h3>
         <a href="<?= admin_url( 'admin.php?page=chilisearch&tab=plans' ) ?>"><?= __( 'See Plans', 'chilisearch' ) ?> →</a>
-        <?php if ($plan === 'premium'): ?>
-            <a href="https://app.chilisearch.com/websites" target="_blank" style="margin:0 10px;"><?= __( 'Manage', 'chilisearch' ) ?> →</a>
-        <?php endif; ?>
     </div>
 </div>
 <div class="card card-stats">
