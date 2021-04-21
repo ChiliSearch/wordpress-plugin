@@ -9,8 +9,16 @@ $thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html(
 <div class="card card-stats">
     <div class="card-header card-header-info card-header-icon">
         <p class="card-category"><?= __( 'Plan', 'chilisearch' ) ?>:</p>
-        <h3 class="card-title"><?= ucfirst($plan) ?><?= !empty($planInfo) ? " <small style='font-weight: normal'>$planInfo</small>" : '' ?></h3>
+        <h3 class="card-title"><?= ucfirst( $plan ) ?><?= ! empty( $planInfo ) ? " <small style='font-weight: normal'>$planInfo</small>" : '' ?></h3>
         <a href="<?= admin_url( 'admin.php?page=chilisearch&tab=plans' ) ?>"><?= __( 'See Plans', 'chilisearch' ) ?> →</a>
+        <a href="javascript:;" onclick="jQuery('#gift-code-holder').slideToggle()" style="margin-left: 10px"><?= __( 'Redeem Gift Code', 'chilisearch' ) ?> →</a>
+        <?php if ( empty( $siteInfo['usedTrialBefore'] ) && $plan === 'basic' ): ?>
+            <a href="javascript:;" onclick="jQuery('#gift-code-holder input').val('trial');jQuery('#gift-code-holder').submit()" style="margin-left: 10px"><?= __( 'Start 7-Days Trial', 'chilisearch' ) ?> →</a>
+        <?php endif; ?>
+        <form style="display: none;margin-top: 10px;" id="gift-code-holder" action="<?= admin_url( 'admin.php?page=chilisearch&tab=analytics&gift_code_form' ) ?>" method="post">
+            <input type="text" name="gift-code" placeholder="<?= __( 'Enter Your Gift Code …', 'chilisearch' ) ?>">
+            <button type="submit" class="button button-primary"><?= __( 'Submit', 'chilisearch' ) ?></button>
+        </form>
     </div>
 </div>
 <div class="card card-stats">
@@ -35,4 +43,4 @@ $thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html(
         <h3 class="card-title"><?= $usedSpace ?></h3>
     </div>
 </div>
-<a href="https://wordpress.org/support/plugin/chilisearch/reviews/?filter=5" target="_blank" style="margin-top:20px;display:block;"><?= __('Leave us a review', 'chilisearch') ?> →</a>
+<a href="https://wordpress.org/support/plugin/chilisearch/reviews/?filter=5" target="_blank" style="margin-top:20px;display:block;"><?= __( 'Leave us a review', 'chilisearch' ) ?> →</a>

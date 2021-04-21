@@ -865,6 +865,9 @@ final class ChiliSearch {
 
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
+                if ( isset( $_GET['gift_code_form'] ) ) {
+                    // TODO activate trial
+                }
             default:
                 return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
         }
