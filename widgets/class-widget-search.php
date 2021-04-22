@@ -18,7 +18,7 @@ class Widget_Search extends WP_Widget {
             'description'                 => __( 'ChiliSearch Search Form Widget', 'chilisearch' ),
             'customize_selective_refresh' => true,
         );
-        parent::__construct( 'chilisearch_form', __( 'Search Form', 'chilisearch' ), $widget_ops );
+        parent::__construct( 'chilisearch_form', __( 'ChiliSearch Form', 'chilisearch' ), $widget_ops );
     }
 
     public function widget( $args, $instance ) {
