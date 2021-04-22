@@ -865,8 +865,19 @@ final class ChiliSearch {
 
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
-                if ( isset( $_GET['gift_code_form'] ) ) {
-                    // TODO activate trial
+                if ( isset( $_POST['gift-code'] ) ) {
+                    list( $responseCode, $payload ) = $this->send_request( 'POST', 'website/redeem-gift-code', ['code' => $_POST['gift-code']] );
+                    if ( $responseCode === 200 ) { ?>
+                        <div class="notice notice-success is-dismissible">
+                            <p><?= __( sprintf('Gift code redeemed successfully! %d days added to your premium service.', isset($payload->addedDaysToService) ? $payload->addedDaysToService : 0), 'chilisearch' ); ?></p>
+                        </div>
+                    <?php } else { ?>
+                        <div class="notice notice-error is-dismissible">
+                            <p><?= __( 'Could not redeem this gift code!', 'chilisearch' ); ?></p>
+                            <p><?= esc_html( isset($payload->message) ? $payload->message : __('No message!', 'chilisearch') ); ?></p>
+                        </div>
+                    <?php }
+                    $this->get_website_info(true);
                 }
             default:
                 return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';

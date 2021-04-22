@@ -15,7 +15,7 @@ $thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html(
         <?php if ( empty( $siteInfo['usedTrialBefore'] ) && $plan === 'basic' ): ?>
             <a href="javascript:;" onclick="jQuery('#gift-code-holder input').val('trial');jQuery('#gift-code-holder').submit()" style="margin-left: 10px"><?= __( 'Start 7-Days Trial', 'chilisearch' ) ?> →</a>
         <?php endif; ?>
-        <form style="display: none;margin-top: 10px;" id="gift-code-holder" action="<?= admin_url( 'admin.php?page=chilisearch&tab=analytics&gift_code_form' ) ?>" method="post">
+        <form style="display: none;margin-top: 10px;" id="gift-code-holder" action="<?= admin_url( 'admin.php?page=chilisearch&tab=analytics' ) ?>" method="post">
             <input type="text" name="gift-code" placeholder="<?= __( 'Enter Your Gift Code …', 'chilisearch' ) ?>">
             <button type="submit" class="button button-primary"><?= __( 'Submit', 'chilisearch' ) ?></button>
         </form>
