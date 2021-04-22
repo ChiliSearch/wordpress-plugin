@@ -1002,10 +1002,11 @@ final class ChiliSearch {
                 'next'                       => __( 'Next', 'chilisearch' ),
                 'category'                   => __( 'category', 'chilisearch' ),
                 'price'                      => __( 'price', 'chilisearch' ),
-                'search-between'             => __( 'search-between', 'chilisearch' ),
+                'search-between'             => __( 'search between', 'chilisearch' ),
                 'to'                         => __( 'to', 'chilisearch' ),
                 'all'                        => __( 'all', 'chilisearch' ),
                 'published'                  => __( 'published', 'chilisearch' ),
+                'show-all-n-results'         => __( 'Show all {totalCount} results', 'chilisearch' ),
             ],
         ];
         if ($this->is_woocommerce_active()) {
