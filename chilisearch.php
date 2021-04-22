@@ -885,13 +885,16 @@ final class ChiliSearch {
     }
 
     public function get_current_plan() {
-        $siteInfo = $this->get_website_info();
+        $siteInfo = $this->get_website_info(false, true);
         return isset( $siteInfo['plan'] ) ? esc_html( $siteInfo['plan'] ) : 'basic';
     }
 
-    public function get_website_info($forceFresh = false) {
+    public function get_website_info($forceFresh = false, $getCachedIfExists = false) {
         if ( empty( $this->configs['site_api_secret'] ) ) {
             return null;
+        }
+        if ( ! $forceFresh && $getCachedIfExists && ! empty( $this->configs['website_info'] )) {
+            return $this->configs['website_info'];
         }
         if ( ! empty( $this->configs['website_info']['last_check'] ) && ! isset( $_GET['fresh'] ) && empty( $forceFresh )) {
             $seconds_ago = microtime( true ) - $this->configs['website_info']['last_check'];
