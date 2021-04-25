@@ -127,6 +127,7 @@ final class ChiliSearch {
         'filter_price'                 => false,
         'auto_search_detection'        => true,
         'search_input_selector'        => 'input[name="s"]',
+        'voice_search_enabled'         => true,
     ];
     private $wts_settings = [
         'posts'                                  => true,
@@ -490,6 +491,7 @@ final class ChiliSearch {
         $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
         $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';
         $this->settings['display_result_tags']          = isset( $_POST['display_result_tags'] ) && $_POST['display_result_tags'] == 'true';
+        $this->settings['voice_search_enabled']         = isset( $_POST['voice_search_enabled'] ) && $_POST['voice_search_enabled'] == 'true';
         if ($this->get_current_plan() === 'premium') {
             $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
             $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
@@ -988,25 +990,31 @@ final class ChiliSearch {
                 'filters'            => [],
                 'isRTL'              => (bool) is_rtl(),
                 'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
+                'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
+                'voiceSearchLocale'  => get_locale(),
             ],
             'phraseBook' => [
-                'powered-by'                 => __( 'powered by', 'chilisearch' ),
-                'search-powered-by'          => __( 'search powered by', 'chilisearch' ),
-                'no-result-message'          => __( 'Couldn\'t find anything related …', 'chilisearch' ),
-                'error-message'              => __( 'Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch' ),
-                'input-placeholder'          => __( 'Search …', 'chilisearch' ),
-                'sayt-init-message'          => __( 'Search …', 'chilisearch' ),
-                'form-submit-value'          => __( 'Search', 'chilisearch' ),
-                'search-result-result-count' => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
-                'prev'                       => __( 'Prev', 'chilisearch' ),
-                'next'                       => __( 'Next', 'chilisearch' ),
-                'category'                   => __( 'category', 'chilisearch' ),
-                'price'                      => __( 'price', 'chilisearch' ),
-                'search-between'             => __( 'search between', 'chilisearch' ),
-                'to'                         => __( 'to', 'chilisearch' ),
-                'all'                        => __( 'all', 'chilisearch' ),
-                'published'                  => __( 'published', 'chilisearch' ),
-                'show-all-n-results'         => __( 'Show all {totalCount} results', 'chilisearch' ),
+                'powered-by'                   => __( 'powered by', 'chilisearch' ),
+                'search-powered-by'            => __( 'search powered by', 'chilisearch' ),
+                'no-result-message'            => __( 'Couldn\'t find anything related …', 'chilisearch' ),
+                'error-message'                => __( 'Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch' ),
+                'input-placeholder'            => __( 'Search …', 'chilisearch' ),
+                'sayt-init-message'            => __( 'Search …', 'chilisearch' ),
+                'form-submit-value'            => __( 'Search', 'chilisearch' ),
+                'search-result-result-count'   => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
+                'prev'                         => __( 'Prev', 'chilisearch' ),
+                'next'                         => __( 'Next', 'chilisearch' ),
+                'category'                     => __( 'category', 'chilisearch' ),
+                'price'                        => __( 'price', 'chilisearch' ),
+                'search-between'               => __( 'search between', 'chilisearch' ),
+                'to'                           => __( 'to', 'chilisearch' ),
+                'all'                          => __( 'all', 'chilisearch' ),
+                'published'                    => __( 'published', 'chilisearch' ),
+                'show-all-n-results'           => __( 'Show all {totalCount} results', 'chilisearch' ),
+                'voice-search-ready-to-listen' => __( 'Ready to listen', 'chilisearch' ),
+                'voice-search-error-no-result' => __( 'Hmm, didn\'t get it. please repeat …', 'chilisearch' ),
+                'voice-search-listening'       => __( 'Listening …', 'chilisearch' ),
+                'voice-search-got-it'          => __( 'Got it!', 'chilisearch' ),
             ],
         ];
         if ($this->is_woocommerce_active()) {
