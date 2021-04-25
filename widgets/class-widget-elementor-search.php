@@ -44,11 +44,20 @@ class Widget_ElementorSearch extends \Elementor\Widget_Base {
 
 	protected function register_controls() {
 		$this->start_controls_section(
-			'section_shortcode',
+			'section_search_form',
 			[
-				'label' => __( 'Chili Search', 'chilisearch' ),
+				'label' => __( 'Search Form', 'chilisearch' ),
 			]
 		);
+
+        $this->add_control(
+            'chili_search_setting_page',
+            [
+                'type' => Controls_Manager::RAW_HTML,
+                'content_classes' => 'elementor-control-field-description',
+                'raw' => '<p>' . sprintf(__( 'Update search setting in %sChili Search Plugin%s', 'chilisearch' ), '<a href="' . esc_url( admin_url( 'admin.php?page=chilisearch&tab=settings' ) ) . '" target="_blank">', '</a>') . '</p>',
+            ]
+        );
 
         $this->add_control(
             'font',
@@ -58,6 +67,35 @@ class Widget_ElementorSearch extends \Elementor\Widget_Base {
                 'separator' => 'before',
             ]
         );
+
+        $this->add_control(
+            'search_input_placeholder',
+            [
+                'label' => __( 'Search input placeholder', 'chilisearch' ),
+                'type' => Controls_Manager::TEXT,
+                'separator' => 'before',
+                'default' => esc_attr_x( 'Search …', 'placeholder' ),
+            ]
+        );
+
+        $this->add_control(
+            'sayt_result_number',
+            [
+                'label' => __( 'Results number', 'chilisearch' ),
+                'type' => Controls_Manager::NUMBER,
+                'separator' => 'before',
+                'default' => 5,
+            ]
+        );
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_submit_button',
+			[
+				'label' => __( 'Submit Button', 'chilisearch' ),
+			]
+		);
 
         $this->add_control(
             'display_submit_button',
@@ -99,16 +137,6 @@ class Widget_ElementorSearch extends \Elementor\Widget_Base {
             ]
         );
 
-        $this->add_control(
-            'submit_input_placeholder',
-            [
-                'label' => __( 'Submit input placeholder', 'chilisearch' ),
-                'type' => Controls_Manager::TEXT,
-                'separator' => 'before',
-                'default' => esc_attr_x( 'Search &hellip;', 'placeholder' ),
-            ]
-        );
-
 		$this->end_controls_section();
 	}
 
@@ -116,10 +144,10 @@ class Widget_ElementorSearch extends \Elementor\Widget_Base {
         $chilisearch = \ChiliSearch::getInstance();
         $settings = $this->get_settings_for_display();
 		?>
-        <form action="<?= $chilisearch->get_or_create_search_page() ?>" method="GET" role="search" class="chilisearch-search_form" style="font-family:<?= $settings['font'] ?>">
-            <div class="chlisrch-f-sb">
+        <form action="<?= $chilisearch->get_or_create_search_page() ?>" method="GET" role="search" class="chilisearch-search_form" style="<?= $settings['font'] ? "font-family:{$settings['font']};" : '' ?>">
+        <div class="chlisrch-f-sb">
                 <label class="chilisearch-search_form_label">
-                    <input type="search" placeholder="<?= $settings['submit_input_placeholder'] ?>" name="chilisearch-query" autocomplete="off">
+                    <input type="search" placeholder="<?= $settings['search_input_placeholder'] ?>" name="chilisearch-query" autocomplete="off" data-result-count="<?= $settings['sayt_result_number'] ?>">
                 </label>
                 <input class="chilisearch-search_form_submit" type="submit" value="<?=$settings['submit_button_text']?>" style="<?= $settings['display_submit_button'] === 'yes'?'':'display:none;' ?>background:<?= $settings['submit_button_background_color'] ?>;color:<?= $settings['submit_button_color'] ?>">
             </div>
