@@ -529,7 +529,9 @@ final class ChiliSearch {
 
     public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed() {
         $active_post_types = $this->get_active_post_types();
-        $posts             = $this->admin_get_active_posts( $active_post_types );
+        $siteInfo = $this->get_website_info();
+        $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['documentCountLimit'] : null;
+        $posts             = $this->admin_get_active_posts( $active_post_types, $documentCountLimit );
         $posts             = array_filter( $posts, function ( $post ) {
             if ( $post->post_type === self::WP_POST_TYPE_PRODUCT && ! $this->wts_settings['woocommerce_products_outofstock'] ) {
                 $product = wc_get_product( $post->ID );
@@ -571,11 +573,11 @@ final class ChiliSearch {
         return $active_post_types;
     }
 
-    protected function admin_get_active_posts( $active_post_types ) {
+    protected function admin_get_active_posts( $active_post_types, $posts_per_page = null ) {
         $query = new WP_Query( [
             'post_type'      => $active_post_types,
             'post_status'    => 'inherit,publish',
-            'posts_per_page' => - 1,
+            'posts_per_page' => isset( $posts_per_page ) ? $posts_per_page : - 1,
             'orderby'        => 'ID',
             'order'          => 'ASC',
         ] );
