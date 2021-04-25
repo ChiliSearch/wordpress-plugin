@@ -230,7 +230,12 @@ final class ChiliSearch {
             return '<div id="chilisearch-search_page"></div>';
         } );
         add_action( 'widgets_init', function () {
-            register_widget( 'Widget_Search' );
+            register_widget( 'ChiliSearch\Widget_Search' );
+
+            if ( class_exists( '\Elementor\Plugin' ) ) {
+                require_once CHILISEARCH_DIR . '/widgets/class-widget-elementor-search.php';
+                \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \ChiliSearch\Widget_ElementorSearch() );
+            }
         } );
     }
 
