@@ -88,6 +88,56 @@ class Widget_ElementorSearch extends \Elementor\Widget_Base {
             ]
         );
 
+        $this->add_control(
+            'voice_search_enabled',
+            [
+                'label' => __( 'Voice Search', 'chilisearch' ),
+                'type' => Controls_Manager::SWITCHER,
+                'separator' => 'before',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'display_thumbnail',
+            [
+                'label' => __( 'Display thumbnail', 'chilisearch' ),
+                'type' => Controls_Manager::SWITCHER,
+                'separator' => 'before',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'display_excerpt',
+            [
+                'label' => __( 'Display excerpt', 'chilisearch' ),
+                'type' => Controls_Manager::SWITCHER,
+                'separator' => 'before',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'display_categories',
+            [
+                'label' => __( 'Display categories', 'chilisearch' ),
+                'type' => Controls_Manager::SWITCHER,
+                'separator' => 'before',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'display_tags',
+            [
+                'label' => __( 'Display tags', 'chilisearch' ),
+                'type' => Controls_Manager::SWITCHER,
+                'separator' => 'before',
+                'default' => 'yes',
+            ]
+        );
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -147,7 +197,7 @@ class Widget_ElementorSearch extends \Elementor\Widget_Base {
         <form action="<?= $chilisearch->get_or_create_search_page() ?>" method="GET" role="search" class="chilisearch-search_form" style="<?= $settings['font'] ? "font-family:{$settings['font']};" : '' ?>">
         <div class="chlisrch-f-sb">
                 <label class="chilisearch-search_form_label">
-                    <input type="search" placeholder="<?= $settings['search_input_placeholder'] ?>" name="chilisearch-query" autocomplete="off" data-result-count="<?= $settings['sayt_result_number'] ?>">
+                    <input type="search" placeholder="<?= $settings['search_input_placeholder'] ?>" name="chilisearch-query" autocomplete="off" data-result-count="<?= $settings['sayt_result_number'] ?>" <?= $settings['display_thumbnail'] === 'yes'?'':'data-no-thumbnail="1"' ?> <?= $settings['display_excerpt'] === 'yes'?'':'data-no-excerpt="1"' ?> <?= $settings['display_categories'] === 'yes'?'':'data-no-categories="1"' ?> <?= $settings['display_tags'] === 'yes'?'':'data-no-tags="1"' ?> <?= $settings['voice_search_enabled'] === 'yes'?'':'data-no-voice-search="1"' ?>>
                 </label>
                 <input class="chilisearch-search_form_submit" type="submit" value="<?=$settings['submit_button_text']?>" style="<?= $settings['display_submit_button'] === 'yes'?'':'display:none;' ?>background:<?= $settings['submit_button_background_color'] ?>;color:<?= $settings['submit_button_color'] ?>">
             </div>
