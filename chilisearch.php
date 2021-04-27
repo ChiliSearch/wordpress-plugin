@@ -249,6 +249,7 @@ final class ChiliSearch {
         add_action( 'wp_ajax_admin_ajax_config_update', [ $this, 'wp_ajax_admin_ajax_config_update' ] );
         add_action( 'wp_ajax_admin_ajax_create_set_search_page', [ $this, 'wp_ajax_admin_ajax_create_set_search_page' ] );
         add_action( 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch', [ $this, 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch' ] );
+        add_action( 'wp_ajax_admin_ajax_get_analytics_from_chilisearch', [ $this, 'wp_ajax_admin_ajax_get_analytics_from_chilisearch' ] );
         add_action( 'wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed', [ $this, 'wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed' ] );
         add_action( 'wp_ajax_admin_ajax_delete_content_should_not_be_indexed', [ $this, 'wp_ajax_admin_ajax_delete_content_should_not_be_indexed' ] );
         add_action( 'wp_ajax_admin_ajax_index_missing_content', [ $this, 'wp_ajax_admin_ajax_index_missing_content' ] );
@@ -530,6 +531,14 @@ final class ChiliSearch {
             wp_send_json( [ 'status' => true, 'documents' => $allDocumentsResult ] );
         }
         wp_send_json( [ 'status' => false, 'payload' => $allDocumentsResult ] );
+    }
+
+    public function wp_ajax_admin_ajax_get_analytics_from_chilisearch() {
+        list( $responseCode, $analytics ) = $this->send_request( 'GET', 'analytics' );
+        if ( $responseCode === 200 ) {
+            wp_send_json( [ 'status' => true, 'analytics' => $analytics ] );
+        }
+        wp_send_json( [ 'status' => false, 'payload' => $analytics ] );
     }
 
     public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed() {
