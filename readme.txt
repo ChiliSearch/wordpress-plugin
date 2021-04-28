@@ -3,8 +3,8 @@ Plugin URI: https://chilisearch.com
 Donate link: https://chilisearch.com/wp-plugin
 Contributors: chilisearch
 Tags: search, woocommerce search, product search, autocomplete search, ajax search, woocommerce, search as you type, search plugin
-Requires at least: 3.9
-Tested up to: 5.7
+Requires at least: 4.0
+Tested up to: 5.7.1
 Requires PHP: 5.6
 Stable tag: 2.0.3
 License: GPLv2 or later
