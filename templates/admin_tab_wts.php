@@ -1,5 +1,7 @@
 <?php
-$plan = ChiliSearch::getInstance()->get_current_plan();
+$siteInfo = $this->get_website_info();
+$plan = $this->get_current_plan();
+$documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['documentCountLimit'] : null;
 ?>
 <style>
     .form-group {
@@ -153,6 +155,10 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
             </tr>
             </tbody>
         </table>
+        <p>
+            <?= sprintf(__('You can index upto %d documents in "%s" plan.', 'chilisearch'), $documentCountLimit, $plan) ?>
+            <a href="https://chilisearch.com/pricing/" target="_blank"><?= __('Need more?', 'chilisearch') ?></a>
+        </p>
         <span style="float: left;" id="get_post_counts_spinner" class="spinner is-active"></span>
         <?php submit_button(); ?>
     </form>

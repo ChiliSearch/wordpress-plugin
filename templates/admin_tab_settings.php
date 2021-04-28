@@ -46,6 +46,17 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label for="voice_search_enabled"><?= __( 'Voice Search', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[voice_search_enabled]" id="voice_search_enabled" value="true" <?= $this->settings['voice_search_enabled'] ? 'checked' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable search using voice.', 'chilisearch' ) ?></p>
+                    </label>
+                    <small><?= sprintf(__( 'Only works in supported browsers %shere%s.', 'chilisearch' ), '<a href="https://developer.mozilla.org/docs/Web/API/SpeechRecognition#browser_compatibility" target="_blank">', '</a>') ?></small>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label for="display_result_image"><?= __( 'Display thumbnail', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -262,6 +273,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'search_page_id': jQuery('#site_config_update #search_page_id').val(),
                     'search_word_type': jQuery('#site_config_update #search_word_type').val(),
                     'sort_by': jQuery('#site_config_update #sort_by').val(),
+                    'voice_search_enabled': jQuery('#site_config_update #voice_search_enabled').is(":checked"),
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
                     'display_chilisearch_brand': jQuery('#site_config_update #display_chilisearch_brand').is(":checked"),

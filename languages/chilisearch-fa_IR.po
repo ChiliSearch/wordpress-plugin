@@ -1,758 +1,758 @@
 # Copyright (C) 2021 ChiliSearch
 # This file is distributed under the same license as the Chili Search plugin.
+# Translators:
+# Ali Jafari <ali.jafari.pw@gmail.com>, 2021
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Chili Search 2.0.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress-plugin-github\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-04-28T19:40:26+02:00\n"
+"PO-Revision-Date: 2021-04-28 17:46+0000\n"
+"Last-Translator: Ali Jafari <ali.jafari.pw@gmail.com>, 2021\n"
+"Language-Team: Persian (Iran) (https://www.transifex.com/chilisearch/teams/120056/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-28T19:40:26+02:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: chilisearch\n"
+"X-Generator: WP-CLI 2.4.0\n"
 
 #. Plugin Name of the plugin
-#: chilisearch.php:268
-#: chilisearch.php:856
+#: chilisearch.php:268 chilisearch.php:856
 #: widgets/class-widget-elementor-search.php:30
 #: widgets/class-widget-search.php:23
 msgid "Chili Search"
-msgstr ""
+msgstr "چیلی سرچ"
 
 #. Plugin URI of the plugin
 msgid "https://chilisearch.com"
-msgstr ""
+msgstr "https://chilisearch.com"
 
 #. Description of the plugin
-msgid "Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine."
+msgid ""
+"Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our"
+" AI-Powered Search Engine."
 msgstr ""
+"با استفاده از موتور جستجوی مجهز به هوش مصنوعی، قدرت کشف نوشته‌ها، برگه‌ها، "
+"رسانه‌ها، ووکامرس و بی‌بی‌پرس را تقویت کنید."
 
 #. Author of the plugin
 msgid "ChiliSearch"
-msgstr ""
+msgstr "چیلی سرچ"
 
 #. Author URI of the plugin
 msgid "https://chilisearch.com/"
-msgstr ""
+msgstr "https://chilisearch.com/"
 
 #: chilisearch.php:159
 msgid "Chili Search requires PHP version %s"
-msgstr ""
+msgstr "چیلی سرچ حداقل به نسخه‌ی %s PHP نیازمند است."
 
 #: chilisearch.php:160
 msgid "Error Activating"
-msgstr ""
+msgstr "مشکل در فعال سازی"
 
 #: chilisearch.php:182
 msgid "Whole Word"
-msgstr ""
+msgstr "تمام کلمه"
 
 #: chilisearch.php:183
 msgid "Partial Word"
-msgstr ""
+msgstr "بخشی از کلمه"
 
 #: chilisearch.php:184
 msgid "Both"
-msgstr ""
+msgstr "هردو"
 
 #: chilisearch.php:190
 msgid "Relevancy"
-msgstr ""
+msgstr "ربط"
 
 #: chilisearch.php:191
 msgid "PublishedAt DESC"
-msgstr ""
+msgstr "تاریخ انتشار (نزولی)"
 
 #: chilisearch.php:192
 msgid "PublishedAt ASC"
-msgstr ""
+msgstr "تاریخ انتشار (صعودی)"
 
 #: chilisearch.php:193
 msgid "Price DESC"
-msgstr ""
+msgstr "قیمت (نزولی)"
 
 #: chilisearch.php:194
 msgid "Price ASC"
-msgstr ""
+msgstr "قیمت (صعودی)"
 
-#: chilisearch.php:261
-#: chilisearch.php:277
-#: chilisearch.php:859
+#: chilisearch.php:261 chilisearch.php:277 chilisearch.php:859
 #: templates/admin_tab_settings.php:23
 msgid "Settings"
-msgstr ""
+msgstr "تنظیمات"
 
-#: chilisearch.php:267
-#: chilisearch.php:276
+#: chilisearch.php:267 chilisearch.php:276
 msgid "Chili Search Settings"
-msgstr ""
+msgstr "تنظیمات چیلی سرچ"
 
 #: chilisearch.php:289
 msgid "Chili Search Setup"
-msgstr ""
+msgstr "راه اندازی چیلی سرچ"
 
 #: chilisearch.php:290
 msgid "Setup your Chili Search %shere%s to empower your website's search!"
 msgstr ""
+"برای قدرت بخشیدن به جستجو وبسایت‌تان، چیلی سرچ خود را از %sاینجا%s "
+"راه‌اندازی کنید."
 
 #: chilisearch.php:322
 msgid "API Secret is not valid!"
-msgstr ""
+msgstr "API Secret معتبر نیست."
 
 #: chilisearch.php:324
 msgid "Request failed. Try again."
-msgstr ""
+msgstr "درخواست شکست خورد. دوباره امتحان کنید."
 
 #: chilisearch.php:443
 msgid "Search page size must be between 1 to 20"
-msgstr ""
+msgstr "تعداد نتیجه صفحه جستجو باید بین 1 تا 20 باشد."
 
 #: chilisearch.php:446
 msgid "SAYT size must be between 1 to 10"
-msgstr ""
+msgstr "تعداد نتیجه جستجو هنگام تایپ باید بین 1 تا 10 باشد."
 
 #: chilisearch.php:449
 msgid "Search input selector can not be empty."
-msgstr ""
+msgstr "انتخابگر اتوماتیک ورودی جستجو نمی‌تواند خالی باشد."
 
 #: chilisearch.php:452
 msgid "Search result page is not selected."
-msgstr ""
+msgstr "صفحه نتایج جستجو انتخاب نشده است."
 
 #: chilisearch.php:455
 msgid "Weight for title is not selected."
-msgstr ""
+msgstr "وزن برای عنوان وارد نشده است."
 
 #: chilisearch.php:458
 msgid "Weight for excerpt is not selected."
-msgstr ""
+msgstr "وزن برای چکیده وارد نشده است."
 
 #: chilisearch.php:461
 msgid "Weight for body is not selected."
-msgstr ""
+msgstr "وزن برای بدنه وارد نشده است."
 
 #: chilisearch.php:464
 msgid "Weight for tags is not selected."
-msgstr ""
+msgstr "وزن برای برچسب‌ها وارد نشده است."
 
 #: chilisearch.php:467
 msgid "Weight for category is not selected."
-msgstr ""
+msgstr "وزن برای دسته وارد نشده است."
 
 #: chilisearch.php:471
 msgid "Search type is invalid."
-msgstr ""
+msgstr "\"نوع جستجو\" صحیح نیست."
 
 #: chilisearch.php:475
 msgid "Sort by is invalid."
-msgstr ""
+msgstr "\"جستجو بر اساس\" صحیح نیست."
 
 #: chilisearch.php:483
 msgid "Search result page is not valid."
-msgstr ""
+msgstr "صفحه نتایج جستجو صحیح نیست."
 
-#: chilisearch.php:613
-#: chilisearch.php:626
+#: chilisearch.php:613 chilisearch.php:626
 msgid "DocumentId is not entered!"
-msgstr ""
+msgstr "DocumentId وارد نشده!"
 
 #: chilisearch.php:631
 msgid "Post not found!"
-msgstr ""
+msgstr "نوشته یافت نشد!"
 
 #: chilisearch.php:635
 msgid "Document type is invalid."
-msgstr ""
+msgstr "نوع محتوا صحیح نیست."
 
 #: chilisearch.php:724
 msgid "In reply to:"
-msgstr ""
+msgstr "در پاسخ به:"
 
 #: chilisearch.php:858
 msgid "Analytics"
-msgstr ""
+msgstr "آمار"
 
 #: chilisearch.php:860
 msgid "Where to Search"
-msgstr ""
+msgstr "جستجو در میان"
 
-#: chilisearch.php:861
-#: templates/admin_tab_demo.php:12
+#: chilisearch.php:861 templates/admin_tab_demo.php:12
 msgid "Demo"
-msgstr ""
+msgstr "پیش‌نمایش"
 
 #: chilisearch.php:894
 msgid "Could not redeem this gift code!"
-msgstr ""
+msgstr "نمی‌توان این کد هدیه را استفاده کرد."
 
 #: chilisearch.php:895
 msgid "No message!"
-msgstr ""
+msgstr "بدون پیام!"
 
 #: chilisearch.php:1013
 msgid "powered by"
-msgstr ""
+msgstr "قدرت گرفته از"
 
 #: chilisearch.php:1014
 msgid "search powered by"
-msgstr ""
+msgstr "جستجو قدرت گرفته از"
 
 #: chilisearch.php:1015
 msgid "Couldn't find anything related …"
-msgstr ""
+msgstr "نتیجه مرتبطی یافت نشد …"
 
 #: chilisearch.php:1016
 msgid "Oops!<small>Sorry, there's some thing wrong. Please try again.</small>"
-msgstr ""
+msgstr "اوپس!<small>متاسفم، مشکلی پیش آمده. لطفا دوباره تلاش کنید.</small>"
 
-#: chilisearch.php:1017
-#: chilisearch.php:1018
+#: chilisearch.php:1017 chilisearch.php:1018
 msgid "Search …"
-msgstr ""
+msgstr "جستجو ..."
 
-#: chilisearch.php:1019
-#: templates/admin_tab_analytics.php:239
+#: chilisearch.php:1019 templates/admin_tab_analytics.php:239
 #: widgets/class-widget-elementor-search.php:186
-#: widgets/class-widget-search.php:33
-#: widgets/class-widget-search.php:74
+#: widgets/class-widget-search.php:33 widgets/class-widget-search.php:74
 msgid "Search"
-msgstr ""
+msgstr "جستجو"
 
 #: chilisearch.php:1020
 msgid "About {totalCount} results ({timeTook} seconds)"
-msgstr ""
+msgstr "تقریبا {totalCount} نتیجه ({timeTook} ثانیه)"
 
 #: chilisearch.php:1021
 msgid "Prev"
-msgstr ""
+msgstr "قبلی"
 
 #: chilisearch.php:1022
 msgid "Next"
-msgstr ""
+msgstr "بعدی"
 
 #: chilisearch.php:1023
 msgid "category"
-msgstr ""
+msgstr "دسته‌بندی"
 
 #: chilisearch.php:1024
 msgid "price"
-msgstr ""
+msgstr "قیمت"
 
 #: chilisearch.php:1025
 msgid "search between"
-msgstr ""
+msgstr "جستجو در میان"
 
 #: chilisearch.php:1026
 msgid "to"
-msgstr ""
+msgstr "به"
 
 #: chilisearch.php:1027
 msgid "all"
-msgstr ""
+msgstr "همه"
 
 #: chilisearch.php:1028
 msgid "published"
-msgstr ""
+msgstr "منتشر شده"
 
 #: chilisearch.php:1029
 msgid "Show all {totalCount} results"
-msgstr ""
+msgstr "نمایش همه {totalCount} نتیجه"
 
 #: chilisearch.php:1030
 msgid "Ready to listen"
-msgstr ""
+msgstr "آماده گوش دادن"
 
 #: chilisearch.php:1031
 msgid "Hmm, didn't get it. please repeat …"
-msgstr ""
+msgstr "همم، متوجه نشدم. لطفا تکرار کنید …"
 
 #: chilisearch.php:1032
 msgid "Listening …"
-msgstr ""
+msgstr "در حال گوش دادن …"
 
 #: chilisearch.php:1033
 msgid "Got it!"
-msgstr ""
+msgstr "متوجه شدم!"
 
-#: chilisearch.php:1042
-#: templates/admin_tab_wts.php:33
+#: chilisearch.php:1042 templates/admin_tab_wts.php:33
 msgid "Posts"
-msgstr ""
+msgstr "نوشته‌ها"
 
-#: chilisearch.php:1045
-#: templates/admin_tab_wts.php:50
+#: chilisearch.php:1045 templates/admin_tab_wts.php:50
 msgid "Pages"
-msgstr ""
+msgstr "برگه‌ها"
 
-#: chilisearch.php:1048
-#: templates/admin_tab_wts.php:121
+#: chilisearch.php:1048 templates/admin_tab_wts.php:121
 msgid "Media"
-msgstr ""
+msgstr "رسانه"
 
 #: chilisearch.php:1051
 msgid "Products"
-msgstr ""
+msgstr "محصولات"
 
 #: chilisearch.php:1054
 msgid "Forums"
-msgstr ""
+msgstr "انجمن‌ها"
 
 #: templates/admin_choose_plan.php:33
 msgid "Skip"
-msgstr ""
+msgstr "رد شدن"
 
 #: templates/admin_get_started_register.php:20
-msgid "By accepting the Terms and Conditions, you agree that your website name, url, email and language will be shared with %sChili Search%s."
+msgid ""
+"By accepting the Terms and Conditions, you agree that your website name, "
+"url, email and language will be shared with %sChili Search%s."
 msgstr ""
+"با تایید قوانین و ضوابط شما تایید می‌کنید که نام، آدرس ،ایمیل و زبان وبسایت "
+"شما با %sچیلی سرچ%s به اشتراک گذاشته شود."
 
 #: templates/admin_get_started_register.php:25
 msgid "I accept Terms and Conditions"
-msgstr ""
+msgstr "من قوانین و ضوابط را قبول می‌کنم."
 
-#: templates/admin_tab_analytics.php:5
-#: templates/admin_tab_analytics.php:6
-#: templates/admin_tab_analytics.php:7
-#: templates/admin_tab_demo.php:3
+#: templates/admin_tab_analytics.php:5 templates/admin_tab_analytics.php:6
+#: templates/admin_tab_analytics.php:7 templates/admin_tab_demo.php:3
 msgid "N/A"
-msgstr ""
+msgstr "نامعلوم"
 
 #: templates/admin_tab_analytics.php:43
 msgid "Plan"
-msgstr ""
+msgstr "طرح"
 
 #: templates/admin_tab_analytics.php:45
 msgid "See Plans"
-msgstr ""
+msgstr "دیدن طرح‌ها"
 
 #: templates/admin_tab_analytics.php:46
 msgid "Redeem Gift Code"
-msgstr ""
+msgstr "استفاده از کد هدیه"
 
 #: templates/admin_tab_analytics.php:48
 msgid "Start 7-Days Trial"
-msgstr ""
+msgstr "شروع 7 روز آزمایشی"
 
 #: templates/admin_tab_analytics.php:51
 msgid "Enter Your Gift Code …"
-msgstr ""
+msgstr "کد هدیه خود را وارد کنید …"
 
 #: templates/admin_tab_analytics.php:52
 msgid "Submit"
-msgstr ""
+msgstr "ثبت"
 
 #: templates/admin_tab_analytics.php:58
 msgid "Number of Indexed Documents"
-msgstr ""
+msgstr "تعداد محتوا ایندکس شده"
 
 #: templates/admin_tab_analytics.php:64
 msgid "Used Space"
-msgstr ""
+msgstr "حجم مصرفی"
 
 #: templates/admin_tab_analytics.php:65
 msgid "(updates every 10 minutes)"
-msgstr ""
+msgstr "(هر 10 دقیقه بروز می‌شود)"
 
 #: templates/admin_tab_analytics.php:74
 msgid "Last Search Queries"
-msgstr ""
+msgstr "آخرین عبارت‌های جستجو شده"
 
-#: templates/admin_tab_analytics.php:78
-#: templates/admin_tab_analytics.php:132
+#: templates/admin_tab_analytics.php:78 templates/admin_tab_analytics.php:132
 msgid "Query"
-msgstr ""
+msgstr "عبارت"
 
 #: templates/admin_tab_analytics.php:79
 msgid "Date"
-msgstr ""
+msgstr "تاریخ"
 
 #: templates/admin_tab_analytics.php:128
 msgid "Most Searched Queries"
-msgstr ""
+msgstr "بیشترین عبارت‌های جستجو شده"
 
 #: templates/admin_tab_analytics.php:133
 msgid "Count"
-msgstr ""
+msgstr "تعداد"
 
 #: templates/admin_tab_analytics.php:182
 msgid "Search per Day"
-msgstr ""
+msgstr "جستجو در روز"
 
 #: templates/admin_tab_analytics.php:235
 msgid "Search as you Type"
-msgstr ""
+msgstr "جستجو به هنگام تایپ"
 
 #: templates/admin_tab_analytics.php:266
 msgid "Leave us a review"
-msgstr ""
+msgstr "برای ما ارزیابی ارسال کنید"
 
 #: templates/admin_tab_demo.php:16
-msgid "%s documents are indexed and ready to be searched. Here you can try out the power of search!"
+msgid ""
+"%s documents are indexed and ready to be searched. Here you can try out the "
+"power of search!"
 msgstr ""
+"تعداد %s محتوا ایندکس و برای جستجو آماده شد. اینجا می‌توانید قدرت جستجو را "
+"امتحان کنید!"
 
 #: templates/admin_tab_settings.php:27
 msgid "Settings saved."
-msgstr ""
+msgstr "تنظیمات ذخیره شد."
 
 #: templates/admin_tab_settings.php:36
 msgid "Search type"
-msgstr ""
+msgstr "نوع جستجو"
 
 #: templates/admin_tab_settings.php:44
 msgid "Match the whole word, partial word or both."
-msgstr ""
+msgstr "هم‌خوانی تمام کلمه، بخشی از کلمه یا هردو."
 
 #: templates/admin_tab_settings.php:49
 #: widgets/class-widget-elementor-search.php:94
 #: widgets/class-widget-search.php:117
 msgid "Voice Search"
-msgstr ""
+msgstr "جستجو صوتی"
 
-#: templates/admin_tab_settings.php:53
-#: templates/admin_tab_settings.php:104
-#: templates/admin_tab_settings.php:114
-#: templates/admin_tab_settings.php:124
+#: templates/admin_tab_settings.php:53 templates/admin_tab_settings.php:104
+#: templates/admin_tab_settings.php:114 templates/admin_tab_settings.php:124
 #: templates/admin_tab_settings.php:134
 msgid "Enable"
-msgstr ""
+msgstr "فعال‌سازی"
 
 #: templates/admin_tab_settings.php:54
 msgid "Enable search using voice."
-msgstr ""
+msgstr "فعال سازی جستجو صوتی."
 
 #: templates/admin_tab_settings.php:56
 msgid "Only works in supported browsers %shere%s."
-msgstr ""
+msgstr "فقط در مرورگر های پشتبانی شده %sدر اینجا%s کار می‌کند."
 
 #: templates/admin_tab_settings.php:60
 #: widgets/class-widget-elementor-search.php:104
 #: widgets/class-widget-search.php:123
 msgid "Display thumbnail"
-msgstr ""
+msgstr "نمایش بندانگشتی"
 
-#: templates/admin_tab_settings.php:64
-#: templates/admin_tab_settings.php:74
-#: templates/admin_tab_settings.php:84
-#: templates/admin_tab_settings.php:94
-#: templates/admin_tab_settings.php:240
-#: templates/admin_tab_settings.php:250
+#: templates/admin_tab_settings.php:64 templates/admin_tab_settings.php:74
+#: templates/admin_tab_settings.php:84 templates/admin_tab_settings.php:94
+#: templates/admin_tab_settings.php:240 templates/admin_tab_settings.php:250
 msgid "Display"
-msgstr ""
+msgstr "نمایش"
 
 #: templates/admin_tab_settings.php:65
 msgid "Display thumbnail in search result."
-msgstr ""
+msgstr "نمایش بندانگشتی در نتایج جستجو."
 
 #: templates/admin_tab_settings.php:70
 #: widgets/class-widget-elementor-search.php:114
 #: widgets/class-widget-search.php:129
 msgid "Display excerpt"
-msgstr ""
+msgstr "نمایش چیکده"
 
 #: templates/admin_tab_settings.php:75
 msgid "Display excerpt in search result."
-msgstr ""
+msgstr "نمایش چکیده در نتایج جستجو."
 
 #: templates/admin_tab_settings.php:80
 #: widgets/class-widget-elementor-search.php:124
 #: widgets/class-widget-search.php:135
 msgid "Display categories"
-msgstr ""
+msgstr "نمایش دسته‌ها"
 
 #: templates/admin_tab_settings.php:85
 msgid "Display categories in search result."
-msgstr ""
+msgstr "نمایش دسته‌ها در نتایج جستجو."
 
 #: templates/admin_tab_settings.php:90
 #: widgets/class-widget-elementor-search.php:134
 #: widgets/class-widget-search.php:141
 msgid "Display tags"
-msgstr ""
+msgstr "نمایش برچسب‌ها"
 
 #: templates/admin_tab_settings.php:95
 msgid "Display tags in search result."
-msgstr ""
+msgstr "نمایش برچسب‌ها در نتایج جستجو."
 
 #: templates/admin_tab_settings.php:100
 msgid "Enable type filter"
-msgstr ""
+msgstr "فعال سازی فیلتر نوع محتوا"
 
 #: templates/admin_tab_settings.php:105
 msgid "Enable filtering base on document type."
-msgstr ""
+msgstr "فعال سازی فیلتر کردن بر اساس نوع محتوا."
 
 #: templates/admin_tab_settings.php:110
 msgid "Enable category filter"
-msgstr ""
+msgstr "فعال سازی فیلتر دسته‌بندی"
 
 #: templates/admin_tab_settings.php:115
 msgid "Enable filtering base on category."
-msgstr ""
+msgstr "فعال سازی فیلتر کردن بر اساس دسته‌بندی."
 
 #: templates/admin_tab_settings.php:120
 msgid "Enable publish date filter"
-msgstr ""
+msgstr "فعال سازی فیلتر تاریخ انتشار"
 
 #: templates/admin_tab_settings.php:125
 msgid "Enable filtering base on publish date."
-msgstr ""
+msgstr "فعال سازی فیلتر کردن بر اساس تاریخ انتشار."
 
 #: templates/admin_tab_settings.php:130
 msgid "Enable product price filter"
-msgstr ""
+msgstr "فعال سازی فیلتر قیمت محصول"
 
 #: templates/admin_tab_settings.php:135
 msgid "Enable filtering base on product price."
-msgstr ""
+msgstr "فعال سازی فیلتر کردن بر اساس قیمت محصول."
 
 #: templates/admin_tab_settings.php:140
 msgid "Search result page"
-msgstr ""
+msgstr "صفحه نتایج جستجو"
 
 #: templates/admin_tab_settings.php:144
 msgid "Chili Search result page (not recommended)"
-msgstr ""
+msgstr "صفحه نتایج جستجو چیلی سرچ (توصیه نشده)"
 
 #: templates/admin_tab_settings.php:149
 msgid "Create Search Page (recommended)"
-msgstr ""
+msgstr "ساخت صفحه نتایج جستجو (توصیه شده)"
 
 #: templates/admin_tab_settings.php:150
 msgid "Choose the search result page."
-msgstr ""
+msgstr "صفحه نتایج جستجو را انتخاب کنید."
 
 #: templates/admin_tab_settings.php:155
 msgid "Search page results number"
-msgstr ""
+msgstr "تعداد نتایج صفحه جستجو"
 
 #: templates/admin_tab_settings.php:159
 msgid "Number of results displayed in search page."
-msgstr ""
+msgstr "تعداد نتایج نمایش داده شده در صفحه جستجو."
 
 #: templates/admin_tab_settings.php:164
 msgid "SAYT (search as you type) results number"
-msgstr ""
+msgstr "تعداد نتایج جستجو هنگام تایپ"
 
 #: templates/admin_tab_settings.php:168
 msgid "Number of results displayed in SAYT box."
-msgstr ""
+msgstr "تعداد نتایج نمایش داده شده در جعبه جستجو هنگام تایپ."
 
 #: templates/admin_tab_settings.php:173
 msgid "Auto search input detection"
-msgstr ""
+msgstr "تشخیص اتوماتیک ورودی جستجو"
 
 #: templates/admin_tab_settings.php:177
 msgid "Detect and replace all search inputs in website"
-msgstr ""
+msgstr "تشخیص و تعویض همه ورودی‌های جستجو داخل سایت"
 
 #: templates/admin_tab_settings.php:182
 msgid "Auto search input selector"
-msgstr ""
+msgstr "انتخابگر اتوماتیک ورودی جستجو"
 
 #: templates/admin_tab_settings.php:186
-msgid "Search input selector, in case the search input is not detected automatically. Don't change it if search is working correctly."
+msgid ""
+"Search input selector, in case the search input is not detected "
+"automatically. Don't change it if search is working correctly."
 msgstr ""
+"انتخابگر ورودی جستجو، زمانی که ورودی جستجو به صورت اتوماتیک تشخیص داده نشده "
+"باشد. اگر جستجو به خوبی کار میکند لطفا این فیلد را تغییر ندهید."
 
 #: templates/admin_tab_settings.php:193
 msgid "Premium Features"
-msgstr ""
+msgstr "امکانات نسخۀ حرفه‌ای"
 
 #: templates/admin_tab_settings.php:197
 msgid "Sort by"
-msgstr ""
+msgstr "چینش بر اساس"
 
 #: templates/admin_tab_settings.php:205
 msgid "Sort search result by."
-msgstr ""
+msgstr "چینش نتایج بر اساس."
 
 #: templates/admin_tab_settings.php:210
 msgid "Field weights"
-msgstr ""
+msgstr "وزن فیلدها"
 
 #: templates/admin_tab_settings.php:213
 msgid "Title"
-msgstr ""
+msgstr "عنوان"
 
 #: templates/admin_tab_settings.php:217
 msgid "Excerpt"
-msgstr ""
+msgstr "چکیده"
 
 #: templates/admin_tab_settings.php:221
 msgid "Body"
-msgstr ""
+msgstr "بدنه"
 
 #: templates/admin_tab_settings.php:225
 msgid "Tags"
-msgstr ""
+msgstr "برچسب‌ها"
 
 #: templates/admin_tab_settings.php:229
 msgid "Category"
-msgstr ""
+msgstr "دسته"
 
 #: templates/admin_tab_settings.php:232
 msgid "Define weight for each field of the document."
-msgstr ""
+msgstr "وزن هر فیلید محتوا را تعیین کنید."
 
 #: templates/admin_tab_settings.php:236
 msgid "Display product price"
-msgstr ""
+msgstr "نمایش قیمت محصول"
 
 #: templates/admin_tab_settings.php:241
 msgid "Display product price in search result."
-msgstr ""
+msgstr "نمایش قیمت محصولات در نتایج جستجو"
 
 #: templates/admin_tab_settings.php:246
 msgid "Display Chili Search brand"
-msgstr ""
+msgstr "نمایش برند چیلی سرچ"
 
 #: templates/admin_tab_settings.php:251
 msgid "Display Chili Search brand in search box and search result."
-msgstr ""
+msgstr "نمایش برند چیلی سرچ در جعبه جستجو و صفحه نتایج جستجو."
 
 #: templates/admin_tab_settings.php:318
 msgid "Something went wrong! please try again."
-msgstr ""
+msgstr "اشتباهی رخ داد! خواهشمندیم دوباره تلاش کنید."
 
 #: templates/admin_tab_wts.php:22
 msgid "Choose where to search"
-msgstr ""
+msgstr "انتخاب اینکه کجا جستجو شود"
 
 #: templates/admin_tab_wts.php:28
 msgid "Search between"
-msgstr ""
+msgstr "جستجو در میان"
 
-#: templates/admin_tab_wts.php:40
-#: templates/admin_tab_wts.php:57
-#: templates/admin_tab_wts.php:74
-#: templates/admin_tab_wts.php:137
+#: templates/admin_tab_wts.php:40 templates/admin_tab_wts.php:57
+#: templates/admin_tab_wts.php:74 templates/admin_tab_wts.php:137
 msgid "Approved comments"
-msgstr ""
+msgstr "نظرات تایید شده"
 
-#: templates/admin_tab_wts.php:42
-#: templates/admin_tab_wts.php:59
-#: templates/admin_tab_wts.php:76
-#: templates/admin_tab_wts.php:83
-#: templates/admin_tab_wts.php:123
-#: templates/admin_tab_wts.php:131
+#: templates/admin_tab_wts.php:42 templates/admin_tab_wts.php:59
+#: templates/admin_tab_wts.php:76 templates/admin_tab_wts.php:83
+#: templates/admin_tab_wts.php:123 templates/admin_tab_wts.php:131
 #: templates/admin_tab_wts.php:139
 msgid "premium only"
-msgstr ""
+msgstr "فقط در نسخۀ حرفه‌ای"
 
 #: templates/admin_tab_wts.php:67
 msgid "WooCommerce products"
-msgstr ""
+msgstr "محصولات ووکامرس"
 
 #: templates/admin_tab_wts.php:67
 msgid "(WooCommerce plugin is not installed)"
-msgstr ""
+msgstr "(پلاگین ووکامرس نصب نشده است)"
 
 #: templates/admin_tab_wts.php:82
 msgid "Product SKU"
-msgstr ""
+msgstr "محصول SKU"
 
 #: templates/admin_tab_wts.php:89
 msgid "Out-of-stock products"
-msgstr ""
+msgstr "محصولات ناموجود در انبار"
 
 #: templates/admin_tab_wts.php:98
 msgid "bbPress Forums"
-msgstr ""
+msgstr "انجمن‌های بی‌بی‌پرس"
 
 #: templates/admin_tab_wts.php:98
 msgid "(bbPress plugin is not installed)"
-msgstr ""
+msgstr "(افزونه بی‌بی‌پرس نصب نشده است)"
 
 #: templates/admin_tab_wts.php:105
 msgid "bbPress Topics"
-msgstr ""
+msgstr "موضوع‌های بی‌بی‌پرس"
 
 #: templates/admin_tab_wts.php:112
 msgid "bbPress Replies"
-msgstr ""
+msgstr "پاسخ‌های بی‌بی‌پرس"
 
 #: templates/admin_tab_wts.php:129
 msgid "Inside document files (doc, docx, pptx, pdf, xlsx, …)"
-msgstr ""
+msgstr "داخل فایل های سند (doc, docx, pptx, pdf, xlsx, …)"
 
 #: templates/admin_tab_wts.php:147
 msgid "Reindex"
-msgstr ""
+msgstr "ایندکس دوباره"
 
 #: templates/admin_tab_wts.php:151
 msgid "Reindex all documents"
-msgstr ""
+msgstr "ایندکس مجدد همه محتواها"
 
 #: templates/admin_tab_wts.php:152
 msgid "Used when shown documents in search result are not updated."
 msgstr ""
+"زمانی استفاده می‌شود که محتوا نمایش داده شده در نتایج جستجو بروزرسانی نشده "
+"باشند."
 
 #: templates/admin_tab_wts.php:159
 msgid "You can index upto %d documents in \"%s\" plan."
-msgstr ""
+msgstr "شما می‌توانید حداکثر %d محتوا در پلن \"%s\" ایندکس کنید."
 
 #: templates/admin_tab_wts.php:160
 msgid "Need more?"
-msgstr ""
+msgstr "بیشتر احتیاج دارید؟"
 
 #: widgets/class-widget-elementor-search.php:49
 #: widgets/class-widget-search.php:88
 msgid "Search Form"
-msgstr ""
+msgstr "فرم جستجو"
 
 #: widgets/class-widget-elementor-search.php:58
 #: widgets/class-widget-search.php:86
 msgid "Update search setting in %sChili Search Plugin%s"
-msgstr ""
+msgstr "تنظیمات جستجو را در %sافزونه چیلی سرچ%s بروزرسانی کنید. "
 
 #: widgets/class-widget-elementor-search.php:65
 msgid "Font"
-msgstr ""
+msgstr "فونت"
 
 #: widgets/class-widget-elementor-search.php:74
 #: widgets/class-widget-search.php:102
 msgid "Search input placeholder"
-msgstr ""
+msgstr "placeholder ورودی جستجو"
 
 #: widgets/class-widget-elementor-search.php:84
 #: widgets/class-widget-search.php:108
 msgid "Results number"
-msgstr ""
+msgstr "تعداد نتیجه"
 
 #: widgets/class-widget-elementor-search.php:146
 #: widgets/class-widget-search.php:144
 msgid "Submit Button"
-msgstr ""
+msgstr "دکمه ثبت"
 
 #: widgets/class-widget-elementor-search.php:153
 #: widgets/class-widget-search.php:149
 msgid "Display submit button"
-msgstr ""
+msgstr "نمایش دکمه ثبت"
 
 #: widgets/class-widget-elementor-search.php:163
 #: widgets/class-widget-search.php:164
 msgid "Submit button color"
-msgstr ""
+msgstr "رنگ دکمه ثبت"
 
 #: widgets/class-widget-elementor-search.php:173
 #: widgets/class-widget-search.php:158
 msgid "Submit button background color"
-msgstr ""
+msgstr "رنگ پس‌زمینه دکمه ثبت"
 
 #: widgets/class-widget-elementor-search.php:183
 #: widgets/class-widget-search.php:152
 msgid "Submit button text"
-msgstr ""
+msgstr "متن دکمه ثبت"
 
 #: widgets/class-widget-search.php:20
 msgid "Chili Search Widget"
-msgstr ""
+msgstr "ابزارک‌ چیلی سرچ"
 
 #: widgets/class-widget-search.php:90
 msgid "Title:"
-msgstr ""
+msgstr "عنوان:"
 
 #: widgets/class-widget-search.php:96
 msgid "Font family:"
-msgstr ""
+msgstr "فونت:"

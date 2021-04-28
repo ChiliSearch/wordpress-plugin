@@ -2,11 +2,11 @@
 Plugin URI: https://chilisearch.com
 Donate link: https://chilisearch.com/wp-plugin
 Contributors: chilisearch
-Tags: search, woocommerce search, product search, autocomplete search, ajax search, woocommerce, search as you type, search plugin
-Requires at least: 3.9
-Tested up to: 5.7
+Tags: search, woocommerce search, elementor search, product search, autocomplete search, ajax search, woocommerce, search as you type, search plugin
+Requires at least: 4.0
+Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,13 +26,19 @@ Experience a Frictionless Search Experiences, regardless of the number of docume
 
 Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, WooCommerce products, bbPress forums and topics discoverable on your search.
 
+Ease searching more than ever by Voice Search, search without typing.
+
 [Live Demo](https://chilisearch.com/demo/?utm_source=wp_readme&utm_medium=referral) | [More Info](https://chilisearch.com?utm_source=wp_readme&utm_medium=referral)
 
 = Features =
 
 &#9989; **Transparent Relevancy**. Take control of your relevancy rules and customize field weights.
 
+&#9989; **Voice Search**. Ease searching more than ever by search without typing.
+
 &#9989; **Easy Integration**. Make everything you want, available on your search results.
+
+&#9989; **Elementor Compatibility**. Design the user experience of search using Elementor.
 
 &#9989; **Search Filters**. Ease visitors access to what they want by filtering on document type, price or published date.
 
@@ -59,8 +65,6 @@ Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, W
 = Try the premium version =
 
 You can use free features always for free and take a trial Premium Chili Search for 7 days without needing a credit card.
-
-[Pricing](https://chilisearch.com/pricing/?utm_source=wp_readme&utm_medium=referral)
 
 == Demo ==
 
@@ -93,8 +97,12 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 2. Search result page
 3. Wordpress Setting Page
 4. Wordpress Indexing Page
+5. Statistics and Analytics Page
 
 == Upgrade Notice ==
+
+= 2.0.4 =
+* Upgrade for latest changes
 
 = 2.0.3 =
 * Upgrade for latest changes
@@ -129,6 +137,12 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 2.0.4 =
+* Add gift code
+* Add voice search
+* Add elementor compatibility
+* Add analytics and statistics
 
 = 2.0.3 =
 * fix internationalization
