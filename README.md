@@ -16,13 +16,19 @@ Experience a Frictionless Search Experiences, regardless of the number of docume
 
 Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, WooCommerce products, bbPress forums and topics discoverable on your search.
 
+Ease searching more than ever by Voice Search, search without typing.
+
 [Live Demo](https://chilisearch.com/demo/?utm_source=wp_readme&utm_medium=referral) | [More Info](https://chilisearch.com?utm_source=wp_readme&utm_medium=referral)
 
 ## Features
 
 &#9989; **Transparent Relevancy**. Take control of your relevancy rules and customize field weights.
 
+&#9989; **Voice Search**. Ease searching more than ever by search without typing.
+
 &#9989; **Easy Integration**. Make everything you want, available on your search results.
+
+&#9989; **Elementor Compatibility**. Design the user experience of search using Elementor.
 
 &#9989; **Search Filters**. Ease visitors access to what they want by filtering on document type, price or published date.
 
