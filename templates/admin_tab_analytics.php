@@ -17,8 +17,9 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
         width: 33%;
         margin-right: 30px;
     }
-    .wrap {
+    .holder {
         display: flex;
+        margin: 10px 2px 0 20px;
     }
     .analytics-holder {
         width: 33%;
@@ -37,7 +38,7 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
         content: '\00a0';
     }
 </style>
-<div class="wrap card-holder">
+<div class="holder card-holder">
     <div class="card card-stats">
         <div class="card-header card-header-info card-header-icon">
             <p class="card-category" style="margin: 0;"><?= __( 'Plan', 'chilisearch' ) ?>:</p>
@@ -69,7 +70,7 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
     <div style="clear:both;"></div>
 </div>
 
-<div class="wrap">
+<div class="holder">
     <div class="analytics-holder">
         <h2><?= __('Last Search Queries', 'chilisearch') ?>:</h2>
         <table class="wp-list-table widefat striped table-view-list" id="lastSearchQueries">
