@@ -9,14 +9,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-07T23:39:34+02:00\n"
+"POT-Creation-Date: 2021-04-28T19:40:26+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: chilisearch\n"
 
 #. Plugin Name of the plugin
-#: chilisearch.php:262
-#: chilisearch.php:845
+#: chilisearch.php:268
+#: chilisearch.php:856
+#: widgets/class-widget-elementor-search.php:30
+#: widgets/class-widget-search.php:23
 msgid "Chili Search"
 msgstr ""
 
@@ -76,193 +78,225 @@ msgstr ""
 msgid "Price ASC"
 msgstr ""
 
-#: chilisearch.php:255
-#: chilisearch.php:271
-#: chilisearch.php:848
+#: chilisearch.php:261
+#: chilisearch.php:277
+#: chilisearch.php:859
 #: templates/admin_tab_settings.php:23
 msgid "Settings"
 msgstr ""
 
-#: chilisearch.php:261
-#: chilisearch.php:270
+#: chilisearch.php:267
+#: chilisearch.php:276
 msgid "Chili Search Settings"
 msgstr ""
 
-#: chilisearch.php:283
+#: chilisearch.php:289
 msgid "Chili Search Setup"
 msgstr ""
 
-#: chilisearch.php:284
+#: chilisearch.php:290
 msgid "Setup your Chili Search %shere%s to empower your website's search!"
 msgstr ""
 
-#: chilisearch.php:316
+#: chilisearch.php:322
 msgid "API Secret is not valid!"
 msgstr ""
 
-#: chilisearch.php:318
+#: chilisearch.php:324
 msgid "Request failed. Try again."
 msgstr ""
 
-#: chilisearch.php:437
+#: chilisearch.php:443
 msgid "Search page size must be between 1 to 20"
 msgstr ""
 
-#: chilisearch.php:440
+#: chilisearch.php:446
 msgid "SAYT size must be between 1 to 10"
 msgstr ""
 
-#: chilisearch.php:443
+#: chilisearch.php:449
 msgid "Search input selector can not be empty."
 msgstr ""
 
-#: chilisearch.php:446
+#: chilisearch.php:452
 msgid "Search result page is not selected."
 msgstr ""
 
-#: chilisearch.php:449
+#: chilisearch.php:455
 msgid "Weight for title is not selected."
 msgstr ""
 
-#: chilisearch.php:452
+#: chilisearch.php:458
 msgid "Weight for excerpt is not selected."
 msgstr ""
 
-#: chilisearch.php:455
+#: chilisearch.php:461
 msgid "Weight for body is not selected."
 msgstr ""
 
-#: chilisearch.php:458
+#: chilisearch.php:464
 msgid "Weight for tags is not selected."
 msgstr ""
 
-#: chilisearch.php:461
+#: chilisearch.php:467
 msgid "Weight for category is not selected."
 msgstr ""
 
-#: chilisearch.php:465
+#: chilisearch.php:471
 msgid "Search type is invalid."
 msgstr ""
 
-#: chilisearch.php:469
+#: chilisearch.php:475
 msgid "Sort by is invalid."
 msgstr ""
 
-#: chilisearch.php:477
+#: chilisearch.php:483
 msgid "Search result page is not valid."
 msgstr ""
 
-#: chilisearch.php:596
-#: chilisearch.php:609
+#: chilisearch.php:613
+#: chilisearch.php:626
 msgid "DocumentId is not entered!"
 msgstr ""
 
-#: chilisearch.php:614
+#: chilisearch.php:631
 msgid "Post not found!"
 msgstr ""
 
-#: chilisearch.php:618
+#: chilisearch.php:635
 msgid "Document type is invalid."
 msgstr ""
 
-#: chilisearch.php:707
+#: chilisearch.php:724
 msgid "In reply to:"
 msgstr ""
 
-#: chilisearch.php:847
+#: chilisearch.php:858
 msgid "Analytics"
 msgstr ""
 
-#: chilisearch.php:849
+#: chilisearch.php:860
 msgid "Where to Search"
 msgstr ""
 
-#: chilisearch.php:850
+#: chilisearch.php:861
 #: templates/admin_tab_demo.php:12
 msgid "Demo"
 msgstr ""
 
-#: chilisearch.php:983
-msgid "powered by"
+#: chilisearch.php:894
+msgid "Could not redeem this gift code!"
 msgstr ""
 
-#: chilisearch.php:984
-msgid "search powered by"
-msgstr ""
-
-#: chilisearch.php:985
-msgid "Couldn't find anything related …"
-msgstr ""
-
-#: chilisearch.php:986
-msgid "Oops!<small>Sorry, there's some thing wrong. Please try again.</small>"
-msgstr ""
-
-#: chilisearch.php:987
-#: chilisearch.php:988
-msgid "Search …"
-msgstr ""
-
-#: chilisearch.php:989
-msgid "Search"
-msgstr ""
-
-#: chilisearch.php:990
-msgid "About {totalCount} results ({timeTook} seconds)"
-msgstr ""
-
-#: chilisearch.php:991
-msgid "Prev"
-msgstr ""
-
-#: chilisearch.php:992
-msgid "Next"
-msgstr ""
-
-#: chilisearch.php:993
-msgid "category"
-msgstr ""
-
-#: chilisearch.php:994
-msgid "price"
-msgstr ""
-
-#: chilisearch.php:995
-msgid "search-between"
-msgstr ""
-
-#: chilisearch.php:996
-msgid "to"
-msgstr ""
-
-#: chilisearch.php:997
-msgid "all"
-msgstr ""
-
-#: chilisearch.php:998
-msgid "published"
-msgstr ""
-
-#: chilisearch.php:1007
-#: templates/admin_tab_wts.php:31
-msgid "Posts"
-msgstr ""
-
-#: chilisearch.php:1010
-#: templates/admin_tab_wts.php:48
-msgid "Pages"
+#: chilisearch.php:895
+msgid "No message!"
 msgstr ""
 
 #: chilisearch.php:1013
-#: templates/admin_tab_wts.php:119
-msgid "Media"
+msgid "powered by"
+msgstr ""
+
+#: chilisearch.php:1014
+msgid "search powered by"
+msgstr ""
+
+#: chilisearch.php:1015
+msgid "Couldn't find anything related …"
 msgstr ""
 
 #: chilisearch.php:1016
-msgid "Products"
+msgid "Oops!<small>Sorry, there's some thing wrong. Please try again.</small>"
+msgstr ""
+
+#: chilisearch.php:1017
+#: chilisearch.php:1018
+msgid "Search …"
 msgstr ""
 
 #: chilisearch.php:1019
+#: templates/admin_tab_analytics.php:239
+#: widgets/class-widget-elementor-search.php:186
+#: widgets/class-widget-search.php:33
+#: widgets/class-widget-search.php:74
+msgid "Search"
+msgstr ""
+
+#: chilisearch.php:1020
+msgid "About {totalCount} results ({timeTook} seconds)"
+msgstr ""
+
+#: chilisearch.php:1021
+msgid "Prev"
+msgstr ""
+
+#: chilisearch.php:1022
+msgid "Next"
+msgstr ""
+
+#: chilisearch.php:1023
+msgid "category"
+msgstr ""
+
+#: chilisearch.php:1024
+msgid "price"
+msgstr ""
+
+#: chilisearch.php:1025
+msgid "search between"
+msgstr ""
+
+#: chilisearch.php:1026
+msgid "to"
+msgstr ""
+
+#: chilisearch.php:1027
+msgid "all"
+msgstr ""
+
+#: chilisearch.php:1028
+msgid "published"
+msgstr ""
+
+#: chilisearch.php:1029
+msgid "Show all {totalCount} results"
+msgstr ""
+
+#: chilisearch.php:1030
+msgid "Ready to listen"
+msgstr ""
+
+#: chilisearch.php:1031
+msgid "Hmm, didn't get it. please repeat …"
+msgstr ""
+
+#: chilisearch.php:1032
+msgid "Listening …"
+msgstr ""
+
+#: chilisearch.php:1033
+msgid "Got it!"
+msgstr ""
+
+#: chilisearch.php:1042
+#: templates/admin_tab_wts.php:33
+msgid "Posts"
+msgstr ""
+
+#: chilisearch.php:1045
+#: templates/admin_tab_wts.php:50
+msgid "Pages"
+msgstr ""
+
+#: chilisearch.php:1048
+#: templates/admin_tab_wts.php:121
+msgid "Media"
+msgstr ""
+
+#: chilisearch.php:1051
+msgid "Products"
+msgstr ""
+
+#: chilisearch.php:1054
 msgid "Forums"
 msgstr ""
 
@@ -285,36 +319,72 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:11
+#: templates/admin_tab_analytics.php:43
 msgid "Plan"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:13
+#: templates/admin_tab_analytics.php:45
 msgid "See Plans"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:15
-msgid "Manage"
+#: templates/admin_tab_analytics.php:46
+msgid "Redeem Gift Code"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:21
+#: templates/admin_tab_analytics.php:48
+msgid "Start 7-Days Trial"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:51
+msgid "Enter Your Gift Code …"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:52
+msgid "Submit"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:58
 msgid "Number of Indexed Documents"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:28
-msgid "Number of Searches since first of %s"
-msgstr ""
-
-#: templates/admin_tab_analytics.php:29
-#: templates/admin_tab_analytics.php:37
-msgid "(updates every 10 minutes)"
-msgstr ""
-
-#: templates/admin_tab_analytics.php:36
+#: templates/admin_tab_analytics.php:64
 msgid "Used Space"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:41
+#: templates/admin_tab_analytics.php:65
+msgid "(updates every 10 minutes)"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:74
+msgid "Last Search Queries"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:78
+#: templates/admin_tab_analytics.php:132
+msgid "Query"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:79
+msgid "Date"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:128
+msgid "Most Searched Queries"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:133
+msgid "Count"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:182
+msgid "Search per Day"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:235
+msgid "Search as you Type"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:266
 msgid "Leave us a review"
 msgstr ""
 
@@ -335,278 +405,354 @@ msgid "Match the whole word, partial word or both."
 msgstr ""
 
 #: templates/admin_tab_settings.php:49
-msgid "Display thumbnail"
+#: widgets/class-widget-elementor-search.php:94
+#: widgets/class-widget-search.php:117
+msgid "Voice Search"
 msgstr ""
 
 #: templates/admin_tab_settings.php:53
-#: templates/admin_tab_settings.php:63
-#: templates/admin_tab_settings.php:73
-#: templates/admin_tab_settings.php:83
-#: templates/admin_tab_settings.php:229
-#: templates/admin_tab_settings.php:239
-msgid "Display"
-msgstr ""
-
-#: templates/admin_tab_settings.php:54
-msgid "Display thumbnail in search result."
-msgstr ""
-
-#: templates/admin_tab_settings.php:59
-msgid "Display excerpt"
-msgstr ""
-
-#: templates/admin_tab_settings.php:64
-msgid "Display excerpt in search result."
-msgstr ""
-
-#: templates/admin_tab_settings.php:69
-msgid "Display categories"
-msgstr ""
-
-#: templates/admin_tab_settings.php:74
-msgid "Display categories in search result."
-msgstr ""
-
-#: templates/admin_tab_settings.php:79
-msgid "Display tags"
-msgstr ""
-
-#: templates/admin_tab_settings.php:84
-msgid "Display tags in search result."
-msgstr ""
-
-#: templates/admin_tab_settings.php:89
-msgid "Enable type filter"
-msgstr ""
-
-#: templates/admin_tab_settings.php:93
-#: templates/admin_tab_settings.php:103
-#: templates/admin_tab_settings.php:113
-#: templates/admin_tab_settings.php:123
+#: templates/admin_tab_settings.php:104
+#: templates/admin_tab_settings.php:114
+#: templates/admin_tab_settings.php:124
+#: templates/admin_tab_settings.php:134
 msgid "Enable"
 msgstr ""
 
+#: templates/admin_tab_settings.php:54
+msgid "Enable search using voice."
+msgstr ""
+
+#: templates/admin_tab_settings.php:56
+msgid "Only works in supported browsers %shere%s."
+msgstr ""
+
+#: templates/admin_tab_settings.php:60
+#: widgets/class-widget-elementor-search.php:104
+#: widgets/class-widget-search.php:123
+msgid "Display thumbnail"
+msgstr ""
+
+#: templates/admin_tab_settings.php:64
+#: templates/admin_tab_settings.php:74
+#: templates/admin_tab_settings.php:84
 #: templates/admin_tab_settings.php:94
+#: templates/admin_tab_settings.php:240
+#: templates/admin_tab_settings.php:250
+msgid "Display"
+msgstr ""
+
+#: templates/admin_tab_settings.php:65
+msgid "Display thumbnail in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:70
+#: widgets/class-widget-elementor-search.php:114
+#: widgets/class-widget-search.php:129
+msgid "Display excerpt"
+msgstr ""
+
+#: templates/admin_tab_settings.php:75
+msgid "Display excerpt in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:80
+#: widgets/class-widget-elementor-search.php:124
+#: widgets/class-widget-search.php:135
+msgid "Display categories"
+msgstr ""
+
+#: templates/admin_tab_settings.php:85
+msgid "Display categories in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:90
+#: widgets/class-widget-elementor-search.php:134
+#: widgets/class-widget-search.php:141
+msgid "Display tags"
+msgstr ""
+
+#: templates/admin_tab_settings.php:95
+msgid "Display tags in search result."
+msgstr ""
+
+#: templates/admin_tab_settings.php:100
+msgid "Enable type filter"
+msgstr ""
+
+#: templates/admin_tab_settings.php:105
 msgid "Enable filtering base on document type."
 msgstr ""
 
-#: templates/admin_tab_settings.php:99
+#: templates/admin_tab_settings.php:110
 msgid "Enable category filter"
 msgstr ""
 
-#: templates/admin_tab_settings.php:104
+#: templates/admin_tab_settings.php:115
 msgid "Enable filtering base on category."
 msgstr ""
 
-#: templates/admin_tab_settings.php:109
+#: templates/admin_tab_settings.php:120
 msgid "Enable publish date filter"
 msgstr ""
 
-#: templates/admin_tab_settings.php:114
+#: templates/admin_tab_settings.php:125
 msgid "Enable filtering base on publish date."
 msgstr ""
 
-#: templates/admin_tab_settings.php:119
+#: templates/admin_tab_settings.php:130
 msgid "Enable product price filter"
 msgstr ""
 
-#: templates/admin_tab_settings.php:124
+#: templates/admin_tab_settings.php:135
 msgid "Enable filtering base on product price."
 msgstr ""
 
-#: templates/admin_tab_settings.php:129
+#: templates/admin_tab_settings.php:140
 msgid "Search result page"
 msgstr ""
 
-#: templates/admin_tab_settings.php:133
+#: templates/admin_tab_settings.php:144
 msgid "Chili Search result page (not recommended)"
 msgstr ""
 
-#: templates/admin_tab_settings.php:138
+#: templates/admin_tab_settings.php:149
 msgid "Create Search Page (recommended)"
 msgstr ""
 
-#: templates/admin_tab_settings.php:139
+#: templates/admin_tab_settings.php:150
 msgid "Choose the search result page."
 msgstr ""
 
-#: templates/admin_tab_settings.php:144
+#: templates/admin_tab_settings.php:155
 msgid "Search page results number"
 msgstr ""
 
-#: templates/admin_tab_settings.php:148
+#: templates/admin_tab_settings.php:159
 msgid "Number of results displayed in search page."
 msgstr ""
 
-#: templates/admin_tab_settings.php:153
+#: templates/admin_tab_settings.php:164
 msgid "SAYT (search as you type) results number"
 msgstr ""
 
-#: templates/admin_tab_settings.php:157
+#: templates/admin_tab_settings.php:168
 msgid "Number of results displayed in SAYT box."
 msgstr ""
 
-#: templates/admin_tab_settings.php:162
+#: templates/admin_tab_settings.php:173
 msgid "Auto search input detection"
 msgstr ""
 
-#: templates/admin_tab_settings.php:166
+#: templates/admin_tab_settings.php:177
 msgid "Detect and replace all search inputs in website"
 msgstr ""
 
-#: templates/admin_tab_settings.php:171
+#: templates/admin_tab_settings.php:182
 msgid "Auto search input selector"
 msgstr ""
 
-#: templates/admin_tab_settings.php:175
+#: templates/admin_tab_settings.php:186
 msgid "Search input selector, in case the search input is not detected automatically. Don't change it if search is working correctly."
 msgstr ""
 
-#: templates/admin_tab_settings.php:182
+#: templates/admin_tab_settings.php:193
 msgid "Premium Features"
 msgstr ""
 
-#: templates/admin_tab_settings.php:186
+#: templates/admin_tab_settings.php:197
 msgid "Sort by"
 msgstr ""
 
-#: templates/admin_tab_settings.php:194
+#: templates/admin_tab_settings.php:205
 msgid "Sort search result by."
 msgstr ""
 
-#: templates/admin_tab_settings.php:199
+#: templates/admin_tab_settings.php:210
 msgid "Field weights"
 msgstr ""
 
-#: templates/admin_tab_settings.php:202
+#: templates/admin_tab_settings.php:213
 msgid "Title"
 msgstr ""
 
-#: templates/admin_tab_settings.php:206
+#: templates/admin_tab_settings.php:217
 msgid "Excerpt"
 msgstr ""
 
-#: templates/admin_tab_settings.php:210
+#: templates/admin_tab_settings.php:221
 msgid "Body"
 msgstr ""
 
-#: templates/admin_tab_settings.php:214
+#: templates/admin_tab_settings.php:225
 msgid "Tags"
 msgstr ""
 
-#: templates/admin_tab_settings.php:218
+#: templates/admin_tab_settings.php:229
 msgid "Category"
 msgstr ""
 
-#: templates/admin_tab_settings.php:221
+#: templates/admin_tab_settings.php:232
 msgid "Define weight for each field of the document."
 msgstr ""
 
-#: templates/admin_tab_settings.php:225
+#: templates/admin_tab_settings.php:236
 msgid "Display product price"
 msgstr ""
 
-#: templates/admin_tab_settings.php:230
+#: templates/admin_tab_settings.php:241
 msgid "Display product price in search result."
 msgstr ""
 
-#: templates/admin_tab_settings.php:235
+#: templates/admin_tab_settings.php:246
 msgid "Display Chili Search brand"
 msgstr ""
 
-#: templates/admin_tab_settings.php:240
+#: templates/admin_tab_settings.php:251
 msgid "Display Chili Search brand in search box and search result."
 msgstr ""
 
-#: templates/admin_tab_settings.php:306
+#: templates/admin_tab_settings.php:318
 msgid "Something went wrong! please try again."
 msgstr ""
 
-#: templates/admin_tab_wts.php:20
+#: templates/admin_tab_wts.php:22
 msgid "Choose where to search"
 msgstr ""
 
-#: templates/admin_tab_wts.php:26
+#: templates/admin_tab_wts.php:28
 msgid "Search between"
-msgstr ""
-
-#: templates/admin_tab_wts.php:38
-#: templates/admin_tab_wts.php:55
-#: templates/admin_tab_wts.php:72
-#: templates/admin_tab_wts.php:135
-msgid "Approved comments"
 msgstr ""
 
 #: templates/admin_tab_wts.php:40
 #: templates/admin_tab_wts.php:57
 #: templates/admin_tab_wts.php:74
-#: templates/admin_tab_wts.php:81
-#: templates/admin_tab_wts.php:121
-#: templates/admin_tab_wts.php:129
 #: templates/admin_tab_wts.php:137
+msgid "Approved comments"
+msgstr ""
+
+#: templates/admin_tab_wts.php:42
+#: templates/admin_tab_wts.php:59
+#: templates/admin_tab_wts.php:76
+#: templates/admin_tab_wts.php:83
+#: templates/admin_tab_wts.php:123
+#: templates/admin_tab_wts.php:131
+#: templates/admin_tab_wts.php:139
 msgid "premium only"
 msgstr ""
 
-#: templates/admin_tab_wts.php:65
+#: templates/admin_tab_wts.php:67
 msgid "WooCommerce products"
 msgstr ""
 
-#: templates/admin_tab_wts.php:65
+#: templates/admin_tab_wts.php:67
 msgid "(WooCommerce plugin is not installed)"
 msgstr ""
 
-#: templates/admin_tab_wts.php:80
+#: templates/admin_tab_wts.php:82
 msgid "Product SKU"
 msgstr ""
 
-#: templates/admin_tab_wts.php:87
+#: templates/admin_tab_wts.php:89
 msgid "Out-of-stock products"
 msgstr ""
 
-#: templates/admin_tab_wts.php:96
+#: templates/admin_tab_wts.php:98
 msgid "bbPress Forums"
 msgstr ""
 
-#: templates/admin_tab_wts.php:96
+#: templates/admin_tab_wts.php:98
 msgid "(bbPress plugin is not installed)"
 msgstr ""
 
-#: templates/admin_tab_wts.php:103
+#: templates/admin_tab_wts.php:105
 msgid "bbPress Topics"
 msgstr ""
 
-#: templates/admin_tab_wts.php:110
+#: templates/admin_tab_wts.php:112
 msgid "bbPress Replies"
 msgstr ""
 
-#: templates/admin_tab_wts.php:127
+#: templates/admin_tab_wts.php:129
 msgid "Inside document files (doc, docx, pptx, pdf, xlsx, …)"
 msgstr ""
 
-#: templates/admin_tab_wts.php:145
+#: templates/admin_tab_wts.php:147
 msgid "Reindex"
 msgstr ""
 
-#: templates/admin_tab_wts.php:149
+#: templates/admin_tab_wts.php:151
 msgid "Reindex all documents"
 msgstr ""
 
-#: templates/admin_tab_wts.php:150
+#: templates/admin_tab_wts.php:152
 msgid "Used when shown documents in search result are not updated."
 msgstr ""
 
-#: widgets/class-widget-search.php:18
-msgid "ChiliSearch Search Form Widget"
+#: templates/admin_tab_wts.php:159
+msgid "You can index upto %d documents in \"%s\" plan."
 msgstr ""
 
-#: widgets/class-widget-search.php:21
+#: templates/admin_tab_wts.php:160
+msgid "Need more?"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:49
+#: widgets/class-widget-search.php:88
 msgid "Search Form"
 msgstr ""
 
-#: widgets/class-widget-search.php:56
+#: widgets/class-widget-elementor-search.php:58
+#: widgets/class-widget-search.php:86
+msgid "Update search setting in %sChili Search Plugin%s"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:65
+msgid "Font"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:74
+#: widgets/class-widget-search.php:102
+msgid "Search input placeholder"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:84
+#: widgets/class-widget-search.php:108
+msgid "Results number"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:146
+#: widgets/class-widget-search.php:144
+msgid "Submit Button"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:153
+#: widgets/class-widget-search.php:149
+msgid "Display submit button"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:163
+#: widgets/class-widget-search.php:164
+msgid "Submit button color"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:173
+#: widgets/class-widget-search.php:158
+msgid "Submit button background color"
+msgstr ""
+
+#: widgets/class-widget-elementor-search.php:183
+#: widgets/class-widget-search.php:152
+msgid "Submit button text"
+msgstr ""
+
+#: widgets/class-widget-search.php:20
+msgid "Chili Search Widget"
+msgstr ""
+
+#: widgets/class-widget-search.php:90
 msgid "Title:"
 msgstr ""
 
-#: widgets/class-widget-search.php:65
-msgid "Display submit button"
+#: widgets/class-widget-search.php:96
+msgid "Font family:"
 msgstr ""
