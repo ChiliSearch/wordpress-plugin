@@ -87,6 +87,12 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 ## Changelog
 
+### 2.0.4
+* add gift code
+* add voice search
+* add elementor compatibility
+* add analytics and statistics
+
 ### 2.0.3
 * fix internationalization
 
