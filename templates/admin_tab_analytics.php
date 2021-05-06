@@ -215,6 +215,14 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
                         tr.append(tdDate)
                         lastSearchQueriesTable.append(tr)
                     }
+                    if (response.analytics.lastQueries.length === 0) {
+                        let tr = document.createElement('tr');
+                        let td = document.createElement('td');
+                        td.setAttribute("colspan", "2");
+                        td.innerText = "- <?= __('no result', 'chilisearch') ?> -";
+                        tr.append(td);
+                        lastSearchQueriesTable.append(tr);
+                    }
 
                     let mostSearchedQueriesTable = document.querySelector('table#mostSearchedQueries tbody');
                     mostSearchedQueriesTable.innerHTML = ''
@@ -229,6 +237,14 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
                         tdDate.innerText = mostSearchedQuery.count
                         tr.append(tdDate)
                         mostSearchedQueriesTable.append(tr)
+                    }
+                    if (response.analytics.mostSearchedQueries.length === 0) {
+                        let tr = document.createElement('tr');
+                        let td = document.createElement('td');
+                        td.setAttribute("colspan", "2");
+                        td.innerText = "- <?= __('no result', 'chilisearch') ?> -";
+                        tr.append(td);
+                        mostSearchedQueriesTable.append(tr);
                     }
 
                     let searchPerDayMap = {
