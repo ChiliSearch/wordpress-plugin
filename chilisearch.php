@@ -347,6 +347,14 @@ final class ChiliSearch {
         $result          = ! empty( $result ) ? json_decode( $result ) : null;
         $responseHeaders = wp_remote_retrieve_headers( $response );
 
+        if ( $responseCode === 401 ) {
+            $this->get_configs();
+            unset( $this->configs['site_api_secret'], $this->configs['get_started_config_finished'] );
+            $this->set_configs();
+
+            return null;
+        }
+
         return [ $responseCode, $result, $responseHeaders ];
     }
 
@@ -920,12 +928,6 @@ final class ChiliSearch {
             }
         }
         list( $getSiteInfoResponseCode, $siteInfo ) = $this->send_request( 'GET', 'website' );
-        if ( $getSiteInfoResponseCode === 401 ) {
-            unset( $this->configs['site_api_secret'], $this->configs['get_started_config_finished'] );
-            $this->set_configs();
-
-            return null;
-        }
         if ( $getSiteInfoResponseCode !== 200 ) {
             return null;
         }
