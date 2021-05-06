@@ -46,8 +46,6 @@ define(
         str_replace( 'http://', 'https://', plugin_dir_url( __FILE__ ) ) : plugin_dir_url( __FILE__ )
 );
 
-require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
-
 final class ChiliSearch {
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
     const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
@@ -230,6 +228,7 @@ final class ChiliSearch {
             return '<div id="chilisearch-search_page"></div>';
         } );
         add_action( 'widgets_init', function () {
+            require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
             register_widget( 'ChiliSearch\Widget_Search' );
 
             if ( class_exists( '\Elementor\Plugin' ) ) {
