@@ -805,6 +805,12 @@ final class ChiliSearch {
         if ( empty( $this->configs['site_api_secret'] ) ) {
             return;
         }
+        add_filter('script_loader_tag', function ( $tag, $handle) {
+            if ( 'chilisearch-settings-js' === $handle ) {
+                return str_replace( ' src=', ' async src=', $tag );
+            }
+            return $tag;
+        }, 10, 2);
         wp_enqueue_script(
             'chilisearch-settings-js',
             esc_url( self::CHILISEARCH_CDN_BASE_URI . 'js/app.js' ),
@@ -815,7 +821,7 @@ final class ChiliSearch {
 
         $params = json_encode( $this->get_js_init_parameters() );
 
-        wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params);" );
+        wp_add_inline_script( 'chilisearch-settings-js', "var ChiliSearchInitParams = $params;" );
     }
 
     public function get_or_create_search_page() {
@@ -876,6 +882,12 @@ final class ChiliSearch {
             case 'indexing':
                 return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
             case 'demo':
+                add_filter('script_loader_tag', function ( $tag, $handle) {
+                    if ( 'chilisearch-settings-js' === $handle ) {
+                        return str_replace( ' src=', ' async src=', $tag );
+                    }
+                    return $tag;
+                }, 10, 2);
                 wp_enqueue_script(
                     'chilisearch-settings-js',
                     esc_url( self::CHILISEARCH_CDN_BASE_URI . 'js/app.js' ),
@@ -886,7 +898,7 @@ final class ChiliSearch {
                 $params = $this->get_js_init_parameters();
                 $params['searchPage'] = admin_url( 'admin.php?page=chilisearch&tab=demo' );
                 $params = json_encode( $params );
-                wp_add_inline_script( 'chilisearch-settings-js', "ChiliSearch.init($params);" );
+                wp_add_inline_script( 'chilisearch-settings-js', "var ChiliSearchInitParams = $params;" );
 
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
