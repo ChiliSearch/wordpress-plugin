@@ -12,7 +12,7 @@
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
  * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
- * Version:           2.0.4
+ * Version:           2.0.5
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '2.0.4' );
+define( 'CHILISEARCH_VERSION', '2.0.5' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
@@ -45,8 +45,6 @@ define(
     strpos( home_url( '/' ), 'https://' ) !== false || strpos( plugin_dir_url( __FILE__ ), 'https://' ) !== false ?
         str_replace( 'http://', 'https://', plugin_dir_url( __FILE__ ) ) : plugin_dir_url( __FILE__ )
 );
-
-require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
 
 final class ChiliSearch {
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
@@ -230,6 +228,7 @@ final class ChiliSearch {
             return '<div id="chilisearch-search_page"></div>';
         } );
         add_action( 'widgets_init', function () {
+            require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
             register_widget( 'ChiliSearch\Widget_Search' );
 
             if ( class_exists( '\Elementor\Plugin' ) ) {
@@ -347,6 +346,14 @@ final class ChiliSearch {
         $result          = $body = wp_remote_retrieve_body( $response );
         $result          = ! empty( $result ) ? json_decode( $result ) : null;
         $responseHeaders = wp_remote_retrieve_headers( $response );
+
+        if ( $responseCode === 401 ) {
+            $this->get_configs();
+            unset( $this->configs['site_api_secret'], $this->configs['get_started_config_finished'] );
+            $this->set_configs();
+
+            return null;
+        }
 
         return [ $responseCode, $result, $responseHeaders ];
     }
@@ -921,12 +928,6 @@ final class ChiliSearch {
             }
         }
         list( $getSiteInfoResponseCode, $siteInfo ) = $this->send_request( 'GET', 'website' );
-        if ( $getSiteInfoResponseCode === 401 ) {
-            unset( $this->configs['site_api_secret'], $this->configs['get_started_config_finished'] );
-            $this->set_configs();
-
-            return null;
-        }
         if ( $getSiteInfoResponseCode !== 200 ) {
             return null;
         }
