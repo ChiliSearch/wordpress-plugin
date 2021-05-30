@@ -1,10 +1,13 @@
 <?php
-$siteInfo              = ChiliSearch::getInstance()->get_website_info();
-$plan                  = ChiliSearch::getInstance()->get_current_plan();
-$planInfo              = isset( $siteInfo['planInfo'] ) ? esc_html( $siteInfo['planInfo'] ) : '';
-$documentsCount        = isset( $siteInfo['documentsCount'] ) ? esc_html( $siteInfo['documentsCount'] ) : __( 'N/A', 'chilisearch' );
-$usedSpace             = isset( $siteInfo['usedSpace'] ) ? esc_html( $siteInfo['usedSpace'] ) : __( 'N/A', 'chilisearch' );
-$thisMonthRequestCount = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html( $siteInfo['thisMonthRequestCount'] ) : __( 'N/A', 'chilisearch' );
+$siteInfo                                   = ChiliSearch::getInstance()->get_website_info();
+$plan                                       = ChiliSearch::getInstance()->get_current_plan();
+$planInfo                                   = isset( $siteInfo['planInfo'] ) ? esc_html( $siteInfo['planInfo'] ) : '';
+$documentsCount                             = isset( $siteInfo['documentsCount'] ) ? esc_html( $siteInfo['documentsCount'] ) : __( 'N/A', 'chilisearch' );
+$documentCountLimit                         = isset( $siteInfo['documentCountLimit'] ) ? esc_html( $siteInfo['documentCountLimit'] ) : __( 'N/A', 'chilisearch' );
+$referralGiftCodeCode                       = isset( $siteInfo['referralGiftCode']->code ) ? esc_html( $siteInfo['referralGiftCode']->code ) : __( 'N/A', 'chilisearch' );
+$referralGiftCodeAddDays                    = isset( $siteInfo['referralGiftCode']->addDays ) ? esc_html( $siteInfo['referralGiftCode']->addDays ) : __( 'N/A', 'chilisearch' );
+$referralGiftCodeIncreaseDocumentCountLimit = isset( $siteInfo['referralGiftCode']->increaseDocumentCountLimit ) ? esc_html( $siteInfo['referralGiftCode']->increaseDocumentCountLimit ) : __( 'N/A', 'chilisearch' );
+$thisMonthRequestCount                      = isset( $siteInfo['thisMonthRequestCount'] ) ? esc_html( $siteInfo['thisMonthRequestCount'] ) : __( 'N/A', 'chilisearch' );
 wp_enqueue_script('chart-js', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js' );
 wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.getElementById('searchPerDayChart').getContext('2d'),{type:'line',data:{labels:['', ''],datasets:[{label:'loading ...', data: [0], borderWidth: 1}]},options:{responsive: true}});" );
 ?>
@@ -41,8 +44,8 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
 <div class="holder card-holder">
     <div class="card card-stats">
         <div class="card-header card-header-info card-header-icon">
-            <p class="card-category" style="margin: 0;"><?= __( 'Plan', 'chilisearch' ) ?>:</p>
-            <h3 class="card-title" style="margin: .78em 0;"><?= ucfirst( $plan ) ?><?= ! empty( $planInfo ) ? " <small style='font-weight: normal'>$planInfo</small>" : '' ?></h3>
+            <p class="card-category"><?= __( 'Plan', 'chilisearch' ) ?>:</p>
+            <h3 class="card-title"><?= ucfirst( $plan ) ?><?= ! empty( $planInfo ) ? " <small style='font-weight: normal'>$planInfo</small>" : '' ?></h3>
             <a href="<?= admin_url( 'admin.php?page=chilisearch&tab=plans' ) ?>"><?= __( 'See Plans', 'chilisearch' ) ?> →</a>
             <a href="javascript:;" onclick="jQuery('#gift-code-holder').slideToggle()" style="margin-left: 10px"><?= __( 'Redeem Gift Code', 'chilisearch' ) ?> →</a>
             <?php if ( empty( $siteInfo['usedTrialBefore'] ) && $plan === 'basic' ): ?>
@@ -55,16 +58,21 @@ wp_add_inline_script( 'chart-js', "var searchPerDayChart = new Chart(document.ge
         </div>
     </div>
     <div class="card card-stats">
-        <div class="card-header card-header-info card-header-icon">
-            <p class="card-category"><?= __( 'Number of Indexed Documents', 'chilisearch' ) ?>:</p>
-            <h3 class="card-title"><?= $documentsCount ?></h3>
+        <div class="card-header card-header-warning card-header-icon">
+            <p class="card-category">
+                <label><?= __( 'Your Gift-Code:', 'chilisearch' ) ?><input onClick="this.select();" type="text" value="<?= $referralGiftCodeCode ?>" style="margin-left:3px;border:0!important;box-shadow:none;background-color:transparent;text-transform:uppercase;" readonly></label>
+            </p>
+            <p class="card-body">
+                <?= sprintf( __( 'Gift your friends %s days free Chili Search Premium and increase your document limit by %s.', 'chilisearch' ), $referralGiftCodeAddDays, $referralGiftCodeIncreaseDocumentCountLimit ) ?>
+            </p>
         </div>
     </div>
     <div class="card card-stats">
-        <div class="card-header card-header-warning card-header-icon">
-            <p class="card-category"><?= __( 'Used Space', 'chilisearch' ) ?>
-                <small><?= __( '(updates every 10 minutes)', 'chilisearch' ) ?></small>:</p>
-            <h3 class="card-title"><?= $usedSpace ?></h3>
+        <div class="card-header card-header-info card-header-icon">
+            <p class="card-category"><?= __( 'Number of Indexed Documents', 'chilisearch' ) ?>:</p>
+            <h3 class="card-title"><?= $documentsCount ?><small>/<?= $documentCountLimit ?></small></h3>
+            <a href="<?= admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ?>"><?= __( 'Manage', 'chilisearch' ) ?> →</a>
+            <a href="<?= admin_url( 'admin.php?page=chilisearch&tab=plans' ) ?>" style="margin-left: 10px"><?= __( 'Want More?', 'chilisearch' ) ?> →</a>
         </div>
     </div>
     <div style="clear:both;"></div>
