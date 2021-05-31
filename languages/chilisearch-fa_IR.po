@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Chili Search 2.0.5\n"
+"Project-Id-Version: Chili Search 2.0.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress-plugin-github\n"
 "Last-Translator: Ali Jafari <ali.jafari.pw@gmail.com>, 2021\n"
 "Language-Team: Persian (Iran) (https://poeditor.com/)\n"
@@ -26,22 +26,18 @@ msgid "Chili Search"
 msgstr "چیلی سرچ"
 
 #. Plugin URI of the plugin
-#: 
 msgid "https://chilisearch.com"
 msgstr "https://chilisearch.com"
 
 #. Description of the plugin
-#: 
 msgid "Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine."
 msgstr "با استفاده از موتور جستجوی مجهز به هوش مصنوعی، قدرت کشف نوشته‌ها، برگه‌ها، رسانه‌ها، ووکامرس و بی‌بی‌پرس را تقویت کنید."
 
 #. Author of the plugin
-#: 
 msgid "ChiliSearch"
 msgstr "چیلی سرچ"
 
 #. Author URI of the plugin
-#: 
 msgid "https://chilisearch.com/"
 msgstr "https://chilisearch.com/"
 
@@ -353,14 +349,6 @@ msgstr "ثبت"
 #: templates/admin_tab_analytics.php:59
 msgid "Number of Indexed Documents"
 msgstr "تعداد محتوا ایندکس شده"
-
-#: templates/admin_tab_analytics.php:65
-msgid "Used Space"
-msgstr "حجم مصرفی"
-
-#: templates/admin_tab_analytics.php:66
-msgid "(updates every 10 minutes)"
-msgstr "(هر 10 دقیقه بروز می‌شود)"
 
 #: templates/admin_tab_analytics.php:75
 msgid "Last Search Queries"
@@ -768,4 +756,32 @@ msgstr "عنوان:"
 #: widgets/class-widget-search.php:96
 msgid "Font family:"
 msgstr "فونت:"
+
+#: templates/admin_tab_analytics.php:63
+msgid "Your Gift-Code:"
+msgstr "کد هدیه شما:"
+
+#: templates/admin_tab_analytics.php:67
+msgid "Invite your friends to Chili Search to win %s days Premium each, right after they redeem this gift codes."
+msgstr "با دعوت دوستان خود به چیلی‌سرچ و وارد کردن این کد هدیه توسط آنها، هرکدام از شما برنده %s روز پریمیوم رایگان خواهید شد."
+
+#: templates/admin_tab_analytics.php:69
+msgid "Invite your friends to Chili Search to win %s days Premium for them and %s days for you, right after they redeem this gift codes."
+msgstr "با دعوت دوستان خود به چیلی‌سرچ و وارد کردن این کد هدیه توسط آنها، ایشان برنده %s روز پریمیوم رایگان و شما برنده %s روز پریمیوم رایگان خواهید شد."
+
+#: templates/admin_tab_analytics.php:78
+msgid "Manage"
+msgstr "مدیریت"
+
+#: templates/admin_tab_analytics.php:79
+msgid "Want More?"
+msgstr "بیشتر لازم دارید؟"
+
+#: templates/admin_tab_analytics.php:65
+msgid "Used Space"
+msgstr "حجم مصرفی"
+
+#: templates/admin_tab_analytics.php:66
+msgid "(updates every 10 minutes)"
+msgstr "(هر 10 دقیقه بروز می‌شود)"
 
