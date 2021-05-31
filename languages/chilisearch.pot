@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-05-25T21:52:37+02:00\n"
+"POT-Creation-Date: 2021-05-31T22:34:30+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: chilisearch\n"
 
 #. Plugin Name of the plugin
 #: chilisearch.php:267
-#: chilisearch.php:863
+#: chilisearch.php:869
 #: widgets/class-widget-elementor-search.php:30
 #: widgets/class-widget-search.php:23
 msgid "Chili Search"
@@ -80,7 +80,7 @@ msgstr ""
 
 #: chilisearch.php:260
 #: chilisearch.php:276
-#: chilisearch.php:866
+#: chilisearch.php:872
 #: templates/admin_tab_settings.php:23
 msgid "Settings"
 msgstr ""
@@ -171,132 +171,132 @@ msgstr ""
 msgid "In reply to:"
 msgstr ""
 
-#: chilisearch.php:865
+#: chilisearch.php:871
 msgid "Analytics"
 msgstr ""
 
-#: chilisearch.php:867
+#: chilisearch.php:873
 msgid "Where to Search"
 msgstr ""
 
-#: chilisearch.php:868
+#: chilisearch.php:874
 #: templates/admin_tab_demo.php:12
 msgid "Demo"
 msgstr ""
 
-#: chilisearch.php:901
+#: chilisearch.php:913
 msgid "Could not redeem this gift code!"
 msgstr ""
 
-#: chilisearch.php:902
+#: chilisearch.php:914
 msgid "No message!"
 msgstr ""
 
-#: chilisearch.php:1014
+#: chilisearch.php:1026
 msgid "powered by"
 msgstr ""
 
-#: chilisearch.php:1015
+#: chilisearch.php:1027
 msgid "search powered by"
 msgstr ""
 
-#: chilisearch.php:1016
+#: chilisearch.php:1028
 msgid "Couldn't find anything related …"
 msgstr ""
 
-#: chilisearch.php:1017
+#: chilisearch.php:1029
 msgid "Oops!<small>Sorry, there's some thing wrong. Please try again.</small>"
 msgstr ""
 
-#: chilisearch.php:1018
-#: chilisearch.php:1019
+#: chilisearch.php:1030
+#: chilisearch.php:1031
 msgid "Search …"
 msgstr ""
 
-#: chilisearch.php:1020
-#: templates/admin_tab_analytics.php:256
+#: chilisearch.php:1032
+#: templates/admin_tab_analytics.php:268
 #: widgets/class-widget-elementor-search.php:186
 #: widgets/class-widget-search.php:33
 #: widgets/class-widget-search.php:74
 msgid "Search"
 msgstr ""
 
-#: chilisearch.php:1021
+#: chilisearch.php:1033
 msgid "About {totalCount} results ({timeTook} seconds)"
 msgstr ""
 
-#: chilisearch.php:1022
+#: chilisearch.php:1034
 msgid "Prev"
 msgstr ""
 
-#: chilisearch.php:1023
+#: chilisearch.php:1035
 msgid "Next"
 msgstr ""
 
-#: chilisearch.php:1024
+#: chilisearch.php:1036
 msgid "category"
 msgstr ""
 
-#: chilisearch.php:1025
+#: chilisearch.php:1037
 msgid "price"
 msgstr ""
 
-#: chilisearch.php:1026
+#: chilisearch.php:1038
 msgid "search between"
 msgstr ""
 
-#: chilisearch.php:1027
+#: chilisearch.php:1039
 msgid "to"
 msgstr ""
 
-#: chilisearch.php:1028
+#: chilisearch.php:1040
 msgid "all"
 msgstr ""
 
-#: chilisearch.php:1029
+#: chilisearch.php:1041
 msgid "published"
 msgstr ""
 
-#: chilisearch.php:1030
+#: chilisearch.php:1042
 msgid "Show all {totalCount} results"
 msgstr ""
 
-#: chilisearch.php:1031
+#: chilisearch.php:1043
 msgid "Ready to listen"
 msgstr ""
 
-#: chilisearch.php:1032
+#: chilisearch.php:1044
 msgid "Hmm, didn't get it. please repeat …"
 msgstr ""
 
-#: chilisearch.php:1033
+#: chilisearch.php:1045
 msgid "Listening …"
 msgstr ""
 
-#: chilisearch.php:1034
+#: chilisearch.php:1046
 msgid "Got it!"
 msgstr ""
 
-#: chilisearch.php:1043
+#: chilisearch.php:1055
 #: templates/admin_tab_wts.php:33
 msgid "Posts"
 msgstr ""
 
-#: chilisearch.php:1046
+#: chilisearch.php:1058
 #: templates/admin_tab_wts.php:50
 msgid "Pages"
 msgstr ""
 
-#: chilisearch.php:1049
+#: chilisearch.php:1061
 #: templates/admin_tab_wts.php:121
 msgid "Media"
 msgstr ""
 
-#: chilisearch.php:1052
+#: chilisearch.php:1064
 msgid "Products"
 msgstr ""
 
-#: chilisearch.php:1055
+#: chilisearch.php:1067
 msgid "Forums"
 msgstr ""
 
@@ -315,81 +315,96 @@ msgstr ""
 #: templates/admin_tab_analytics.php:5
 #: templates/admin_tab_analytics.php:6
 #: templates/admin_tab_analytics.php:7
+#: templates/admin_tab_analytics.php:8
+#: templates/admin_tab_analytics.php:9
+#: templates/admin_tab_analytics.php:10
 #: templates/admin_tab_demo.php:3
 msgid "N/A"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:44
+#: templates/admin_tab_analytics.php:47
 msgid "Plan"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:46
+#: templates/admin_tab_analytics.php:49
 msgid "See Plans"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:47
+#: templates/admin_tab_analytics.php:50
 msgid "Redeem Gift Code"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:49
+#: templates/admin_tab_analytics.php:52
 msgid "Start 7-Days Trial"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:52
+#: templates/admin_tab_analytics.php:55
 msgid "Enter Your Gift Code …"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:53
+#: templates/admin_tab_analytics.php:56
 msgid "Submit"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:59
+#: templates/admin_tab_analytics.php:63
+msgid "Your Gift-Code:"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:67
+msgid "Invite your friends to Chili Search to win %s days Premium each, right after they redeem this gift codes."
+msgstr ""
+
+#: templates/admin_tab_analytics.php:69
+msgid "Invite your friends to Chili Search to win %s days Premium for them and %s days for you, right after they redeem this gift codes."
+msgstr ""
+
+#: templates/admin_tab_analytics.php:76
 msgid "Number of Indexed Documents"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:65
-msgid "Used Space"
-msgstr ""
-
-#: templates/admin_tab_analytics.php:66
-msgid "(updates every 10 minutes)"
-msgstr ""
-
-#: templates/admin_tab_analytics.php:75
-msgid "Last Search Queries"
+#: templates/admin_tab_analytics.php:78
+msgid "Manage"
 msgstr ""
 
 #: templates/admin_tab_analytics.php:79
-#: templates/admin_tab_analytics.php:133
+msgid "Want More?"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:87
+msgid "Last Search Queries"
+msgstr ""
+
+#: templates/admin_tab_analytics.php:91
+#: templates/admin_tab_analytics.php:145
 msgid "Query"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:80
+#: templates/admin_tab_analytics.php:92
 msgid "Date"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:129
+#: templates/admin_tab_analytics.php:141
 msgid "Most Searched Queries"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:134
+#: templates/admin_tab_analytics.php:146
 msgid "Count"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:183
+#: templates/admin_tab_analytics.php:195
 msgid "Search per Day"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:222
-#: templates/admin_tab_analytics.php:245
+#: templates/admin_tab_analytics.php:234
+#: templates/admin_tab_analytics.php:257
 msgid "no result"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:252
+#: templates/admin_tab_analytics.php:264
 msgid "Search as you Type"
 msgstr ""
 
-#: templates/admin_tab_analytics.php:283
+#: templates/admin_tab_analytics.php:295
 msgid "Leave us a review"
 msgstr ""
 
