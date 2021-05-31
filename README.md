@@ -87,6 +87,10 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 ## Changelog
 
+### 2.0.6
+* add friend referral gift-code
+* make js load async
+
 ### 2.0.5
 * performance enhancement
 * minor bugs fix

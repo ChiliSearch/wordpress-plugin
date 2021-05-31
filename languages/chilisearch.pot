@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Chili Search plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Chili Search 2.0.5\n"
+"Project-Id-Version: Chili Search 2.0.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress-plugin-github\n"
 "Last-Translator: Ali Jafari <ali.jafari.pw@gmail.com>, 2021\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
