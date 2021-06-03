@@ -1001,7 +1001,7 @@ final class ChiliSearch {
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],
                 'currency'           => '',
-                'sortBy'             => $this->get_current_plan() === 'premium' ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
+                'sortBy' => $this->get_current_plan() === 'premium' && !empty($this->settings['sort_by']) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [
                     'thumbnail'    => (bool) $this->settings['display_result_image'],
                     'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
