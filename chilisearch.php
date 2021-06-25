@@ -672,6 +672,9 @@ final class ChiliSearch {
             }, wp_get_post_tags( $post->ID ) ),
             'publishedAt' => ! empty( $post->post_date_gmt ) ? $post->post_date_gmt : null,
         ];
+        if ( empty( $document['title'] ) ) {
+            return false;
+        }
         switch ( $post->post_type ) {
             case self::WP_POST_TYPE_PRODUCT:
                 $product                = wc_get_product( $post->ID );
