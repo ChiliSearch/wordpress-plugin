@@ -971,6 +971,12 @@ final class ChiliSearch {
         if ( ! in_array( $post->post_type, $active_post_types, true ) ) {
             return true;
         }
+        $siteInfo           = $this->get_website_info();
+        $documentCount      = isset( $siteInfo['documentsCount'] ) ? (int) $siteInfo['documentsCount'] : null;
+        $documentCountLimit = isset( $siteInfo['documentCountLimit'] ) ? (int) $siteInfo['documentCountLimit'] : null;
+        if ( isset( $documentCount, $documentCountLimit ) && $documentCount >= $documentCountLimit ) {
+            return true;
+        }
         try {
             if ( $post->post_status === 'publish' ) {
                 $document = $this->transform_post_to_document( $post );
