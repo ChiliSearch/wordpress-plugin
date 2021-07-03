@@ -12,7 +12,7 @@
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
  * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
- * Version:           2.0.6
+ * Version:           2.0.7
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '2.0.6' );
+define( 'CHILISEARCH_VERSION', '2.0.7' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
@@ -672,6 +672,9 @@ final class ChiliSearch {
             }, wp_get_post_tags( $post->ID ) ),
             'publishedAt' => ! empty( $post->post_date_gmt ) ? $post->post_date_gmt : null,
         ];
+        if ( empty( $document['title'] ) ) {
+            return false;
+        }
         switch ( $post->post_type ) {
             case self::WP_POST_TYPE_PRODUCT:
                 $product                = wc_get_product( $post->ID );
@@ -968,6 +971,12 @@ final class ChiliSearch {
         if ( ! in_array( $post->post_type, $active_post_types, true ) ) {
             return true;
         }
+        $siteInfo           = $this->get_website_info();
+        $documentCount      = isset( $siteInfo['documentsCount'] ) ? (int) $siteInfo['documentsCount'] : null;
+        $documentCountLimit = isset( $siteInfo['documentCountLimit'] ) ? (int) $siteInfo['documentCountLimit'] : null;
+        if ( isset( $documentCount, $documentCountLimit ) && $documentCount >= $documentCountLimit ) {
+            return true;
+        }
         try {
             if ( $post->post_status === 'publish' ) {
                 $document = $this->transform_post_to_document( $post );
@@ -1001,7 +1010,7 @@ final class ChiliSearch {
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],
                 'currency'           => '',
-                'sortBy'             => $this->get_current_plan() === 'premium' ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
+                'sortBy' => $this->get_current_plan() === 'premium' && !empty($this->settings['sort_by']) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [
                     'thumbnail'    => (bool) $this->settings['display_result_image'],
                     'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
