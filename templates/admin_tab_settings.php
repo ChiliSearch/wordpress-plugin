@@ -21,13 +21,6 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
 </style>
 <div class="wrap">
     <h2><?php _e( 'Settings', 'chilisearch' ); ?></h2>
-    <?php if ( isset( $_GET['saved'] ) ): ?>
-        <div class="notice notice-success is-dismissible" style="margin-top: 20px;">
-            <p>
-                <strong><?= __( 'Settings saved.', 'chilisearch' ) ?></strong>
-            </p>
-        </div>
-    <?php endif ?>
     <form method="post" action="options.php" id="site_config_update">
         <?php settings_fields( 'chilisearch_settings_group' ); ?>
         <table class="form-table">
@@ -255,13 +248,22 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                 </tbody>
             </table>
         </div>
-        <?php submit_button(); ?>
+        <p class="submit">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="<?= __( 'Save Changes' ) ?>">
+            <span style="float: none;margin-top: -3px;display: none;" id="spinner" class="spinner is-active"></span>
+            <span id="save_result" style="display: none;"></span>
+        </p>
     </form>
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
+        let spinner = jQuery('#spinner');
+        let save_result = jQuery('#save_result');
         jQuery('#site_config_update').submit(function (e) {
             e.preventDefault();
+            spinner.show();
+            save_result.hide();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
             jQuery('#site_config_update button[type="submit"]').prop('disabled', true)
             jQuery.post(
                 ajaxurl,
@@ -292,17 +294,21 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'auto_search_detection': jQuery('#site_config_update #auto_search_detection').is(":checked"),
                 },
                 function (response) {
-                    if (response.status) {
-                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings&saved' ) ?>");
-                        return;
-                    }
+                    spinner.hide();
                     jQuery('#site_config_update button[type="submit"]').prop('disabled', false)
-                    jQuery('#site_config_update .message-box').html('<div class="notice notice-error is-dismissible"><p><strong>' + response.message + '</strong></p></div>')
+                    if (response.status) {
+                        save_result.text('<?= __( 'Settings saved.', 'chilisearch' ) ?>').css('color', '#077907').show();
+                    } else {
+                        save_result.text(response.message).css('color', '#dc0f0f').show();
+                    }
                 }
             );
             return false;
         });
         jQuery('#site_config_update #create_set_search_page').click(function () {
+            spinner.show();
+            save_result.hide();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
             jQuery(this).prop('disabled', true)
             jQuery.post(
                 ajaxurl,
@@ -310,12 +316,14 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'action': 'admin_ajax_create_set_search_page',
                 },
                 function (response) {
-                    if (response.status) {
-                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings&saved' ) ?>");
-                        return;
-                    }
+                    spinner.hide();
                     jQuery(this).prop('disabled', false)
-                    alert('<?= __( 'Something went wrong! please try again.', 'chilisearch' ); ?>');
+                    if (response.status) {
+                        save_result.text('<?= __( 'Settings saved.', 'chilisearch' ) ?>').css('color', '#077907').show();
+                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings' ) ?>");
+                    } else {
+                        save_result.text('<?= __( 'Something went wrong! please try again.', 'chilisearch' ) ?>').css('color', '#dc0f0f').show();
+                    }
                 }
             );
             return false;
