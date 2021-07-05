@@ -89,6 +89,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 ## Changelog
 
+### 2.0.8
+* add fuzzy search
+
 ### 2.0.7
 * bug fix
 
