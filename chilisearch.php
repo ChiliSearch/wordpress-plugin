@@ -126,6 +126,7 @@ final class ChiliSearch {
         'auto_search_detection'        => true,
         'search_input_selector'        => 'input[name="s"]',
         'voice_search_enabled'         => true,
+        'fuzzy_search_enabled'         => true,
     ];
     private $wts_settings = [
         'posts'                                  => true,
@@ -558,6 +559,7 @@ final class ChiliSearch {
         $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';
         $this->settings['display_result_tags']          = isset( $_POST['display_result_tags'] ) && $_POST['display_result_tags'] == 'true';
         $this->settings['voice_search_enabled']         = isset( $_POST['voice_search_enabled'] ) && $_POST['voice_search_enabled'] == 'true';
+        $this->settings['fuzzy_search_enabled']         = isset( $_POST['fuzzy_search_enabled'] ) && $_POST['fuzzy_search_enabled'] == 'true';
         if ($this->get_current_plan() === 'premium') {
             $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
             $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
@@ -1058,10 +1060,10 @@ final class ChiliSearch {
     }
 
     protected function get_js_init_parameters() {
-        $messages = $this->get_messages();
+        $messages                  = $this->get_messages();
         $messages['error-message'] = $messages['error-message-head'] . '<small>' . $messages['error-message-body'] . '</small>';
-        unset($messages['error-message-head'], $messages['error-message-body']);
-        $params   = [
+        unset( $messages['error-message-head'], $messages['error-message-body'] );
+        $params = [
             'apiKey'     => $this->configs['site_api_key'],
             'searchPage' => $this->get_or_create_search_page(),
             'configs'    => [
@@ -1070,7 +1072,7 @@ final class ChiliSearch {
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],
                 'currency'           => '',
-                'sortBy' => $this->get_current_plan() === 'premium' && !empty($this->settings['sort_by']) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
+                'sortBy'             => $this->get_current_plan() === 'premium' && ! empty( $this->settings['sort_by'] ) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [
                     'thumbnail'    => (bool) $this->settings['display_result_image'],
                     'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
@@ -1089,12 +1091,13 @@ final class ChiliSearch {
                 'isRTL'              => (bool) is_rtl(),
                 'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
                 'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
+                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
                 'voiceSearchLocale'  => get_locale(),
             ],
             'phraseBook' => $messages,
         ];
-        if ($this->is_woocommerce_active()) {
-            $params['configs']['currency'] = html_entity_decode(get_woocommerce_currency_symbol());
+        if ( $this->is_woocommerce_active() ) {
+            $params['configs']['currency'] = html_entity_decode( get_woocommerce_currency_symbol() );
         }
         if ( $this->settings['filter_type'] ) {
             $active_post_types = [];
@@ -1138,20 +1141,20 @@ final class ChiliSearch {
                 );
             }
         }
-        if ( $this->settings['filter_price'] && $this->is_woocommerce_active()) {
+        if ( $this->settings['filter_price'] && $this->is_woocommerce_active() ) {
             $params['configs']['filters']['price'] = @$this->get_filtered_price();
         }
-        if ( $this->settings['filter_publishedat']) {
+        if ( $this->settings['filter_publishedat'] ) {
             $active_post_types = $this->get_active_post_types();
-            $min_post = new WP_Query( [
+            $min_post          = new WP_Query( [
                 'post_type'      => $active_post_types,
                 'post_status'    => 'inherit,publish',
                 'posts_per_page' => 1,
                 'orderby'        => 'post_date',
                 'order'          => 'ASC',
             ] );
-            if (!empty($min_post->post->post_date)) {
-                $params['configs']['filters']['publishedat']['from'] = date('Y-m-d', strtotime($min_post->post->post_date));
+            if ( ! empty( $min_post->post->post_date ) ) {
+                $params['configs']['filters']['publishedat']['from'] = date( 'Y-m-d', strtotime( $min_post->post->post_date ) );
             }
             $max_post = new WP_Query( [
                 'post_type'      => $active_post_types,
@@ -1160,10 +1163,11 @@ final class ChiliSearch {
                 'orderby'        => 'post_date',
                 'order'          => 'DESC',
             ] );
-            if (!empty($max_post->post->post_date)) {
-                $params['configs']['filters']['publishedat']['to'] = date('Y-m-d', strtotime($max_post->post->post_date));
+            if ( ! empty( $max_post->post->post_date ) ) {
+                $params['configs']['filters']['publishedat']['to'] = date( 'Y-m-d', strtotime( $max_post->post->post_date ) );
             }
         }
+
         return $params;
     }
 

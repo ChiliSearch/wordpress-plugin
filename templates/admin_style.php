@@ -14,4 +14,21 @@
         margin-top: 0;
         margin-left: 0;
     }
+
+    #site_config_update #weights label {
+        display: block;
+        margin: 5px;
+    }
+    #site_config_update #weights label span {
+        width: 100px;
+        display: inline-block;
+    }
+    #site_config_update #weights label input {
+        width: 50px;
+    }
+    #site_config_update .premium-box {
+        padding: 1px 15px;
+        background: #d7e8d8;
+        border-radius: 5px;
+    }
 </style>

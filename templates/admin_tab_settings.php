@@ -2,22 +2,6 @@
 $plan = ChiliSearch::getInstance()->get_current_plan();
 ?>
 <style>
-    #weights label {
-        display: block;
-        margin: 5px;
-    }
-    #weights label span {
-        width: 100px;
-        display: inline-block;
-    }
-    #weights label input {
-        width: 50px;
-    }
-    .premium-box {
-        padding: 1px 15px;
-        background: #d7e8d8;
-        border-radius: 5px;
-    }
 </style>
 <div class="wrap">
     <h2><?php _e( 'Settings', 'chilisearch' ); ?></h2>
@@ -25,6 +9,16 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
         <?php settings_fields( 'chilisearch_settings_group' ); ?>
         <table class="form-table">
             <tbody>
+            <tr valign="top">
+                <th scope="row"><label for="fuzzy_search_enabled"><?= __( 'Fuzzy search', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[fuzzy_search_enabled]" id="fuzzy_search_enabled" value="true" <?= $this->settings['fuzzy_search_enabled'] ? 'checked' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable fuzzy searching.', 'chilisearch' ) ?> <a href="https://en.wikipedia.org/wiki/Approximate_string_matching" target="_blank"><?= __( 'more info', 'chilisearch' ) ?></a></p>
+                    </label>
+                </td>
+            </tr>
             <tr valign="top">
                 <th scope="row"><label for="search_word_type"><?= __( 'Search type', 'chilisearch' ) ?></label></th>
                 <td>
@@ -39,7 +33,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label for="voice_search_enabled"><?= __( 'Voice Search', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="voice_search_enabled"><?= __( 'Voice search', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <input type="checkbox" name="chilisearch_settings[voice_search_enabled]" id="voice_search_enabled" value="true" <?= $this->settings['voice_search_enabled'] ? 'checked' : '' ?>>
@@ -275,6 +269,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'search_page_id': jQuery('#site_config_update #search_page_id').val(),
                     'search_word_type': jQuery('#site_config_update #search_word_type').val(),
                     'sort_by': jQuery('#site_config_update #sort_by').val(),
+                    'fuzzy_search_enabled': jQuery('#site_config_update #fuzzy_search_enabled').is(":checked"),
                     'voice_search_enabled': jQuery('#site_config_update #voice_search_enabled').is(":checked"),
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
