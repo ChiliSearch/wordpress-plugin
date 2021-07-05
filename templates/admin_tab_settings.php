@@ -2,36 +2,23 @@
 $plan = ChiliSearch::getInstance()->get_current_plan();
 ?>
 <style>
-    #weights label {
-        display: block;
-        margin: 5px;
-    }
-    #weights label span {
-        width: 100px;
-        display: inline-block;
-    }
-    #weights label input {
-        width: 50px;
-    }
-    .premium-box {
-        padding: 1px 15px;
-        background: #d7e8d8;
-        border-radius: 5px;
-    }
 </style>
 <div class="wrap">
     <h2><?php _e( 'Settings', 'chilisearch' ); ?></h2>
-    <?php if ( isset( $_GET['saved'] ) ): ?>
-        <div class="notice notice-success is-dismissible" style="margin-top: 20px;">
-            <p>
-                <strong><?= __( 'Settings saved.', 'chilisearch' ) ?></strong>
-            </p>
-        </div>
-    <?php endif ?>
     <form method="post" action="options.php" id="site_config_update">
         <?php settings_fields( 'chilisearch_settings_group' ); ?>
         <table class="form-table">
             <tbody>
+            <tr valign="top">
+                <th scope="row"><label for="fuzzy_search_enabled"><?= __( 'Fuzzy search', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="chilisearch_settings[fuzzy_search_enabled]" id="fuzzy_search_enabled" value="true" <?= $this->settings['fuzzy_search_enabled'] ? 'checked' : '' ?>>
+                        <?= __( 'Enable', 'chilisearch' ) ?>
+                        <p class="description"><?= __( 'Enable fuzzy searching.', 'chilisearch' ) ?> <a href="https://en.wikipedia.org/wiki/Approximate_string_matching" target="_blank"><?= __( 'more info', 'chilisearch' ) ?></a></p>
+                    </label>
+                </td>
+            </tr>
             <tr valign="top">
                 <th scope="row"><label for="search_word_type"><?= __( 'Search type', 'chilisearch' ) ?></label></th>
                 <td>
@@ -46,7 +33,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label for="voice_search_enabled"><?= __( 'Voice Search', 'chilisearch' ) ?></label></th>
+                <th scope="row"><label for="voice_search_enabled"><?= __( 'Voice search', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
                         <input type="checkbox" name="chilisearch_settings[voice_search_enabled]" id="voice_search_enabled" value="true" <?= $this->settings['voice_search_enabled'] ? 'checked' : '' ?>>
@@ -255,13 +242,22 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                 </tbody>
             </table>
         </div>
-        <?php submit_button(); ?>
+        <p class="submit">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="<?= __( 'Save Changes' ) ?>">
+            <span style="float: none;margin-top: -3px;display: none;" id="spinner" class="spinner is-active"></span>
+            <span id="save_result" style="display: none;"></span>
+        </p>
     </form>
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
+        let spinner = jQuery('#spinner');
+        let save_result = jQuery('#save_result');
         jQuery('#site_config_update').submit(function (e) {
             e.preventDefault();
+            spinner.show();
+            save_result.hide();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
             jQuery('#site_config_update button[type="submit"]').prop('disabled', true)
             jQuery.post(
                 ajaxurl,
@@ -273,6 +269,7 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'search_page_id': jQuery('#site_config_update #search_page_id').val(),
                     'search_word_type': jQuery('#site_config_update #search_word_type').val(),
                     'sort_by': jQuery('#site_config_update #sort_by').val(),
+                    'fuzzy_search_enabled': jQuery('#site_config_update #fuzzy_search_enabled').is(":checked"),
                     'voice_search_enabled': jQuery('#site_config_update #voice_search_enabled').is(":checked"),
                     'display_result_image': jQuery('#site_config_update #display_result_image').is(":checked"),
                     'display_result_product_price': jQuery('#site_config_update #display_result_product_price').is(":checked"),
@@ -292,17 +289,21 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'auto_search_detection': jQuery('#site_config_update #auto_search_detection').is(":checked"),
                 },
                 function (response) {
-                    if (response.status) {
-                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings&saved' ) ?>");
-                        return;
-                    }
+                    spinner.hide();
                     jQuery('#site_config_update button[type="submit"]').prop('disabled', false)
-                    jQuery('#site_config_update .message-box').html('<div class="notice notice-error is-dismissible"><p><strong>' + response.message + '</strong></p></div>')
+                    if (response.status) {
+                        save_result.text('<?= __( 'Settings saved.', 'chilisearch' ) ?>').css('color', '#077907').show();
+                    } else {
+                        save_result.text(response.message).css('color', '#dc0f0f').show();
+                    }
                 }
             );
             return false;
         });
         jQuery('#site_config_update #create_set_search_page').click(function () {
+            spinner.show();
+            save_result.hide();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
             jQuery(this).prop('disabled', true)
             jQuery.post(
                 ajaxurl,
@@ -310,12 +311,14 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     'action': 'admin_ajax_create_set_search_page',
                 },
                 function (response) {
-                    if (response.status) {
-                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings&saved' ) ?>");
-                        return;
-                    }
+                    spinner.hide();
                     jQuery(this).prop('disabled', false)
-                    alert('<?= __( 'Something went wrong! please try again.', 'chilisearch' ); ?>');
+                    if (response.status) {
+                        save_result.text('<?= __( 'Settings saved.', 'chilisearch' ) ?>').css('color', '#077907').show();
+                        window.location.replace("<?= admin_url( 'admin.php?page=chilisearch&tab=settings' ) ?>");
+                    } else {
+                        save_result.text('<?= __( 'Something went wrong! please try again.', 'chilisearch' ) ?>').css('color', '#dc0f0f').show();
+                    }
                 }
             );
             return false;

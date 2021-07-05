@@ -4,7 +4,7 @@ Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-
 
 ## Description
 
-**Chili Search** replaces the WordPress default search with a lightning fast, full-ajax and accurate search.
+**Chili Search** replaces the WordPress default search with a lightning fast, full-ajax, Fuzzy and accurate search.
 
 By the use of cloud technologies and AI computations on Documents, Chili Search provides a fast, accurate and reliable search solution.
 
@@ -23,6 +23,8 @@ Ease searching more than ever by Voice Search, search without typing.
 ## Features
 
 &#9989; **Transparent Relevancy**. Take control of your relevancy rules and customize field weights.
+
+&#9989; **Fuzzy Search**. Allow users to make mistakes while typing and still find the related results.
 
 &#9989; **Voice Search**. Ease searching more than ever by search without typing.
 
@@ -86,6 +88,9 @@ Sure! you can visit Chili Search setting page and manage it in `Where to search`
 For questions and answers, please see our website [chilisearch.com](https://chilisearch.com?utm_source=wp_readme&utm_medium=referral)
 
 ## Changelog
+
+### 2.0.8
+* add fuzzy search
 
 ### 2.0.7
 * bug fix

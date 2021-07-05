@@ -12,7 +12,7 @@
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
  * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
- * Version:           2.0.7
+ * Version:           2.0.8
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '2.0.7' );
+define( 'CHILISEARCH_VERSION', '2.0.8' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
@@ -126,6 +126,7 @@ final class ChiliSearch {
         'auto_search_detection'        => true,
         'search_input_selector'        => 'input[name="s"]',
         'voice_search_enabled'         => true,
+        'fuzzy_search_enabled'         => true,
     ];
     private $wts_settings = [
         'posts'                                  => true,
@@ -150,6 +151,7 @@ final class ChiliSearch {
         'get_started_config_finished' => false,
         'website_info'                => null,
     ];
+    private $messages;
 
     private function __construct() {
         if ( version_compare( PHP_VERSION, CHILISEARCH_PHP_MINIMUM, '<' ) ) {
@@ -162,6 +164,7 @@ final class ChiliSearch {
         $this->get_settings();
         $this->get_wts_settings();
         $this->get_configs();
+        $this->get_messages();
 
         $this->setup_client_actions();
         $this->setup_admin_actions();
@@ -220,6 +223,39 @@ final class ChiliSearch {
         return $this->configs;
     }
 
+    private function get_messages() {
+        $this->messages = [
+            'powered-by'                   => __( 'powered by', 'chilisearch' ),
+            'search-powered-by'            => __( 'search powered by', 'chilisearch' ),
+            'no-result-message'            => __( 'Couldn\'t find anything related …', 'chilisearch' ),
+            'error-message-head'           => __( 'Oops!', 'chilisearch' ),
+            'error-message-body'           => __( 'Sorry, there\'s some thing wrong. Please try again.', 'chilisearch' ),
+            'input-placeholder'            => __( 'Search …', 'chilisearch' ),
+            'sayt-init-message'            => __( 'Search …', 'chilisearch' ),
+            'form-submit-value'            => __( 'Search', 'chilisearch' ),
+            'search-result-result-count'   => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
+            'prev'                         => __( 'Prev', 'chilisearch' ),
+            'next'                         => __( 'Next', 'chilisearch' ),
+            'category'                     => __( 'category', 'chilisearch' ),
+            'price'                        => __( 'price', 'chilisearch' ),
+            'search-between'               => __( 'search between', 'chilisearch' ),
+            'to'                           => __( 'to', 'chilisearch' ),
+            'all'                          => __( 'all', 'chilisearch' ),
+            'published'                    => __( 'published', 'chilisearch' ),
+            'show-all-n-results'           => __( 'Show all {totalCount} results', 'chilisearch' ),
+            'voice-search-ready-to-listen' => __( 'Ready to listen', 'chilisearch' ),
+            'voice-search-error-no-result' => __( 'Hmm, didn\'t get it. please repeat …', 'chilisearch' ),
+            'voice-search-listening'       => __( 'Listening …', 'chilisearch' ),
+            'voice-search-got-it'          => __( 'Got it!', 'chilisearch' ),
+        ];
+        $messages = get_option( 'chilisearch_messages' );
+        if ( ! empty( $messages ) ) {
+            $this->messages = array_merge( $this->messages, $messages );
+        }
+
+        return $this->messages;
+    }
+
     private function setup_client_actions() {
         add_action( 'plugins_loaded', [ $this, 'i18n' ], 2 );
         add_action( 'wp', [ $this, 'default_search_page' ] );
@@ -246,6 +282,7 @@ final class ChiliSearch {
         add_action( 'wp_ajax_admin_ajax_register_website', [ $this, 'admin_ajax_register_website' ] );
         add_action( 'wp_ajax_admin_ajax_index_config', [ $this, 'wp_ajax_admin_ajax_index_config' ] );
         add_action( 'wp_ajax_admin_ajax_config_update', [ $this, 'wp_ajax_admin_ajax_config_update' ] );
+        add_action( 'wp_ajax_admin_ajax_messages_config', [ $this, 'wp_ajax_admin_ajax_messages_config' ] );
         add_action( 'wp_ajax_admin_ajax_create_set_search_page', [ $this, 'wp_ajax_admin_ajax_create_set_search_page' ] );
         add_action( 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch', [ $this, 'wp_ajax_admin_ajax_get_list_of_ids_from_chilisearch' ] );
         add_action( 'wp_ajax_admin_ajax_get_analytics_from_chilisearch', [ $this, 'wp_ajax_admin_ajax_get_analytics_from_chilisearch' ] );
@@ -395,6 +432,10 @@ final class ChiliSearch {
         update_option( 'chilisearch_configs', $this->configs );
     }
 
+    private function set_messages() {
+        update_option( 'chilisearch_messages', $this->messages );
+    }
+
     public function wp_ajax_admin_ajax_index_config() {
         $posts                                  = isset( $_POST['posts'] ) && $_POST['posts'] == 'true';
         $posts_approved_comments                = isset( $_POST['posts_approved_comments'] ) && $_POST['posts_approved_comments'] == 'true';
@@ -434,6 +475,19 @@ final class ChiliSearch {
             $this->configs['get_started_config_finished'] = true;
             $this->set_configs();
         }
+        wp_send_json( [ 'status' => true ] );
+    }
+
+    public function wp_ajax_admin_ajax_messages_config() {
+        if ( ! isset( $_POST['chilisearch_messages_settings'] ) || ! is_array( $_POST['chilisearch_messages_settings'] ) ) {
+            wp_send_json( [ 'status' => false, 'message' => __( 'Invalid request!' ) ] );
+        }
+        $messages = $_POST['chilisearch_messages_settings'];
+        $messages = array_map( static function ( $message ) {
+            return trim( sanitize_text_field( stripslashes( $message ) ) );
+        }, $messages );
+        $this->messages = array_merge( $this->get_messages(), $messages );
+        $this->set_messages();
         wp_send_json( [ 'status' => true ] );
     }
 
@@ -505,6 +559,7 @@ final class ChiliSearch {
         $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';
         $this->settings['display_result_tags']          = isset( $_POST['display_result_tags'] ) && $_POST['display_result_tags'] == 'true';
         $this->settings['voice_search_enabled']         = isset( $_POST['voice_search_enabled'] ) && $_POST['voice_search_enabled'] == 'true';
+        $this->settings['fuzzy_search_enabled']         = isset( $_POST['fuzzy_search_enabled'] ) && $_POST['fuzzy_search_enabled'] == 'true';
         if ($this->get_current_plan() === 'premium') {
             $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
             $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
@@ -858,6 +913,7 @@ final class ChiliSearch {
 
     public function admin_chilisearch_options_page() {
         $this->get_configs();
+        require CHILISEARCH_DIR . '/templates/admin_style.php';
         if ( empty( $this->configs['site_api_secret'] ) || empty( $this->configs['get_started_api_finished'] ) ) {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
@@ -875,6 +931,7 @@ final class ChiliSearch {
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=settings' ) ) ?>" class="nav-tab <?= $tab === 'settings' ? 'nav-tab-active' : '' ?>"><?= __( 'Settings', 'chilisearch' ) ?></a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ) ?>" class="nav-tab <?= $tab === 'where-to-search' ? 'nav-tab-active' : '' ?>"><?= __( 'Where to Search', 'chilisearch' ) ?></a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=demo' ) ) ?>" class="nav-tab <?= $tab === 'demo' ? 'nav-tab-active' : '' ?>"><?= __( 'Demo', 'chilisearch' ) ?></a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=messages' ) ) ?>" class="nav-tab <?= $tab === 'messages' ? 'nav-tab-active' : '' ?>"><?= __( 'Messages', 'chilisearch' ) ?></a>
         </h2>
         <?php
         switch ( $tab ) {
@@ -884,6 +941,8 @@ final class ChiliSearch {
                 return require CHILISEARCH_DIR . '/templates/admin_tab_wts.php';
             case 'indexing':
                 return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
+            case 'messages':
+                return require CHILISEARCH_DIR . '/templates/admin_tab_messages.php';
             case 'demo':
                 add_filter('script_loader_tag', function ( $tag, $handle) {
                     if ( 'chilisearch-settings-js' === $handle ) {
@@ -905,6 +964,7 @@ final class ChiliSearch {
 
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
+            default:
                 if ( isset( $_POST['gift-code'] ) ) {
                     list( $responseCode, $payload ) = $this->send_request( 'POST', 'website/redeem-gift-code', ['code' => $_POST['gift-code']] );
                     if ( $responseCode === 200 ) { ?>
@@ -919,7 +979,6 @@ final class ChiliSearch {
                     <?php }
                     $this->get_website_info(true);
                 }
-            default:
                 return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
         }
     }
@@ -1001,6 +1060,9 @@ final class ChiliSearch {
     }
 
     protected function get_js_init_parameters() {
+        $messages                  = $this->get_messages();
+        $messages['error-message'] = $messages['error-message-head'] . '<small>' . $messages['error-message-body'] . '</small>';
+        unset( $messages['error-message-head'], $messages['error-message-body'] );
         $params = [
             'apiKey'     => $this->configs['site_api_key'],
             'searchPage' => $this->get_or_create_search_page(),
@@ -1010,7 +1072,7 @@ final class ChiliSearch {
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],
                 'currency'           => '',
-                'sortBy' => $this->get_current_plan() === 'premium' && !empty($this->settings['sort_by']) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
+                'sortBy'             => $this->get_current_plan() === 'premium' && ! empty( $this->settings['sort_by'] ) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [
                     'thumbnail'    => (bool) $this->settings['display_result_image'],
                     'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
@@ -1029,34 +1091,13 @@ final class ChiliSearch {
                 'isRTL'              => (bool) is_rtl(),
                 'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
                 'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
+                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
                 'voiceSearchLocale'  => get_locale(),
             ],
-            'phraseBook' => [
-                'powered-by'                   => __( 'powered by', 'chilisearch' ),
-                'search-powered-by'            => __( 'search powered by', 'chilisearch' ),
-                'no-result-message'            => __( 'Couldn\'t find anything related …', 'chilisearch' ),
-                'error-message'                => __( 'Oops!<small>Sorry, there\'s some thing wrong. Please try again.</small>', 'chilisearch' ),
-                'input-placeholder'            => __( 'Search …', 'chilisearch' ),
-                'sayt-init-message'            => __( 'Search …', 'chilisearch' ),
-                'form-submit-value'            => __( 'Search', 'chilisearch' ),
-                'search-result-result-count'   => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
-                'prev'                         => __( 'Prev', 'chilisearch' ),
-                'next'                         => __( 'Next', 'chilisearch' ),
-                'category'                     => __( 'category', 'chilisearch' ),
-                'price'                        => __( 'price', 'chilisearch' ),
-                'search-between'               => __( 'search between', 'chilisearch' ),
-                'to'                           => __( 'to', 'chilisearch' ),
-                'all'                          => __( 'all', 'chilisearch' ),
-                'published'                    => __( 'published', 'chilisearch' ),
-                'show-all-n-results'           => __( 'Show all {totalCount} results', 'chilisearch' ),
-                'voice-search-ready-to-listen' => __( 'Ready to listen', 'chilisearch' ),
-                'voice-search-error-no-result' => __( 'Hmm, didn\'t get it. please repeat …', 'chilisearch' ),
-                'voice-search-listening'       => __( 'Listening …', 'chilisearch' ),
-                'voice-search-got-it'          => __( 'Got it!', 'chilisearch' ),
-            ],
+            'phraseBook' => $messages,
         ];
-        if ($this->is_woocommerce_active()) {
-            $params['configs']['currency'] = html_entity_decode(get_woocommerce_currency_symbol());
+        if ( $this->is_woocommerce_active() ) {
+            $params['configs']['currency'] = html_entity_decode( get_woocommerce_currency_symbol() );
         }
         if ( $this->settings['filter_type'] ) {
             $active_post_types = [];
@@ -1100,20 +1141,20 @@ final class ChiliSearch {
                 );
             }
         }
-        if ( $this->settings['filter_price'] && $this->is_woocommerce_active()) {
+        if ( $this->settings['filter_price'] && $this->is_woocommerce_active() ) {
             $params['configs']['filters']['price'] = @$this->get_filtered_price();
         }
-        if ( $this->settings['filter_publishedat']) {
+        if ( $this->settings['filter_publishedat'] ) {
             $active_post_types = $this->get_active_post_types();
-            $min_post = new WP_Query( [
+            $min_post          = new WP_Query( [
                 'post_type'      => $active_post_types,
                 'post_status'    => 'inherit,publish',
                 'posts_per_page' => 1,
                 'orderby'        => 'post_date',
                 'order'          => 'ASC',
             ] );
-            if (!empty($min_post->post->post_date)) {
-                $params['configs']['filters']['publishedat']['from'] = date('Y-m-d', strtotime($min_post->post->post_date));
+            if ( ! empty( $min_post->post->post_date ) ) {
+                $params['configs']['filters']['publishedat']['from'] = date( 'Y-m-d', strtotime( $min_post->post->post_date ) );
             }
             $max_post = new WP_Query( [
                 'post_type'      => $active_post_types,
@@ -1122,10 +1163,11 @@ final class ChiliSearch {
                 'orderby'        => 'post_date',
                 'order'          => 'DESC',
             ] );
-            if (!empty($max_post->post->post_date)) {
-                $params['configs']['filters']['publishedat']['to'] = date('Y-m-d', strtotime($max_post->post->post_date));
+            if ( ! empty( $max_post->post->post_date ) ) {
+                $params['configs']['filters']['publishedat']['to'] = date( 'Y-m-d', strtotime( $max_post->post->post_date ) );
             }
         }
+
         return $params;
     }
 
