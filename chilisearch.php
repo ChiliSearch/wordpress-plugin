@@ -103,30 +103,22 @@ final class ChiliSearch {
     private static $instance = null;
 
     private $settings = [
-        'search_page_id'               => - 1,
-        'search_page_size'             => 15,
-        'sayt_page_size'               => 5,
-        'search_word_type'             => self::SEARCH_WORD_TYPE_BOTH,
-        'sort_by'                      => self::SORT_BY_RELEVANCY,
-        'display_result_image'         => true,
-        'display_result_product_price' => false,
-        'display_result_excerpt'       => true,
-        'display_result_categories'    => true,
-        'display_result_tags'          => true,
-        'display_chilisearch_brand'    => true,
-        'weight_title'                 => 3,
-        'weight_excerpt'               => 2,
-        'weight_body'                  => 1,
-        'weight_tags'                  => 5,
-        'weight_categories'            => 3,
-        'filter_type'                  => true,
-        'filter_category'              => true,
-        'filter_publishedat'           => true,
-        'filter_price'                 => false,
-        'auto_search_detection'        => true,
-        'search_input_selector'        => 'input[name="s"]',
-        'voice_search_enabled'         => true,
-        'fuzzy_search_enabled'         => true,
+        'search_page_id'                     => - 1,
+        'search_page_size'                   => 15,
+        'sayt_page_size'                     => 5,
+        'search_word_type'                   => self::SEARCH_WORD_TYPE_BOTH,
+        'sort_by'                            => self::SORT_BY_RELEVANCY,
+        'display_result_product_price'       => false,
+        'display_result_product_add_to_cart' => false,
+        'display_chilisearch_brand'          => true,
+        'weight_title'                       => 3,
+        'weight_excerpt'                     => 2,
+        'weight_body'                        => 1,
+        'weight_tags'                        => 5,
+        'weight_categories'                  => 3,
+        'search_input_selector'              => 'input[name="s"]',
+        'voice_search_enabled'               => true,
+        'fuzzy_search_enabled'               => true,
     ];
     private $wts_settings = [
         'posts'                                  => true,
@@ -258,10 +250,10 @@ final class ChiliSearch {
 
     private function setup_client_actions() {
         add_action( 'plugins_loaded', [ $this, 'i18n' ], 2 );
-        add_action( 'wp', [ $this, 'default_search_page' ] );
+        add_action( 'wp_loaded', [ $this, 'default_search_page' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'client_enqueue_scripts' ] );
         add_shortcode( 'chilisearch_search_page', function () {
-            return '<div id="chilisearch-search_page"></div>';
+            return '<div id="js-cs-page"></div>';
         } );
         add_action( 'widgets_init', function () {
             require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
@@ -397,12 +389,13 @@ final class ChiliSearch {
 
     private function set_settings() {
         if ( function_exists( 'is_plugin_active' ) ) {
-            $this->settings['display_result_product_price'] = $this->settings['display_result_product_price'] && $this->is_woocommerce_active();
-            $this->settings['filter_price']                 = $this->settings['filter_price'] && $this->is_woocommerce_active();
+            $this->settings['display_result_product_price']       = $this->settings['display_result_product_price'] && $this->is_woocommerce_active();
+            $this->settings['display_result_product_add_to_cart'] = $this->settings['display_result_product_add_to_cart'] && $this->is_woocommerce_active();
         }
-        $this->settings['sort_by']                      = $this->get_current_plan() === 'premium' ? $this->settings['sort_by'] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ];
-        $this->settings['display_result_product_price'] = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'];
-        $this->settings['display_chilisearch_brand']    = $this->get_current_plan() !== 'premium' || $this->settings['display_chilisearch_brand'];
+        $this->settings['sort_by']                            = $this->get_current_plan() === 'premium' ? $this->settings['sort_by'] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ];
+        $this->settings['display_result_product_price']       = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'];
+        $this->settings['display_result_product_add_to_cart'] = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'];
+        $this->settings['display_chilisearch_brand']          = $this->get_current_plan() !== 'premium' || $this->settings['display_chilisearch_brand'];
         update_option( 'chilisearch_settings', $this->settings );
     }
 
@@ -546,29 +539,21 @@ final class ChiliSearch {
         $this->get_settings();
         $this->settings['search_page_size']             = (int) sanitize_key( trim( $_POST['search_page_size'] ) );
         $this->settings['sayt_page_size']               = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
-        $this->settings['auto_search_detection']        = isset( $_POST['auto_search_detection'] ) && $_POST['auto_search_detection'] == 'true';
         $this->settings['search_input_selector']        = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
         $this->settings['search_page_id']               = $searchPageId;
         $this->settings['search_word_type']             = sanitize_key( trim( $_POST['search_word_type'] ) );
-        $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
-        $this->settings['filter_type']                  = isset( $_POST['filter_type'] ) && $_POST['filter_type'] == 'true';
-        $this->settings['filter_category']              = isset( $_POST['filter_category'] ) && $_POST['filter_category'] == 'true';
-        $this->settings['filter_publishedat']           = isset( $_POST['filter_publishedat'] ) && $_POST['filter_publishedat'] == 'true';
-        $this->settings['filter_price']                 = isset( $_POST['filter_price'] ) && $_POST['filter_price'] == 'true';
-        $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
-        $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';
-        $this->settings['display_result_tags']          = isset( $_POST['display_result_tags'] ) && $_POST['display_result_tags'] == 'true';
         $this->settings['voice_search_enabled']         = isset( $_POST['voice_search_enabled'] ) && $_POST['voice_search_enabled'] == 'true';
         $this->settings['fuzzy_search_enabled']         = isset( $_POST['fuzzy_search_enabled'] ) && $_POST['fuzzy_search_enabled'] == 'true';
-        if ($this->get_current_plan() === 'premium') {
-            $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
-            $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
-            $this->settings['weight_excerpt']               = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
-            $this->settings['weight_body']                  = (int) sanitize_key( trim( $_POST['weight_body'] ) );
-            $this->settings['weight_tags']                  = (int) sanitize_key( trim( $_POST['weight_tags'] ) );
-            $this->settings['weight_categories']            = (int) sanitize_key( trim( $_POST['weight_categories'] ) );
-            $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
-            $this->settings['display_chilisearch_brand']    = isset( $_POST['display_chilisearch_brand'] ) && $_POST['display_chilisearch_brand'] == 'true';
+        if ( $this->get_current_plan() === 'premium' ) {
+            $this->settings['sort_by']                            = sanitize_key( trim( $_POST['sort_by'] ) );
+            $this->settings['weight_title']                       = (int) sanitize_key( trim( $_POST['weight_title'] ) );
+            $this->settings['weight_excerpt']                     = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
+            $this->settings['weight_body']                        = (int) sanitize_key( trim( $_POST['weight_body'] ) );
+            $this->settings['weight_tags']                        = (int) sanitize_key( trim( $_POST['weight_tags'] ) );
+            $this->settings['weight_categories']                  = (int) sanitize_key( trim( $_POST['weight_categories'] ) );
+            $this->settings['display_result_product_price']       = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
+            $this->settings['display_result_product_add_to_cart'] = isset( $_POST['display_result_product_add_to_cart'] ) && $_POST['display_result_product_add_to_cart'] == 'true';
+            $this->settings['display_chilisearch_brand']          = isset( $_POST['display_chilisearch_brand'] ) && $_POST['display_chilisearch_brand'] == 'true';
         }
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
@@ -902,7 +887,14 @@ final class ChiliSearch {
     }
 
     public function default_search_page() {
-        if ( $this->settings['search_page_id'] == - 1 && ! empty( $_GET['chilisearch-query'] ) ) {
+        if ( $this->settings['search_page_id'] == - 1 && ! empty( $_GET['query'] ) ) {
+            global $wp_query;
+            $wp_query->is_search = 1;
+
+            add_filter('get_search_query', function ( $title) {
+                return $_GET['query'];
+            });
+
             require_once CHILISEARCH_DIR . '/templates/client_default_search_page.php';
             // In our template we add header and footer ourselves,
             // so we need to stop execution here to avoid re-rendering
@@ -1067,18 +1059,15 @@ final class ChiliSearch {
             'apiKey'     => $this->configs['site_api_key'],
             'searchPage' => $this->get_or_create_search_page(),
             'configs'    => [
-                'extraInputSelector' => $this->settings['auto_search_detection'] ? $this->settings['search_input_selector'] : '',
+                'extraInputSelector' => ! empty( $this->settings['search_input_selector'] ) ? $this->settings['search_input_selector'] : '',
                 'searchPageSize'     => $this->settings['search_page_size'],
                 'saytPageSize'       => $this->settings['sayt_page_size'],
                 'wordType'           => $this->settings['search_word_type'],
-                'currency'           => '',
+                'currency'           => $this->is_woocommerce_active() ? html_entity_decode( get_woocommerce_currency_symbol() ) : '',
                 'sortBy'             => $this->get_current_plan() === 'premium' && ! empty( $this->settings['sort_by'] ) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [
-                    'thumbnail'    => (bool) $this->settings['display_result_image'],
-                    'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
-                    'except'       => (bool) $this->settings['display_result_excerpt'],
-                    'categories'   => (bool) $this->settings['display_result_categories'],
-                    'tags'         => (bool) $this->settings['display_result_tags'],
+                    'productPrice'     => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
+                    'productAddToCart' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'],
                 ],
                 'weight'             => [
                     'title'      => $this->settings['weight_title'],
@@ -1087,124 +1076,16 @@ final class ChiliSearch {
                     'tags'       => $this->settings['weight_tags'],
                     'categories' => $this->settings['weight_categories'],
                 ],
-                'filters'            => [],
                 'isRTL'              => (bool) is_rtl(),
                 'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
                 'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
-                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
                 'voiceSearchLocale'  => get_locale(),
+                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
             ],
             'phraseBook' => $messages,
         ];
-        if ( $this->is_woocommerce_active() ) {
-            $params['configs']['currency'] = html_entity_decode( get_woocommerce_currency_symbol() );
-        }
-        if ( $this->settings['filter_type'] ) {
-            $active_post_types = [];
-            if ( ! empty( $this->wts_settings['posts'] ) ) {
-                $active_post_types['post'] = __( 'Posts', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['pages'] ) ) {
-                $active_post_types['page'] = __( 'Pages', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['media'] ) ) {
-                $active_post_types['media'] = __( 'Media', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['woocommerce_products'] ) ) {
-                $active_post_types['product'] = __( 'Products', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['bbpress_forum'] ) ) {
-                $active_post_types['forum'] = __( 'Forums', 'chilisearch' );
-            }
-            if ( count( $active_post_types ) > 1 ) {
-                $params['configs']['filters']['type'] = $active_post_types;
-            }
-        }
-        if ( $this->settings['filter_category'] ) {
-            $params['configs']['filters']['categories'] = array_map( function ( $category ) {
-                return htmlspecialchars_decode( $category->name );
-            }, get_categories( [
-                'taxonomy' => 'category',
-                'orderby'  => 'count',
-                'order'    => 'DESC'
-            ] ) );
-            if ( $this->is_woocommerce_active() ) {
-                $params['configs']['filters']['categories'] = array_merge(
-                    array_map( function ( $category ) {
-                        return htmlspecialchars_decode( $category->name );
-                    }, get_categories( [
-                        'taxonomy' => 'product_cat',
-                        'orderby'  => 'count',
-                        'order'    => 'DESC'
-                    ] ) ),
-                    $params['configs']['filters']['categories']
-                );
-            }
-        }
-        if ( $this->settings['filter_price'] && $this->is_woocommerce_active() ) {
-            $params['configs']['filters']['price'] = @$this->get_filtered_price();
-        }
-        if ( $this->settings['filter_publishedat'] ) {
-            $active_post_types = $this->get_active_post_types();
-            $min_post          = new WP_Query( [
-                'post_type'      => $active_post_types,
-                'post_status'    => 'inherit,publish',
-                'posts_per_page' => 1,
-                'orderby'        => 'post_date',
-                'order'          => 'ASC',
-            ] );
-            if ( ! empty( $min_post->post->post_date ) ) {
-                $params['configs']['filters']['publishedat']['from'] = date( 'Y-m-d', strtotime( $min_post->post->post_date ) );
-            }
-            $max_post = new WP_Query( [
-                'post_type'      => $active_post_types,
-                'post_status'    => 'inherit,publish',
-                'posts_per_page' => 1,
-                'orderby'        => 'post_date',
-                'order'          => 'DESC',
-            ] );
-            if ( ! empty( $max_post->post->post_date ) ) {
-                $params['configs']['filters']['publishedat']['to'] = date( 'Y-m-d', strtotime( $max_post->post->post_date ) );
-            }
-        }
 
         return $params;
-    }
-
-    protected function get_filtered_price() {
-        global $wpdb;
-
-        $args =  WC_Query::get_main_query();
-
-        $tax_query  = isset( $args->tax_query->queries ) ? $args->tax_query->queries : array();
-        $meta_query = isset( $args->query_vars['meta_query'] ) ? $args->query_vars['meta_query'] : array();
-
-        foreach ( $meta_query + $tax_query as $key => $query ) {
-            if ( ! empty( $query['price_filter'] ) || ! empty( $query['rating_filter'] ) ) {
-                unset( $meta_query[ $key ] );
-            }
-        }
-
-        $meta_query = new \WP_Meta_Query( $meta_query );
-        $tax_query  = new \WP_Tax_Query( $tax_query );
-
-        $meta_query_sql = $meta_query->get_sql( 'post', $wpdb->posts, 'ID' );
-        $tax_query_sql  = $tax_query->get_sql( $wpdb->posts, 'ID' );
-
-        $sql = "SELECT min( FLOOR( price_meta.meta_value ) ) as min_price, max( CEILING( price_meta.meta_value ) ) as max_price FROM {$wpdb->posts} ";
-        $sql .= " LEFT JOIN {$wpdb->postmeta} as price_meta ON {$wpdb->posts}.ID = price_meta.post_id " . $tax_query_sql['join'] . $meta_query_sql['join'];
-        $sql .= " 	WHERE {$wpdb->posts}.post_type IN ('product')
-			AND {$wpdb->posts}.post_status = 'publish'
-			AND price_meta.meta_key IN ('_price')
-			AND price_meta.meta_value > '' ";
-        $sql .= $tax_query_sql['where'] . $meta_query_sql['where'];
-
-        $prices = $wpdb->get_row( $sql );
-
-        return [
-            'min' => floor( $prices->min_price ),
-            'max' => ceil( $prices->max_price )
-        ];
     }
 }
 
