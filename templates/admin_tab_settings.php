@@ -1,5 +1,6 @@
 <?php
 $plan = ChiliSearch::getInstance()->get_current_plan();
+$search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
 ?>
 <style>
 </style>
@@ -49,11 +50,11 @@ $plan = ChiliSearch::getInstance()->get_current_plan();
                     <label>
                         <select name="chilisearch_settings[search_page_id]" id="search_page_id" class="regular-text">
                             <option value="-1" <?= ! isset( $this->settings['search_page_id'] ) || $this->settings['search_page_id'] == - 1 ? 'selected' : '' ?>><?= __( 'Chili Search result page', 'chilisearch' ); ?></option>
-                            <?php foreach ( get_pages( [ 'post_type' => 'page', 'post_status' => 'publish' ] ) as $page ): ?>
-                                <option value="<?= $page->ID ?>" <?= isset( $this->settings['search_page_id'] ) && $this->settings['search_page_id'] == $page->ID ? 'selected' : '' ?>><?= sprintf( '%s (%s) ', $page->post_title, get_permalink( $page->ID ) ) ?></option>
-                            <?php endforeach; ?>
+                            <?php if ( ! empty( $search_page ) ): ?>
+                                <option value="<?= $search_page->ID ?>" <?= isset( $this->settings['search_page_id'] ) && $this->settings['search_page_id'] == $search_page->ID ? 'selected' : '' ?>><?= sprintf( '%s (%s) ', $search_page->post_title, get_permalink( $search_page->ID ) ) ?></option>
+                            <?php endif; ?>
                         </select>
-                        <?php if ( ! isset( $this->settings['search_page_id'] ) || $this->settings['search_page_id'] == - 1 ): ?><button type="button" class="button button-primary" id="create_set_search_page"><?= __( 'Create Search Page (recommended)', 'chilisearch' ); ?></button><?php endif; ?>
+                        <?php if ( empty( $search_page ) &&  ( ! isset( $this->settings['search_page_id'] ) || $this->settings['search_page_id'] == - 1 ) ): ?><button type="button" class="button button-primary" id="create_set_search_page"><?= __( 'Create Search Page (recommended)', 'chilisearch' ); ?></button><?php endif; ?>
                         <p class="description"><?= __( 'Choose the search result page.', 'chilisearch' ) ?></p>
                     </label>
                 </td>

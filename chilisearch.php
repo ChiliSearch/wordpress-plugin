@@ -561,13 +561,18 @@ final class ChiliSearch {
 
     public function wp_ajax_admin_ajax_create_set_search_page() {
         $this->get_settings();
-        $this->settings['search_page_id'] = wp_insert_post( [
-            'post_title'   => wp_strip_all_tags( __( 'Search' ) ),
-            'post_content' => '[chilisearch_search_page]',
-            'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
-            'post_type'    => self::WP_POST_TYPE_PAGE,
-        ] );
+        $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
+        if ( ! empty( $search_page ) ) {
+            $this->settings['search_page_id'] = $search_page->ID;
+        } else {
+            $this->settings['search_page_id'] = wp_insert_post( [
+                'post_title'   => wp_strip_all_tags( __( 'Search' ) ),
+                'post_content' => '[chilisearch_search_page]<p>Search by <a href="https://chilisearch.com" target="_blank">Chili Search</a></p>',
+                'post_status'  => 'publish',
+                'post_author'  => get_current_user_id(),
+                'post_type'    => self::WP_POST_TYPE_PAGE,
+            ] );
+        }
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
