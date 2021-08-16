@@ -562,7 +562,7 @@ final class ChiliSearch {
     public function wp_ajax_admin_ajax_create_set_search_page() {
         $this->get_settings();
         $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
-        if ( ! empty( $search_page ) ) {
+        if ( ! empty( $search_page ) && $search_page->post_status === 'publish' ) {
             $this->settings['search_page_id'] = $search_page->ID;
         } else {
             $this->settings['search_page_id'] = wp_insert_post( [
