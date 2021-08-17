@@ -39,7 +39,7 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                                     <input type="checkbox" name="chilisearch_wtf_settings[posts_approved_comments]" id="posts_approved_comments" <?= $this->wts_settings['posts_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=post' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                         </ul>
@@ -56,7 +56,7 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                                     <input type="checkbox" name="chilisearch_wtf_settings[pages_approved_comments]" id="pages_approved_comments" <?= $this->wts_settings['pages_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=page' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                         </ul>
@@ -73,14 +73,14 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                                     <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_approved_comments]" id="woocommerce_products_approved_comments" <?= $this->wts_settings['woocommerce_products_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=product' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                             <li>
                                 <label class="mb-0" for="woocommerce_products_sku">
                                     <input type="checkbox" name="chilisearch_wtf_settings[woocommerce_products_sku]" id="woocommerce_products_sku" <?= $this->wts_settings['woocommerce_products_sku'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Product SKU', 'chilisearch' ) ?>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                             <li class="mb-0">
@@ -120,7 +120,7 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                             <input type="checkbox" name="chilisearch_wtf_settings[media]" id="media" <?= $this->wts_settings['media'] ? 'checked' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
                             <?= __( 'Media', 'chilisearch' ) ?>
                             <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=attachment' ) ) ?>" target="_blank"></a></small>
-                            <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                            <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                         </label>
                         <ul>
                             <li>
@@ -128,7 +128,7 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                                     <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                             <li class="mb-0">
@@ -136,7 +136,7 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                                     <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
                                     <?= __( 'Approved comments', 'chilisearch' ) ?>
                                     <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=attachment' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=plans' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
+                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                                 </label>
                             </li>
                         </ul>

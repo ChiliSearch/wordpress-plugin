@@ -915,9 +915,6 @@ final class ChiliSearch {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         $tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'analytics';
-        if ( $tab === 'plans' ) {
-            return require CHILISEARCH_DIR . '/templates/admin_choose_plan.php';
-        }
         if ( empty( $this->configs['get_started_config_finished'] ) && $tab !== 'where-to-search' ) {
             wp_redirect( admin_url( 'admin.php?page=chilisearch&tab=where-to-search&get-started' ) );
         }
@@ -929,6 +926,7 @@ final class ChiliSearch {
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ) ?>" class="nav-tab <?= $tab === 'where-to-search' ? 'nav-tab-active' : '' ?>"><?= __( 'Where to Search', 'chilisearch' ) ?></a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=demo' ) ) ?>" class="nav-tab <?= $tab === 'demo' ? 'nav-tab-active' : '' ?>"><?= __( 'Demo', 'chilisearch' ) ?></a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=messages' ) ) ?>" class="nav-tab <?= $tab === 'messages' ? 'nav-tab-active' : '' ?>"><?= __( 'Messages', 'chilisearch' ) ?></a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>" class="nav-tab <?= $tab === 'license' ? 'nav-tab-active' : '' ?>"><?= __( 'License', 'chilisearch' ) ?></a>
         </h2>
         <?php
         switch ( $tab ) {
@@ -940,6 +938,22 @@ final class ChiliSearch {
                 return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
             case 'messages':
                 return require CHILISEARCH_DIR . '/templates/admin_tab_messages.php';
+            case 'license':
+                if ( isset( $_POST['gift-code'] ) ) {
+                    list( $responseCode, $payload ) = $this->send_request( 'POST', 'website/redeem-gift-code', ['code' => $_POST['gift-code']] );
+                    if ( $responseCode === 200 ) { ?>
+                        <div class="notice notice-success is-dismissible">
+                            <p><?= __( sprintf('Gift code redeemed successfully! %d days added to your premium service.', isset($payload->addedDaysToService) ? $payload->addedDaysToService : 0), 'chilisearch' ); ?></p>
+                        </div>
+                    <?php } else { ?>
+                        <div class="notice notice-error is-dismissible">
+                            <p><?= __( 'Could not redeem this gift code!', 'chilisearch' ); ?></p>
+                            <p><?= esc_html( isset($payload->message) ? $payload->message : __('No message!', 'chilisearch') ); ?></p>
+                        </div>
+                    <?php }
+                    $this->get_website_info(true);
+                }
+                return require CHILISEARCH_DIR . '/templates/admin_tab_license.php';
             case 'demo':
                 add_filter('script_loader_tag', function ( $tag, $handle) {
                     if ( 'chilisearch-settings-js' === $handle ) {
@@ -962,20 +976,6 @@ final class ChiliSearch {
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
             default:
-                if ( isset( $_POST['gift-code'] ) ) {
-                    list( $responseCode, $payload ) = $this->send_request( 'POST', 'website/redeem-gift-code', ['code' => $_POST['gift-code']] );
-                    if ( $responseCode === 200 ) { ?>
-                        <div class="notice notice-success is-dismissible">
-                            <p><?= __( sprintf('Gift code redeemed successfully! %d days added to your premium service.', isset($payload->addedDaysToService) ? $payload->addedDaysToService : 0), 'chilisearch' ); ?></p>
-                        </div>
-                    <?php } else { ?>
-                        <div class="notice notice-error is-dismissible">
-                            <p><?= __( 'Could not redeem this gift code!', 'chilisearch' ); ?></p>
-                            <p><?= esc_html( isset($payload->message) ? $payload->message : __('No message!', 'chilisearch') ); ?></p>
-                        </div>
-                    <?php }
-                    $this->get_website_info(true);
-                }
                 return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
         }
     }
