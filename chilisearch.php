@@ -392,6 +392,7 @@ final class ChiliSearch {
             $this->settings['display_result_product_price']       = $this->settings['display_result_product_price'] && $this->is_woocommerce_active();
             $this->settings['display_result_product_add_to_cart'] = $this->settings['display_result_product_add_to_cart'] && $this->is_woocommerce_active();
         }
+        $this->settings['search_word_type']                   = $this->get_current_plan() === 'premium' ? $this->settings['search_word_type'] : self::SEARCH_WORD_TYPE_BOTH;
         $this->settings['sort_by']                            = $this->get_current_plan() === 'premium' ? $this->settings['sort_by'] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ];
         $this->settings['display_result_product_price']       = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'];
         $this->settings['display_result_product_add_to_cart'] = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'];
@@ -541,10 +542,10 @@ final class ChiliSearch {
         $this->settings['sayt_page_size']               = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
         $this->settings['search_input_selector']        = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
         $this->settings['search_page_id']               = $searchPageId;
-        $this->settings['search_word_type']             = sanitize_key( trim( $_POST['search_word_type'] ) );
         $this->settings['voice_search_enabled']         = isset( $_POST['voice_search_enabled'] ) && $_POST['voice_search_enabled'] == 'true';
         $this->settings['fuzzy_search_enabled']         = isset( $_POST['fuzzy_search_enabled'] ) && $_POST['fuzzy_search_enabled'] == 'true';
         if ( $this->get_current_plan() === 'premium' ) {
+            $this->settings['search_word_type']                   = sanitize_key( trim( $_POST['search_word_type'] ) );
             $this->settings['sort_by']                            = sanitize_key( trim( $_POST['sort_by'] ) );
             $this->settings['weight_title']                       = (int) sanitize_key( trim( $_POST['weight_title'] ) );
             $this->settings['weight_excerpt']                     = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
@@ -1067,7 +1068,7 @@ final class ChiliSearch {
                 'extraInputSelector' => ! empty( $this->settings['search_input_selector'] ) ? $this->settings['search_input_selector'] : '',
                 'searchPageSize'     => $this->settings['search_page_size'],
                 'saytPageSize'       => $this->settings['sayt_page_size'],
-                'wordType'           => $this->settings['search_word_type'],
+                'wordType'           => $this->get_current_plan() === 'premium' ? $this->settings['search_word_type'] : self::SEARCH_WORD_TYPE_BOTH,
                 'currency'           => $this->is_woocommerce_active() ? html_entity_decode( get_woocommerce_currency_symbol() ) : '',
                 'sortBy'             => $this->get_current_plan() === 'premium' && ! empty( $this->settings['sort_by'] ) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
                 'displayInResult'    => [

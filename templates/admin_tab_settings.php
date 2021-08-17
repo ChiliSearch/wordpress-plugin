@@ -5,7 +5,6 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
 <style>
 </style>
 <div class="wrap">
-    <h2><?php _e( 'Settings', 'chilisearch' ); ?></h2>
     <form method="post" action="options.php" id="site_config_update">
         <?php settings_fields( 'chilisearch_settings_group' ); ?>
         <table class="form-table">
@@ -21,19 +20,6 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row"><label for="search_word_type"><?= __( 'Search type', 'chilisearch' ) ?></label></th>
-                <td>
-                    <label>
-                        <select name="chilisearch_settings[search_word_type]" id="search_word_type" class="regular-text">
-                            <?php foreach ( ChiliSearch::get_word_types() as $search_word_type => $search_word_type_name ): ?>
-                                <option value="<?= $search_word_type ?>" <?= $this->settings['search_word_type'] === $search_word_type ? 'selected' : '' ?>><?= $search_word_type_name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <p class="description"><?= __( 'Match the whole word, partial word or both.', 'chilisearch' ) ?></p>
-                    </label>
-                </td>
-            </tr>
-            <tr valign="top">
                 <th scope="row"><label for="voice_search_enabled"><?= __( 'Voice search', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -42,21 +28,6 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                         <p class="description"><?= __( 'Enable search using voice.', 'chilisearch' ) ?></p>
                     </label>
                     <small><?= sprintf(__( 'Only works in supported browsers %shere%s.', 'chilisearch' ), '<a href="https://developer.mozilla.org/docs/Web/API/SpeechRecognition#browser_compatibility" target="_blank">', '</a>') ?></small>
-                </td>
-            </tr>
-            <tr valign="top">
-                <th scope="row"><label for="search_page_id"><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
-                <td>
-                    <label>
-                        <select name="chilisearch_settings[search_page_id]" id="search_page_id" class="regular-text">
-                            <option value="-1" <?= ! isset( $this->settings['search_page_id'] ) || $this->settings['search_page_id'] == - 1 ? 'selected' : '' ?>><?= __( 'Chili Search result page', 'chilisearch' ); ?></option>
-                            <?php if ( ! empty( $search_page && $search_page->post_status === 'publish' ) ): ?>
-                                <option value="<?= $search_page->ID ?>" <?= isset( $this->settings['search_page_id'] ) && $this->settings['search_page_id'] == $search_page->ID ? 'selected' : '' ?>><?= sprintf( '%s (%s) ', $search_page->post_title, get_permalink( $search_page->ID ) ) ?></option>
-                            <?php endif; ?>
-                        </select>
-                        <?php if ( empty( $search_page ) ): ?><button type="button" class="button button-primary" id="create_set_search_page"><?= __( 'Create Search Page (recommended)', 'chilisearch' ); ?></button><?php endif; ?>
-                        <p class="description"><?= __( 'Choose the search result page.', 'chilisearch' ) ?></p>
-                    </label>
                 </td>
             </tr>
             <tr valign="top">
@@ -78,6 +49,25 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                 </td>
             </tr>
             <tr valign="top">
+                <th scope="row"><label for="search_page_id"><?= __( 'Search result page', 'chilisearch' ) ?></label></th>
+                <td>
+                    <label>
+                        <select name="chilisearch_settings[search_page_id]" id="search_page_id" class="regular-text">
+                            <option value="-1" <?= ! isset( $this->settings['search_page_id'] ) || $this->settings['search_page_id'] == - 1 ? 'selected' : '' ?>><?= __( 'Chili Search result page', 'chilisearch' ); ?></option>
+                            <?php if ( ! empty( $search_page && $search_page->post_status === 'publish' ) ): ?>
+                                <option value="<?= $search_page->ID ?>" <?= isset( $this->settings['search_page_id'] ) && $this->settings['search_page_id'] == $search_page->ID ? 'selected' : '' ?>><?= sprintf( '%s (%s) ', $search_page->post_title, get_permalink( $search_page->ID ) ) ?></option>
+                            <?php endif; ?>
+                        </select>
+                        <?php if ( empty( $search_page ) ): ?>
+                            <button type="button" class="button button-primary" id="create_set_search_page"><?= __( 'Create Search Page (recommended)', 'chilisearch' ); ?></button>
+                        <?php else: ?>
+                            <a href="post.php?post=<?= $search_page->ID ?>&action=edit" class="button button-primary" target="_blank"><?= __( 'Edit Search Page', 'chilisearch' ); ?></a>
+                        <?php endif; ?>
+                        <p class="description"><?= __( 'Choose the search result page.', 'chilisearch' ) ?></p>
+                    </label>
+                </td>
+            </tr>
+            <tr valign="top">
                 <th scope="row"><label for="search_input_selector"><?= __( 'Auto search input selector', 'chilisearch' ) ?></label></th>
                 <td>
                     <label>
@@ -92,6 +82,19 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
             <h3><?= __( 'Premium Features', 'chilisearch' ) ?>:</h3>
             <table class="form-table">
                 <tbody>
+                <tr valign="top">
+                    <th scope="row"><label for="search_word_type"><?= __( 'Search type', 'chilisearch' ) ?></label></th>
+                    <td>
+                        <label>
+                            <select name="chilisearch_settings[search_word_type]" id="search_word_type" class="regular-text" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
+                                <?php foreach ( ChiliSearch::get_word_types() as $search_word_type => $search_word_type_name ): ?>
+                                    <option value="<?= $search_word_type ?>" <?= $this->settings['search_word_type'] === $search_word_type ? 'selected' : '' ?>><?= $search_word_type_name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?= __( 'Match the whole word, partial word or both.', 'chilisearch' ) ?></p>
+                        </label>
+                    </td>
+                </tr>
                 <tr valign="top">
                     <th scope="row"><label for="sort_by"><?= __( 'Sort by', 'chilisearch' ) ?></label></th>
                     <td>
