@@ -901,7 +901,7 @@ final class ChiliSearch {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         $tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'analytics';
-        if ( empty( $this->configs['get_started_config_finished'] ) && $tab !== 'where-to-search' ) {
+        if ( empty( $this->configs['get_started_config_finished'] ) && !in_array($tab, ['where-to-search', 'license']) ) {
             wp_redirect( admin_url( 'admin.php?page=chilisearch&tab=where-to-search&get-started' ) );
         }
         ?>
