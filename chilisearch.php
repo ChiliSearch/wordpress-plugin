@@ -61,12 +61,6 @@ final class ChiliSearch {
         'application/vnd.oasis.opendocument.text'                                   => 'odt',
         'text/plain'                                                                => 'txt',
     ];
-    const MIME_TYPES_IMAGES = [
-        'image/jpeg'   => 'jpg',
-        'image/png'    => 'png',
-        'image/gif'    => 'gif',
-        'image/x-icon' => 'ico',
-    ];
     const WP_POST_TYPE_POST = 'post';
     const WP_POST_TYPE_PAGE = 'page';
     const WP_POST_TYPE_ATTACHMENT = 'attachment';
@@ -125,9 +119,7 @@ final class ChiliSearch {
         'posts_approved_comments'                => false,
         'pages'                                  => true,
         'pages_approved_comments'                => false,
-        'media'                                  => false,
         'media_doc_files'                        => false,
-        'media_approved_comments'                => false,
         'woocommerce_products'                   => false,
         'woocommerce_products_approved_comments' => false,
         'woocommerce_products_outofstock'        => false,
@@ -415,8 +407,6 @@ final class ChiliSearch {
             $this->wts_settings['woocommerce_products_sku']               = false;
             $this->wts_settings['posts_approved_comments']                = false;
             $this->wts_settings['pages_approved_comments']                = false;
-            $this->wts_settings['media']                                  = false;
-            $this->wts_settings['media_approved_comments']                = false;
             $this->wts_settings['media_doc_files']                        = false;
         }
         update_option( 'chilisearch_wts_settings', $this->wts_settings );
@@ -435,8 +425,6 @@ final class ChiliSearch {
         $posts_approved_comments                = isset( $_POST['posts_approved_comments'] ) && $_POST['posts_approved_comments'] == 'true';
         $pages                                  = isset( $_POST['pages'] ) && $_POST['pages'] == 'true';
         $pages_approved_comments                = isset( $_POST['pages_approved_comments'] ) && $_POST['pages_approved_comments'] == 'true';
-        $media                                  = isset( $_POST['media'] ) && $_POST['media'] == 'true';
-        $media_approved_comments                = isset( $_POST['media_approved_comments'] ) && $_POST['media_approved_comments'] == 'true';
         $woocommerce_products                   = isset( $_POST['woocommerce_products'] ) && $_POST['woocommerce_products'] == 'true';
         $woocommerce_products_approved_comments = isset( $_POST['woocommerce_products_approved_comments'] ) && $_POST['woocommerce_products_approved_comments'] == 'true';
         $woocommerce_products_outofstock        = isset( $_POST['woocommerce_products_outofstock'] ) && $_POST['woocommerce_products_outofstock'] == 'true';
@@ -445,7 +433,7 @@ final class ChiliSearch {
         $bbpress_topic                          = isset( $_POST['bbpress_topic'] ) && $_POST['bbpress_topic'] == 'true';
         $bbpress_reply                          = isset( $_POST['bbpress_reply'] ) && $_POST['bbpress_reply'] == 'true';
         $media_doc_files                        = isset( $_POST['media_doc_files'] ) && $_POST['media_doc_files'] == 'true';
-        if ( ! ( $posts || $pages || $media || $woocommerce_products || $bbpress_forum ) ) {
+        if ( ! ( $posts || $pages || $woocommerce_products || $bbpress_forum ) ) {
             wp_send_json( [ 'status' => false, 'message' => __( 'Choose at least one option.' ) ] );
         }
         $this->get_wts_settings();
@@ -453,9 +441,7 @@ final class ChiliSearch {
         $this->wts_settings['posts_approved_comments']                = $posts_approved_comments;
         $this->wts_settings['pages']                                  = $pages;
         $this->wts_settings['pages_approved_comments']                = $pages_approved_comments;
-        $this->wts_settings['media']                                  = $media;
         $this->wts_settings['media_doc_files']                        = $media_doc_files;
-        $this->wts_settings['media_approved_comments']                = $media_approved_comments;
         $this->wts_settings['woocommerce_products']                   = $woocommerce_products;
         $this->wts_settings['woocommerce_products_approved_comments'] = $woocommerce_products_approved_comments;
         $this->wts_settings['woocommerce_products_outofstock']        = $woocommerce_products_outofstock;
@@ -621,7 +607,7 @@ final class ChiliSearch {
         if ( ! empty( $this->wts_settings['pages'] ) ) {
             $active_post_types[] = self::WP_POST_TYPE_PAGE;
         }
-        if ( ! empty( $this->wts_settings['media'] ) ) {
+        if ( ! empty( $this->wts_settings['media_doc_files'] ) ) {
             $active_post_types[] = self::WP_POST_TYPE_ATTACHMENT;
         }
         if ( ! empty( $this->wts_settings['woocommerce_products'] ) ) {
@@ -760,16 +746,16 @@ final class ChiliSearch {
                 $document['image'] = ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null;
                 break;
             case self::WP_POST_TYPE_ATTACHMENT:
-                $document['type']  = 'media';
-                $document['title'] = str_replace( '-', ' ', $document['title'] );
-                if ( array_key_exists( $post->post_mime_type, self::MIME_TYPES_IMAGES ) ) {
-                    $document['image'] = ! empty( $post->guid ) ? $post->guid : null;
-                } elseif (
+                if (
                     ! empty( $this->wts_settings['media_doc_files'] ) &&
                     array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS )
                 ) {
+                    $document['type']  = 'media';
+                    $document['title'] = str_replace( '-', ' ', $document['title'] );
                     $document['docFileType'] = self::MIME_TYPES_DOCS[ $post->post_mime_type ];
                     $document['docFileBody'] = @base64_encode( file_get_contents( get_attached_file( $post->ID ) ) );
+                } else {
+                    return null; // should be skipped
                 }
                 break;
             case self::WP_POST_TYPE_FORUM_REPLY:
@@ -788,7 +774,6 @@ final class ChiliSearch {
         if (
             ( $post->post_type === self::WP_POST_TYPE_POST && ! empty( $this->wts_settings['posts_approved_comments'] ) ) ||
             ( $post->post_type === self::WP_POST_TYPE_PAGE && ! empty( $this->wts_settings['pages_approved_comments'] ) ) ||
-            ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT && ! empty( $this->wts_settings['media_approved_comments'] ) ) ||
             ( $post->post_type === self::WP_POST_TYPE_PRODUCT && ! empty( $this->wts_settings['woocommerce_products_approved_comments'] ) )
         ) {
             $document['comments'] = array_map( function ( $comment ) {

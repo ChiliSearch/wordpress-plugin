@@ -4,9 +4,6 @@ $plan = $this->get_current_plan();
 $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['documentCountLimit'] : null;
 ?>
 <style>
-    .form-group {
-        padding: 0 15px;
-    }
     .form-group > ul {
         padding: 5px 40px;
         margin: 5px 0;
@@ -19,7 +16,6 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
     }
 </style>
 <div class="wrap">
-    <h2><?= __( 'Choose where to search', 'chilisearch' ) ?></h2>
     <form method="post" action="options.php" id="site_index_config">
         <?php settings_fields( 'chilisearch_wts_settings_group' ); ?>
         <table class="form-table">
@@ -116,30 +112,12 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                         </ul>
                     </div>
                     <div class="form-group">
-                        <label for="media">
-                            <input type="checkbox" name="chilisearch_wtf_settings[media]" id="media" <?= $this->wts_settings['media'] ? 'checked' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>>
-                            <?= __( 'Media', 'chilisearch' ) ?>
-                            <small><a href="<?= esc_url( admin_url( 'edit.php?post_status=publish&post_type=attachment' ) ) ?>" target="_blank"></a></small>
+                        <label for="media_doc_files">
+                            <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> <?php if ($plan !== 'premium'): ?>disabled="disabled"<?php endif; ?>>
+                            <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
+                            <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
                             <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
                         </label>
-                        <ul>
-                            <li>
-                                <label class="mb-0" for="media_doc_files">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> disabled="disabled">
-                                    <?= __( 'Inside document files (doc, docx, pptx, pdf, xlsx, …)', 'chilisearch' ) ?>
-                                    <small><a href="<?= esc_url( admin_url( 'upload.php?post_mime_type=application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.oasis.opendocument.text,application/vnd.apple.pages,application/pdf,application/vnd.ms-xpsdocument,application/oxps,application/rtf,application/wordperfect,application/octet-stream' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
-                                </label>
-                            </li>
-                            <li class="mb-0">
-                                <label class="mb-0" for="media_approved_comments">
-                                    <input type="checkbox" name="chilisearch_wtf_settings[media_approved_comments]" id="media_approved_comments" <?= $this->wts_settings['media_approved_comments'] ? 'checked' : '' ?> disabled="disabled">
-                                    <?= __( 'Approved comments', 'chilisearch' ) ?>
-                                    <small><a href="<?= esc_url( admin_url( 'edit-comments.php?comment_status=approved&post_type=attachment' ) ) ?>" target="_blank"></a></small>
-                                    <?php if ($plan !== 'premium'): ?><a target="_blank" href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>"><span>(<?= __('premium only', 'chilisearch') ?>)</span></a><?php endif; ?>
-                                </label>
-                            </li>
-                        </ul>
                     </div>
                 </td>
             </tr>
@@ -159,8 +137,10 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
             <?= sprintf(__('You can index upto %d documents in "%s" plan.', 'chilisearch'), $documentCountLimit, $plan) ?>
             <a href="https://chilisearch.com/pricing/" target="_blank"><?= __('Need more?', 'chilisearch') ?></a>
         </p>
-        <span style="float: left;" id="get_post_counts_spinner" class="spinner is-active"></span>
-        <?php submit_button(); ?>
+        <div style="display: flex;">
+            <?php submit_button(); ?>
+            <span style="align-self:center;" id="get_post_counts_spinner" class="spinner is-active"></span>
+        </div>
     </form>
 </div>
 <script type="text/javascript">
@@ -188,14 +168,8 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                     jQuery('label[for="pages_approved_comments"] small a').text(
                         "(" + wordpressPostsCount.page_comments + ")"
                     )
-                    jQuery('label[for="media"] small a').text(
-                        "(" + wordpressPostsCount.attachment + ")"
-                    )
                     jQuery('label[for="media_doc_files"] small a').text(
                         "(" + wordpressPostsCount.attachment_docs + ")"
-                    )
-                    jQuery('label[for="media_approved_comments"] small a').text(
-                        "(" + wordpressPostsCount.attachment_comments + ")"
                     )
                     if ('product' in wordpressPostsCount && 'product_comments' in wordpressPostsCount && 'product_outofstock' in wordpressPostsCount) {
                         jQuery('label[for="woocommerce_products"] small a').text(
@@ -238,15 +212,6 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                 $('#pages_approved_comments').attr('disabled', 'disabled');
             }
         });
-        jQuery('#media').change(function () {
-            if (this.checked && <?= $plan === 'premium' ? 'true' : 'false' ?>) {
-                $('#media_doc_files').removeAttr('disabled');
-                $('#media_approved_comments').removeAttr('disabled');
-            } else {
-                $('#media_doc_files').attr('disabled', 'disabled');
-                $('#media_approved_comments').attr('disabled', 'disabled');
-            }
-        });
         jQuery('#woocommerce_products').change(function () {
             if (this.checked) {
                 $('#woocommerce_products_approved_comments').removeAttr('disabled');
@@ -272,7 +237,6 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
         });
         jQuery('#posts').trigger('change');
         jQuery('#pages').trigger('change');
-        jQuery('#media').trigger('change');
         jQuery('#woocommerce_products').trigger('change');
         jQuery('#bbpress_forum').trigger('change');
         jQuery('#site_index_config').submit(function (e) {
@@ -287,8 +251,6 @@ $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['d
                     'posts_approved_comments': jQuery('#site_index_config #posts_approved_comments').is(":checked"),
                     'pages': jQuery('#site_index_config #pages').is(":checked"),
                     'pages_approved_comments': jQuery('#site_index_config #pages_approved_comments').is(":checked"),
-                    'media': jQuery('#site_index_config #media').is(":checked"),
-                    'media_approved_comments': jQuery('#site_index_config #media_approved_comments').is(":checked"),
                     'woocommerce_products': jQuery('#site_index_config #woocommerce_products').is(":checked"),
                     'woocommerce_products_approved_comments': jQuery('#site_index_config #woocommerce_products_approved_comments').is(":checked"),
                     'woocommerce_products_sku': jQuery('#site_index_config #woocommerce_products_sku').is(":checked"),
