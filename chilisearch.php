@@ -68,15 +68,7 @@ final class ChiliSearch {
     const WP_POST_TYPE_FORUM_FORUM = 'forum';
     const WP_POST_TYPE_FORUM_TOPIC = 'topic';
     const WP_POST_TYPE_FORUM_REPLY = 'reply';
-    const WP_POST_TYPES = [
-        self::WP_POST_TYPE_POST,
-        self::WP_POST_TYPE_PAGE,
-        self::WP_POST_TYPE_ATTACHMENT,
-        self::WP_POST_TYPE_PRODUCT,
-        self::WP_POST_TYPE_FORUM_FORUM,
-        self::WP_POST_TYPE_FORUM_TOPIC,
-        self::WP_POST_TYPE_FORUM_REPLY,
-    ];
+
     const SEARCH_WORD_TYPE_BOTH = 'both';
     const SEARCH_WORD_TYPE_WHOLE_WORD = 'whole_word';
     const SEARCH_WORD_TYPE_PARTIAL_WORD = 'partial_word';
@@ -114,20 +106,7 @@ final class ChiliSearch {
         'voice_search_enabled'               => true,
         'fuzzy_search_enabled'               => true,
     ];
-    private $wts_settings = [
-        'posts'                                  => true,
-        'posts_approved_comments'                => false,
-        'pages'                                  => true,
-        'pages_approved_comments'                => false,
-        'media_doc_files'                        => false,
-        'woocommerce_products'                   => false,
-        'woocommerce_products_approved_comments' => false,
-        'woocommerce_products_outofstock'        => false,
-        'woocommerce_products_sku'               => false,
-        'bbpress_forum'                          => false,
-        'bbpress_topic'                          => false,
-        'bbpress_reply'                          => false,
-    ];
+    private $wts_settings = [];
     private $configs = [
         'site_api_key'                => null,
         'site_api_secret'             => null,
@@ -393,21 +372,8 @@ final class ChiliSearch {
     }
 
     private function set_wts_settings() {
-        if ( function_exists( 'is_plugin_active' ) ) {
-            $this->wts_settings['woocommerce_products']                   = $this->wts_settings['woocommerce_products'] && $this->is_woocommerce_active();
-            $this->wts_settings['woocommerce_products_approved_comments'] = $this->wts_settings['woocommerce_products_approved_comments'] && $this->is_woocommerce_active();
-            $this->wts_settings['woocommerce_products_outofstock']        = $this->wts_settings['woocommerce_products_outofstock'] && $this->is_woocommerce_active();
-            $this->wts_settings['woocommerce_products_sku']               = $this->wts_settings['woocommerce_products_sku'] && $this->is_woocommerce_active();
-            $this->wts_settings['bbpress_forum']                          = $this->wts_settings['bbpress_forum'] && $this->is_bbpress_active();
-            $this->wts_settings['bbpress_topic']                          = $this->wts_settings['bbpress_topic'] && $this->is_bbpress_active();
-            $this->wts_settings['bbpress_reply']                          = $this->wts_settings['bbpress_reply'] && $this->is_bbpress_active();
-        }
         if ( $this->get_current_plan() !== 'premium' ) {
-            $this->wts_settings['woocommerce_products_approved_comments'] = false;
-            $this->wts_settings['woocommerce_products_sku']               = false;
-            $this->wts_settings['posts_approved_comments']                = false;
-            $this->wts_settings['pages_approved_comments']                = false;
-            $this->wts_settings['media_doc_files']                        = false;
+            $this->wts_settings['media_doc_files'] = false;
         }
         update_option( 'chilisearch_wts_settings', $this->wts_settings );
     }
@@ -421,34 +387,14 @@ final class ChiliSearch {
     }
 
     public function wp_ajax_admin_ajax_index_config() {
-        $posts                                  = isset( $_POST['posts'] ) && $_POST['posts'] == 'true';
-        $posts_approved_comments                = isset( $_POST['posts_approved_comments'] ) && $_POST['posts_approved_comments'] == 'true';
-        $pages                                  = isset( $_POST['pages'] ) && $_POST['pages'] == 'true';
-        $pages_approved_comments                = isset( $_POST['pages_approved_comments'] ) && $_POST['pages_approved_comments'] == 'true';
-        $woocommerce_products                   = isset( $_POST['woocommerce_products'] ) && $_POST['woocommerce_products'] == 'true';
-        $woocommerce_products_approved_comments = isset( $_POST['woocommerce_products_approved_comments'] ) && $_POST['woocommerce_products_approved_comments'] == 'true';
-        $woocommerce_products_outofstock        = isset( $_POST['woocommerce_products_outofstock'] ) && $_POST['woocommerce_products_outofstock'] == 'true';
-        $woocommerce_products_sku               = isset( $_POST['woocommerce_products_sku'] ) && $_POST['woocommerce_products_sku'] == 'true';
-        $bbpress_forum                          = isset( $_POST['bbpress_forum'] ) && $_POST['bbpress_forum'] == 'true';
-        $bbpress_topic                          = isset( $_POST['bbpress_topic'] ) && $_POST['bbpress_topic'] == 'true';
-        $bbpress_reply                          = isset( $_POST['bbpress_reply'] ) && $_POST['bbpress_reply'] == 'true';
-        $media_doc_files                        = isset( $_POST['media_doc_files'] ) && $_POST['media_doc_files'] == 'true';
-        if ( ! ( $posts || $pages || $woocommerce_products || $bbpress_forum ) ) {
+        $chilisearch_wtf_settings = ! empty( $_POST['chilisearch_wtf_settings'] ) ? array_keys( $_POST['chilisearch_wtf_settings'] ) : [];
+        if ( empty( $chilisearch_wtf_settings ) ) {
             wp_send_json( [ 'status' => false, 'message' => __( 'Choose at least one option.' ) ] );
         }
+        $chilisearch_wtf_settings = array_map( 'sanitize_key', $chilisearch_wtf_settings );
+        $chilisearch_wtf_settings = array_fill_keys( $chilisearch_wtf_settings, true );
         $this->get_wts_settings();
-        $this->wts_settings['posts']                                  = $posts;
-        $this->wts_settings['posts_approved_comments']                = $posts_approved_comments;
-        $this->wts_settings['pages']                                  = $pages;
-        $this->wts_settings['pages_approved_comments']                = $pages_approved_comments;
-        $this->wts_settings['media_doc_files']                        = $media_doc_files;
-        $this->wts_settings['woocommerce_products']                   = $woocommerce_products;
-        $this->wts_settings['woocommerce_products_approved_comments'] = $woocommerce_products_approved_comments;
-        $this->wts_settings['woocommerce_products_outofstock']        = $woocommerce_products_outofstock;
-        $this->wts_settings['woocommerce_products_sku']               = $woocommerce_products_sku;
-        $this->wts_settings['bbpress_forum']                          = $bbpress_forum;
-        $this->wts_settings['bbpress_topic']                          = $bbpress_topic;
-        $this->wts_settings['bbpress_reply']                          = $bbpress_reply;
+        $this->wts_settings = $chilisearch_wtf_settings;
         $this->set_wts_settings();
         if ( empty( $this->configs['get_started_config_finished'] ) ) {
             $this->get_configs();
@@ -581,49 +527,39 @@ final class ChiliSearch {
     }
 
     public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed() {
-        $active_post_types = $this->get_active_post_types();
-        $siteInfo = $this->get_website_info();
-        $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['documentCountLimit'] : null;
-        $posts             = $this->admin_get_active_posts( $active_post_types, $documentCountLimit );
-        $posts             = array_filter( $posts, function ( $post ) {
-            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT && ! $this->wts_settings['woocommerce_products_outofstock'] ) {
+        $active_post_types  = $this->get_active_post_types();
+        $siteInfo           = $this->get_website_info();
+        $documentCountLimit = isset( $siteInfo['documentCountLimit'] ) ? (int) $siteInfo['documentCountLimit'] : null;
+        $posts              = $this->admin_get_active_posts( $active_post_types, $documentCountLimit );
+        $posts              = array_filter( $posts, function ( $post ) {
+            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
                 $product = wc_get_product( $post->ID );
+                if ( $product->get_stock_status() === 'instock' ) {
+                    return ! empty( $this->wts_settings['product_instock'] );
+                }
 
-                return $product->get_stock_status() === 'instock';
+                return ! empty( $this->wts_settings['product_outofstock'] );
+            }
+            if ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT ) {
+                return array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS );
             }
 
             return true;
         } );
-        $documentIDs       = array_map( [ $this, 'get_document_id_from_post' ], $posts );
+        $documentIDs        = array_map( [ $this, 'get_document_id_from_post' ], $posts );
 
         wp_send_json( [ 'status' => true, 'documents' => array_values( $documentIDs ) ] );
     }
 
     protected function get_active_post_types() {
-        $active_post_types = [];
-        if ( ! empty( $this->wts_settings['posts'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_POST;
-        }
-        if ( ! empty( $this->wts_settings['pages'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_PAGE;
-        }
-        if ( ! empty( $this->wts_settings['media_doc_files'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_ATTACHMENT;
-        }
-        if ( ! empty( $this->wts_settings['woocommerce_products'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_PRODUCT;
-        }
-        if ( ! empty( $this->wts_settings['bbpress_forum'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_FORUM_FORUM;
-            if ( ! empty( $this->wts_settings['bbpress_topic'] ) ) {
-                $active_post_types[] = self::WP_POST_TYPE_FORUM_TOPIC;
-            }
-            if ( ! empty( $this->wts_settings['bbpress_reply'] ) ) {
-                $active_post_types[] = self::WP_POST_TYPE_FORUM_REPLY;
-            }
-        }
+        $wts_settings               = $this->wts_settings;
+        $wts_settings['product']    = ! empty( $wts_settings['product_instock'] ) || ! empty( $wts_settings['product_outofstock'] );
+        $wts_settings['attachment'] = ! empty( $wts_settings['media_doc_files'] );
 
-        return $active_post_types;
+        $wts_settings['product_instock'] = $wts_settings['product_outofstock'] = $wts_settings['media_doc_files'] = false;
+        $wts_settings = array_filter( $wts_settings, 'boolval' );
+
+        return array_keys( $wts_settings );
     }
 
     protected function admin_get_active_posts( $active_post_types, $posts_per_page = null ) {
@@ -638,7 +574,7 @@ final class ChiliSearch {
         return array_filter( $query->posts, function ( $post ) {
             if ( $post->post_status === 'inherit' ) {
                 $post_parent = get_post( $post->post_parent );
-                if ( $post_parent === null || $post_parent->post_status !== 'publish' ) {
+                if ( ! array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS ) && ( $post_parent === null || $post_parent->post_status !== 'publish' ) ) {
                     return false;
                 }
             }
@@ -702,6 +638,7 @@ final class ChiliSearch {
             'tags'        => array_map( function ( $term ) {
                 return ! empty( $term->name ) ? $term->name : null;
             }, wp_get_post_tags( $post->ID ) ),
+            'image' => ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null,
             'publishedAt' => ! empty( $post->post_date_gmt ) ? $post->post_date_gmt : null,
         ];
         if ( empty( $document['title'] ) ) {
@@ -714,9 +651,7 @@ final class ChiliSearch {
                 $document['tags']       = wp_get_post_terms( $post->ID, 'product_tag', [ 'fields' => 'names' ] );
                 $document['excerpt']    = $product->get_short_description();
                 $document['price']      = (int) $product->get_price();
-                if ( $this->wts_settings['woocommerce_products_sku'] ) {
-                    $document['sku']        = $product->get_sku();
-                }
+                $document['sku']        = $product->get_sku();
                 $document['attributes'] = [];
                 /** @var WC_Product_Attribute $attribute */
                 foreach ( $product->get_attributes() as $attributeKey => $attribute ) {
@@ -740,10 +675,7 @@ final class ChiliSearch {
                         }
                     }
                 }
-                $document['status'] = $product->get_stock_status() === 'instock' ? 1 : 0;
-            case self::WP_POST_TYPE_POST:
-            case self::WP_POST_TYPE_PAGE:
-                $document['image'] = ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null;
+                $document['status'] = $product->get_stock_status();
                 break;
             case self::WP_POST_TYPE_ATTACHMENT:
                 if (
@@ -771,15 +703,6 @@ final class ChiliSearch {
                 $document['excerpt'] = substr( $document['body'], 0, 300 );
                 break;
         }
-        if (
-            ( $post->post_type === self::WP_POST_TYPE_POST && ! empty( $this->wts_settings['posts_approved_comments'] ) ) ||
-            ( $post->post_type === self::WP_POST_TYPE_PAGE && ! empty( $this->wts_settings['pages_approved_comments'] ) ) ||
-            ( $post->post_type === self::WP_POST_TYPE_PRODUCT && ! empty( $this->wts_settings['woocommerce_products_approved_comments'] ) )
-        ) {
-            $document['comments'] = array_map( function ( $comment ) {
-                return (string) $comment->comment_content;
-            }, get_comments( [ 'post_id' => $post->ID ] ) );
-        }
 
         return $document;
     }
@@ -789,46 +712,28 @@ final class ChiliSearch {
     }
 
     public function wp_ajax_admin_ajax_get_posts_count() {
-        $post_type_count = [
-            self::WP_POST_TYPE_POST       => 0,
-            self::WP_POST_TYPE_PAGE       => 0,
-            self::WP_POST_TYPE_ATTACHMENT => 0,
-            'post_comments'               => 0,
-            'page_comments'               => 0,
-            'attachment_comments'         => 0,
-            'attachment_docs'             => 0,
+        $all_post_types         = array_keys( get_post_types( [ 'public' => true ] ) );
+        $admin_get_active_posts = $this->admin_get_active_posts( $all_post_types );
+        $post_type_count        = [
+            'media_doc_files' => 0,
+            'product_instock' => 0,
+            'product_outofstock' => 0,
         ];
-        if ( $this->is_bbpress_active() ) {
-            $post_type_count += [
-                self::WP_POST_TYPE_FORUM_FORUM => 0,
-                self::WP_POST_TYPE_FORUM_TOPIC => 0,
-                self::WP_POST_TYPE_FORUM_REPLY => 0,
-            ];
-        }
-        if ( $this->is_woocommerce_active() ) {
-            $post_type_count += [
-                self::WP_POST_TYPE_PRODUCT => 0,
-                'product_comments'         => 0,
-                'product_outofstock'       => 0,
-            ];
-        }
-        $admin_get_active_posts = $this->admin_get_active_posts( self::WP_POST_TYPES );
+        $post_type_count += array_fill_keys( $all_post_types , 0 );
         foreach ( $admin_get_active_posts as $post ) {
-            if ( $post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT ) {
-                $post_type_count[ $post->post_type ] ++;
+            if ( empty( $post_type_count[ $post->post_type ] ) ) {
+                $post_type_count[ $post->post_type ] = 0;
             }
-            if ( $post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT || $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
-                $post_type_count[ $post->post_type . '_comments' ] += wp_count_comments( $post->ID )->approved;
-            }
+            $post_type_count[ $post->post_type ] ++;
             if ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT && array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS ) ) {
-                $post_type_count['attachment_docs'] ++;
+                $post_type_count[ 'media_doc_files' ] ++;
             }
-            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
+            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT && function_exists( 'wc_get_product' ) && $this->is_woocommerce_active() ) {
                 $product = wc_get_product( $post->ID );
                 if ( $product->get_stock_status() === 'instock' ) {
-                    $post_type_count[ self::WP_POST_TYPE_PRODUCT ] ++;
+                    $post_type_count[ 'product_instock' ] ++;
                 } elseif ( $product->get_stock_status() === 'outofstock' ) {
-                    $post_type_count['product_outofstock'] ++;
+                    $post_type_count[ 'product_outofstock' ] ++;
                 }
             }
         }
@@ -1013,6 +918,20 @@ final class ChiliSearch {
         if ( ! in_array( $post->post_type, $active_post_types, true ) ) {
             return true;
         }
+        if ( $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
+            $product = wc_get_product( $post->ID );
+            if ( $product->get_stock_status() === 'instock' ) {
+                if ( empty( $this->wts_settings['product_instock'] ) ) {
+                    return true;
+                }
+            } elseif ( empty( $this->wts_settings['product_outofstock'] ) ) {
+                return true;
+            }
+        }
+        if ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT && ! array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS ) ) {
+            return true;
+        }
+
         $siteInfo           = $this->get_website_info();
         $documentCount      = isset( $siteInfo['documentsCount'] ) ? (int) $siteInfo['documentsCount'] : null;
         $documentCountLimit = isset( $siteInfo['documentCountLimit'] ) ? (int) $siteInfo['documentCountLimit'] : null;
