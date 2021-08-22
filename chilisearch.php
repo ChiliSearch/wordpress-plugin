@@ -86,6 +86,25 @@ final class ChiliSearch {
         self::SORT_BY_PRICE_ASC         => '-price',
     ];
 
+    const FACET_CATEGORIES = 'categories';
+    const FACET_TAGS = 'tags';
+    const FACET_AUTHOR = 'author';
+    const FACET_BRAND = 'brand';
+    const FACET_TYPE = 'type';
+    const FACET_PRICE = 'price';
+    const FACET_PUBLISHED_AT = 'publishedAt';
+    const FACET_STATUS = 'status';
+    const FACETS = [
+        self::FACET_CATEGORIES,
+        self::FACET_TAGS,
+        self::FACET_AUTHOR,
+        self::FACET_BRAND,
+        self::FACET_TYPE,
+        self::FACET_PRICE,
+        self::FACET_PUBLISHED_AT,
+        self::FACET_STATUS,
+    ];
+
     private static $instance = null;
 
     private $settings = [
@@ -105,6 +124,7 @@ final class ChiliSearch {
         'search_input_selector'              => 'input[name="s"]',
         'voice_search_enabled'               => true,
         'fuzzy_search_enabled'               => true,
+        'facets'                             => self::FACETS,
     ];
     private $wts_settings = [];
     private $configs = [
@@ -188,28 +208,22 @@ final class ChiliSearch {
 
     private function get_messages() {
         $this->messages = [
-            'powered-by'                   => __( 'powered by', 'chilisearch' ),
-            'search-powered-by'            => __( 'search powered by', 'chilisearch' ),
-            'no-result-message'            => __( 'Couldn\'t find anything related …', 'chilisearch' ),
-            'error-message-head'           => __( 'Oops!', 'chilisearch' ),
-            'error-message-body'           => __( 'Sorry, there\'s some thing wrong. Please try again.', 'chilisearch' ),
-            'input-placeholder'            => __( 'Search …', 'chilisearch' ),
-            'sayt-init-message'            => __( 'Search …', 'chilisearch' ),
-            'form-submit-value'            => __( 'Search', 'chilisearch' ),
-            'search-result-result-count'   => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
-            'prev'                         => __( 'Prev', 'chilisearch' ),
-            'next'                         => __( 'Next', 'chilisearch' ),
-            'category'                     => __( 'category', 'chilisearch' ),
-            'price'                        => __( 'price', 'chilisearch' ),
-            'search-between'               => __( 'search between', 'chilisearch' ),
-            'to'                           => __( 'to', 'chilisearch' ),
-            'all'                          => __( 'all', 'chilisearch' ),
-            'published'                    => __( 'published', 'chilisearch' ),
-            'show-all-n-results'           => __( 'Show all {totalCount} results', 'chilisearch' ),
-            'voice-search-ready-to-listen' => __( 'Ready to listen', 'chilisearch' ),
-            'voice-search-error-no-result' => __( 'Hmm, didn\'t get it. please repeat …', 'chilisearch' ),
-            'voice-search-listening'       => __( 'Listening …', 'chilisearch' ),
-            'voice-search-got-it'          => __( 'Got it!', 'chilisearch' ),
+            'powered-by'            => __( 'powered by', 'chilisearch' ),
+            'no-result-message'     => __( 'Couldn\'t find anything related …', 'chilisearch' ),
+            'error-message-head'    => __( 'Oops!', 'chilisearch' ),
+            'error-message-body'    => __( 'Sorry, there\'s something wrong. Please try again.', 'chilisearch' ),
+            'input-placeholder'     => __( 'Search …', 'chilisearch' ),
+            'form-submit-value'     => __( 'Search', 'chilisearch' ),
+            'n-to-m-from-t-results' => __( '{n} to {m} from {t} results', 'chilisearch' ),
+            'results'               => __( 'Results', 'chilisearch' ),
+            'facet-categories'      => __( 'Category', 'chilisearch' ),
+            'facet-tags'            => __( 'Tags', 'chilisearch' ),
+            'facet-author'          => __( 'Author', 'chilisearch' ),
+            'facet-brand'           => __( 'Brand', 'chilisearch' ),
+            'facet-type'            => __( 'Type', 'chilisearch' ),
+            'facet-price'           => __( 'Price', 'chilisearch' ),
+            'facet-publishedAt'     => __( 'Published At', 'chilisearch' ),
+            'facet-status'          => __( 'Status', 'chilisearch' ),
         ];
         $messages = get_option( 'chilisearch_messages' );
         if ( ! empty( $messages ) ) {
@@ -623,9 +637,10 @@ final class ChiliSearch {
     }
 
     public function transform_post_to_document( $post ) {
-        $document = [
+        $all_post_types = get_post_types( [ 'public' => true ], false );
+        $document       = [
             'id'          => $this->get_document_id_from_post( $post ),
-            'type'        => $post->post_type,
+            'type'        => ! empty( $all_post_types[ $post->post_type ] ) ? $all_post_types[ $post->post_type ]->label : $post->post_type,
             'title'       => ! empty( $post->post_title ) ? $post->post_title : '',
             'link'        => get_permalink( $post->ID ),
             'excerpt'     => ! empty( $post->post_excerpt ) ? $post->post_excerpt : null,
@@ -638,7 +653,7 @@ final class ChiliSearch {
             'tags'        => array_map( function ( $term ) {
                 return ! empty( $term->name ) ? $term->name : null;
             }, wp_get_post_tags( $post->ID ) ),
-            'image' => ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null,
+            'image'       => ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null,
             'publishedAt' => ! empty( $post->post_date_gmt ) ? $post->post_date_gmt : null,
         ];
         if ( empty( $document['title'] ) ) {
@@ -688,8 +703,7 @@ final class ChiliSearch {
                     ! empty( $this->wts_settings['media_doc_files'] ) &&
                     array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS )
                 ) {
-                    $document['type']  = 'media';
-                    $document['title'] = str_replace( '-', ' ', $document['title'] );
+                    $document['title']       = str_replace( '-', ' ', $document['title'] );
                     $document['docFileType'] = self::MIME_TYPES_DOCS[ $post->post_mime_type ];
                     $document['docFileBody'] = @base64_encode( file_get_contents( get_attached_file( $post->ID ) ) );
                 } else {
@@ -705,7 +719,6 @@ final class ChiliSearch {
                 $document['link']  = get_permalink( $topic->ID ) . "#post-" . $post->ID;
             case self::WP_POST_TYPE_FORUM_FORUM:
             case self::WP_POST_TYPE_FORUM_TOPIC:
-                $document['type']    = 'forum';
                 $document['excerpt'] = substr( $document['body'], 0, 300 );
                 break;
         }
@@ -981,6 +994,12 @@ final class ChiliSearch {
                 'wordType'           => $this->get_current_plan() === 'premium' ? $this->settings['search_word_type'] : self::SEARCH_WORD_TYPE_BOTH,
                 'currency'           => $this->is_woocommerce_active() ? html_entity_decode( get_woocommerce_currency_symbol() ) : '',
                 'sortBy'             => $this->get_current_plan() === 'premium' && ! empty( $this->settings['sort_by'] ) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
+                'isRTL'              => (bool) is_rtl(),
+                'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
+                'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
+                'voiceSearchLocale'  => get_locale(),
+                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
+                'facets'             => $this->settings['facets'],
                 'displayInResult'    => [
                     'productPrice'     => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
                     'productAddToCart' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'],
@@ -992,11 +1011,6 @@ final class ChiliSearch {
                     'tags'       => $this->settings['weight_tags'],
                     'categories' => $this->settings['weight_categories'],
                 ],
-                'isRTL'              => (bool) is_rtl(),
-                'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
-                'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
-                'voiceSearchLocale'  => get_locale(),
-                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
             ],
             'phraseBook' => $messages,
         ];
