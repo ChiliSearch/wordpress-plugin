@@ -69,7 +69,7 @@ unset( $post_types['product'], $post_types['attachment'] );
         </table>
         <p>
             <?= sprintf(__('You can index upto %d documents in "%s" plan.', 'chilisearch'), $documentCountLimit, $plan) ?>
-            <a href="https://chilisearch.com/pricing/" target="_blank"><?= __('Need more?', 'chilisearch') ?></a>
+            <a href="<?= admin_url( 'admin.php?page=chilisearch&tab=license' ) ?>" target="_blank"><?= __('Need more?', 'chilisearch') ?></a>
         </p>
         <div style="display: flex;">
             <input type="hidden" name="action" value="admin_ajax_index_config">

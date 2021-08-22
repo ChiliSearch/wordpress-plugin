@@ -139,7 +139,7 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                     <td>
                         <label>
                             <input type="checkbox" name="chilisearch_settings[display_result_product_price]" id="display_result_product_price" value="true" <?= $this->is_woocommerce_active() && $this->settings['display_result_product_price'] ? 'checked' : '' ?> <?= $plan !== 'premium' || !$this->is_woocommerce_active() ? 'disabled="disabled"' : '' ?>>
-                            <?= __( 'Display', 'chilisearch' ) ?>
+                            <?= __( 'Display', 'chilisearch' ) ?> <small><?= !$this->is_woocommerce_active() ? __('(WooCommerce plugin is not installed)', 'chilisearch') : '' ?></small>
                             <p class="description"><?= __( 'Display product price in search result.', 'chilisearch' ) ?></p>
                         </label>
                     </td>
@@ -149,7 +149,7 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                     <td>
                         <label>
                             <input type="checkbox" name="chilisearch_settings[display_result_product_add_to_cart]" id="display_result_product_add_to_cart" value="true" <?= $this->is_woocommerce_active() && $this->settings['display_result_product_add_to_cart'] ? 'checked' : '' ?> <?= $plan !== 'premium' || !$this->is_woocommerce_active() ? 'disabled="disabled"' : '' ?>>
-                            <?= __( 'Display', 'chilisearch' ) ?>
+                            <?= __( 'Display', 'chilisearch' ) ?> <small><?= !$this->is_woocommerce_active() ? __('(WooCommerce plugin is not installed)', 'chilisearch') : '' ?></small>
                             <p class="description"><?= __( 'Display add-to-cart button in search result.', 'chilisearch' ) ?></p>
                         </label>
                     </td>

@@ -675,7 +675,13 @@ final class ChiliSearch {
                         }
                     }
                 }
-                $document['status'] = $product->get_stock_status();
+                if ( $product->is_on_backorder() ) {
+                    $document['status'] = __( 'On backorder', 'woocommerce' );
+                } elseif ( $product->is_in_stock() ) {
+                    $document['status'] = __( 'In stock', 'woocommerce' );
+                } else {
+                    $document['status'] = __( 'Out of stock', 'woocommerce' );
+                }
                 break;
             case self::WP_POST_TYPE_ATTACHMENT:
                 if (
@@ -732,7 +738,7 @@ final class ChiliSearch {
                 $product = wc_get_product( $post->ID );
                 if ( $product->get_stock_status() === 'instock' ) {
                     $post_type_count[ 'product_instock' ] ++;
-                } elseif ( $product->get_stock_status() === 'outofstock' ) {
+                } else {
                     $post_type_count[ 'product_outofstock' ] ++;
                 }
             }
@@ -783,12 +789,12 @@ final class ChiliSearch {
     }
 
     public function default_search_page() {
-        if ( $this->settings['search_page_id'] == - 1 && ! empty( $_GET['query'] ) ) {
+        if ( $this->settings['search_page_id'] == - 1 && ! empty( $_GET['cs']['query'] ) ) {
             global $wp_query;
             $wp_query->is_search = 1;
 
             add_filter('get_search_query', function ( $title) {
-                return $_GET['query'];
+                return $_GET['cs']['query'];
             });
 
             require_once CHILISEARCH_DIR . '/templates/client_default_search_page.php';
