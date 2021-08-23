@@ -12,7 +12,7 @@
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
  * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
- * Version:           2.0.8
+ * Version:           3.0.0
  * Author:            ChiliSearch
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '2.0.8' );
+define( 'CHILISEARCH_VERSION', '3.0.0' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
@@ -48,7 +48,7 @@ define(
 
 final class ChiliSearch {
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
-    const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
+    const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v2/';
     const CHILISEARCH_APP_BASE_URI = 'https://app.chilisearch.com/';
 
     const MIME_TYPES_DOCS = [
@@ -61,12 +61,6 @@ final class ChiliSearch {
         'application/vnd.oasis.opendocument.text'                                   => 'odt',
         'text/plain'                                                                => 'txt',
     ];
-    const MIME_TYPES_IMAGES = [
-        'image/jpeg'   => 'jpg',
-        'image/png'    => 'png',
-        'image/gif'    => 'gif',
-        'image/x-icon' => 'ico',
-    ];
     const WP_POST_TYPE_POST = 'post';
     const WP_POST_TYPE_PAGE = 'page';
     const WP_POST_TYPE_ATTACHMENT = 'attachment';
@@ -74,15 +68,7 @@ final class ChiliSearch {
     const WP_POST_TYPE_FORUM_FORUM = 'forum';
     const WP_POST_TYPE_FORUM_TOPIC = 'topic';
     const WP_POST_TYPE_FORUM_REPLY = 'reply';
-    const WP_POST_TYPES = [
-        self::WP_POST_TYPE_POST,
-        self::WP_POST_TYPE_PAGE,
-        self::WP_POST_TYPE_ATTACHMENT,
-        self::WP_POST_TYPE_PRODUCT,
-        self::WP_POST_TYPE_FORUM_FORUM,
-        self::WP_POST_TYPE_FORUM_TOPIC,
-        self::WP_POST_TYPE_FORUM_REPLY,
-    ];
+
     const SEARCH_WORD_TYPE_BOTH = 'both';
     const SEARCH_WORD_TYPE_WHOLE_WORD = 'whole_word';
     const SEARCH_WORD_TYPE_PARTIAL_WORD = 'partial_word';
@@ -100,50 +86,47 @@ final class ChiliSearch {
         self::SORT_BY_PRICE_ASC         => '-price',
     ];
 
+    const FACET_CATEGORIES = 'categories';
+    const FACET_TAGS = 'tags';
+    const FACET_AUTHOR = 'author';
+    const FACET_BRAND = 'brand';
+    const FACET_TYPE = 'type';
+    const FACET_PRICE = 'price';
+    const FACET_PUBLISHED_AT = 'publishedAt';
+    const FACET_STATUS = 'status';
+    const FACETS = [
+        self::FACET_CATEGORIES,
+        self::FACET_TAGS,
+        self::FACET_AUTHOR,
+        self::FACET_BRAND,
+        self::FACET_TYPE,
+        self::FACET_PRICE,
+        self::FACET_PUBLISHED_AT,
+        self::FACET_STATUS,
+    ];
+
     private static $instance = null;
 
     private $settings = [
-        'search_page_id'               => - 1,
-        'search_page_size'             => 15,
-        'sayt_page_size'               => 5,
-        'search_word_type'             => self::SEARCH_WORD_TYPE_BOTH,
-        'sort_by'                      => self::SORT_BY_RELEVANCY,
-        'display_result_image'         => true,
-        'display_result_product_price' => false,
-        'display_result_excerpt'       => true,
-        'display_result_categories'    => true,
-        'display_result_tags'          => true,
-        'display_chilisearch_brand'    => true,
-        'weight_title'                 => 3,
-        'weight_excerpt'               => 2,
-        'weight_body'                  => 1,
-        'weight_tags'                  => 5,
-        'weight_categories'            => 3,
-        'filter_type'                  => true,
-        'filter_category'              => true,
-        'filter_publishedat'           => true,
-        'filter_price'                 => false,
-        'auto_search_detection'        => true,
-        'search_input_selector'        => 'input[name="s"]',
-        'voice_search_enabled'         => true,
-        'fuzzy_search_enabled'         => true,
+        'search_page_id'                     => - 1,
+        'search_page_size'                   => 15,
+        'sayt_page_size'                     => 5,
+        'search_word_type'                   => self::SEARCH_WORD_TYPE_BOTH,
+        'sort_by'                            => self::SORT_BY_RELEVANCY,
+        'display_result_product_price'       => false,
+        'display_result_product_add_to_cart' => false,
+        'display_chilisearch_brand'          => true,
+        'weight_title'                       => 3,
+        'weight_excerpt'                     => 2,
+        'weight_body'                        => 1,
+        'weight_tags'                        => 5,
+        'weight_categories'                  => 3,
+        'search_input_selector'              => 'input[name="s"]',
+        'voice_search_enabled'               => true,
+        'fuzzy_search_enabled'               => true,
+        'facets'                             => self::FACETS,
     ];
-    private $wts_settings = [
-        'posts'                                  => true,
-        'posts_approved_comments'                => false,
-        'pages'                                  => true,
-        'pages_approved_comments'                => false,
-        'media'                                  => false,
-        'media_doc_files'                        => false,
-        'media_approved_comments'                => false,
-        'woocommerce_products'                   => false,
-        'woocommerce_products_approved_comments' => false,
-        'woocommerce_products_outofstock'        => false,
-        'woocommerce_products_sku'               => false,
-        'bbpress_forum'                          => false,
-        'bbpress_topic'                          => false,
-        'bbpress_reply'                          => false,
-    ];
+    private $wts_settings = [];
     private $configs = [
         'site_api_key'                => null,
         'site_api_secret'             => null,
@@ -225,28 +208,22 @@ final class ChiliSearch {
 
     private function get_messages() {
         $this->messages = [
-            'powered-by'                   => __( 'powered by', 'chilisearch' ),
-            'search-powered-by'            => __( 'search powered by', 'chilisearch' ),
-            'no-result-message'            => __( 'Couldn\'t find anything related …', 'chilisearch' ),
-            'error-message-head'           => __( 'Oops!', 'chilisearch' ),
-            'error-message-body'           => __( 'Sorry, there\'s some thing wrong. Please try again.', 'chilisearch' ),
-            'input-placeholder'            => __( 'Search …', 'chilisearch' ),
-            'sayt-init-message'            => __( 'Search …', 'chilisearch' ),
-            'form-submit-value'            => __( 'Search', 'chilisearch' ),
-            'search-result-result-count'   => __( 'About {totalCount} results ({timeTook} seconds)', 'chilisearch' ),
-            'prev'                         => __( 'Prev', 'chilisearch' ),
-            'next'                         => __( 'Next', 'chilisearch' ),
-            'category'                     => __( 'category', 'chilisearch' ),
-            'price'                        => __( 'price', 'chilisearch' ),
-            'search-between'               => __( 'search between', 'chilisearch' ),
-            'to'                           => __( 'to', 'chilisearch' ),
-            'all'                          => __( 'all', 'chilisearch' ),
-            'published'                    => __( 'published', 'chilisearch' ),
-            'show-all-n-results'           => __( 'Show all {totalCount} results', 'chilisearch' ),
-            'voice-search-ready-to-listen' => __( 'Ready to listen', 'chilisearch' ),
-            'voice-search-error-no-result' => __( 'Hmm, didn\'t get it. please repeat …', 'chilisearch' ),
-            'voice-search-listening'       => __( 'Listening …', 'chilisearch' ),
-            'voice-search-got-it'          => __( 'Got it!', 'chilisearch' ),
+            'powered-by'            => __( 'powered by', 'chilisearch' ),
+            'no-result-message'     => __( 'Couldn\'t find anything related …', 'chilisearch' ),
+            'error-message-head'    => __( 'Oops!', 'chilisearch' ),
+            'error-message-body'    => __( 'Sorry, there\'s something wrong. Please try again.', 'chilisearch' ),
+            'input-placeholder'     => __( 'Search …', 'chilisearch' ),
+            'form-submit-value'     => __( 'Search', 'chilisearch' ),
+            'n-to-m-from-t-results' => __( '{n} to {m} from {t} results', 'chilisearch' ),
+            'results'               => __( 'Results', 'chilisearch' ),
+            'facet-categories'      => __( 'Category', 'chilisearch' ),
+            'facet-tags'            => __( 'Tags', 'chilisearch' ),
+            'facet-author'          => __( 'Author', 'chilisearch' ),
+            'facet-brand'           => __( 'Brand', 'chilisearch' ),
+            'facet-type'            => __( 'Type', 'chilisearch' ),
+            'facet-price'           => __( 'Price', 'chilisearch' ),
+            'facet-publishedAt'     => __( 'Published At', 'chilisearch' ),
+            'facet-status'          => __( 'Status', 'chilisearch' ),
         ];
         $messages = get_option( 'chilisearch_messages' );
         if ( ! empty( $messages ) ) {
@@ -258,10 +235,10 @@ final class ChiliSearch {
 
     private function setup_client_actions() {
         add_action( 'plugins_loaded', [ $this, 'i18n' ], 2 );
-        add_action( 'wp', [ $this, 'default_search_page' ] );
+        add_action( 'wp_loaded', [ $this, 'default_search_page' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'client_enqueue_scripts' ] );
         add_shortcode( 'chilisearch_search_page', function () {
-            return '<div id="chilisearch-search_page"></div>';
+            return '<div id="js-cs-page"></div>';
         } );
         add_action( 'widgets_init', function () {
             require_once CHILISEARCH_DIR . '/widgets/class-widget-search.php';
@@ -397,33 +374,23 @@ final class ChiliSearch {
 
     private function set_settings() {
         if ( function_exists( 'is_plugin_active' ) ) {
-            $this->settings['display_result_product_price'] = $this->settings['display_result_product_price'] && $this->is_woocommerce_active();
-            $this->settings['filter_price']                 = $this->settings['filter_price'] && $this->is_woocommerce_active();
+            $this->settings['display_result_product_price']       = $this->settings['display_result_product_price'] && $this->is_woocommerce_active();
+            $this->settings['display_result_product_add_to_cart'] = $this->settings['display_result_product_add_to_cart'] && $this->is_woocommerce_active();
         }
-        $this->settings['sort_by']                      = $this->get_current_plan() === 'premium' ? $this->settings['sort_by'] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ];
-        $this->settings['display_result_product_price'] = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'];
-        $this->settings['display_chilisearch_brand']    = $this->get_current_plan() !== 'premium' || $this->settings['display_chilisearch_brand'];
+        $this->settings['search_word_type']                   = $this->get_current_plan() === 'premium' ? $this->settings['search_word_type'] : self::SEARCH_WORD_TYPE_BOTH;
+        $this->settings['sort_by']                            = $this->get_current_plan() === 'premium' ? $this->settings['sort_by'] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ];
+        $this->settings['display_result_product_price']       = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'];
+        $this->settings['display_result_product_add_to_cart'] = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'];
+        $this->settings['display_chilisearch_brand']          = $this->get_current_plan() !== 'premium' || $this->settings['display_chilisearch_brand'];
+        if ( $this->get_current_plan() !== 'premium' ) {
+            $this->settings['facets'] = self::FACETS;
+        }
         update_option( 'chilisearch_settings', $this->settings );
     }
 
     private function set_wts_settings() {
-        if ( function_exists( 'is_plugin_active' ) ) {
-            $this->wts_settings['woocommerce_products']                   = $this->wts_settings['woocommerce_products'] && $this->is_woocommerce_active();
-            $this->wts_settings['woocommerce_products_approved_comments'] = $this->wts_settings['woocommerce_products_approved_comments'] && $this->is_woocommerce_active();
-            $this->wts_settings['woocommerce_products_outofstock']        = $this->wts_settings['woocommerce_products_outofstock'] && $this->is_woocommerce_active();
-            $this->wts_settings['woocommerce_products_sku']               = $this->wts_settings['woocommerce_products_sku'] && $this->is_woocommerce_active();
-            $this->wts_settings['bbpress_forum']                          = $this->wts_settings['bbpress_forum'] && $this->is_bbpress_active();
-            $this->wts_settings['bbpress_topic']                          = $this->wts_settings['bbpress_topic'] && $this->is_bbpress_active();
-            $this->wts_settings['bbpress_reply']                          = $this->wts_settings['bbpress_reply'] && $this->is_bbpress_active();
-        }
         if ( $this->get_current_plan() !== 'premium' ) {
-            $this->wts_settings['woocommerce_products_approved_comments'] = false;
-            $this->wts_settings['woocommerce_products_sku']               = false;
-            $this->wts_settings['posts_approved_comments']                = false;
-            $this->wts_settings['pages_approved_comments']                = false;
-            $this->wts_settings['media']                                  = false;
-            $this->wts_settings['media_approved_comments']                = false;
-            $this->wts_settings['media_doc_files']                        = false;
+            $this->wts_settings['media_doc_files'] = false;
         }
         update_option( 'chilisearch_wts_settings', $this->wts_settings );
     }
@@ -437,38 +404,14 @@ final class ChiliSearch {
     }
 
     public function wp_ajax_admin_ajax_index_config() {
-        $posts                                  = isset( $_POST['posts'] ) && $_POST['posts'] == 'true';
-        $posts_approved_comments                = isset( $_POST['posts_approved_comments'] ) && $_POST['posts_approved_comments'] == 'true';
-        $pages                                  = isset( $_POST['pages'] ) && $_POST['pages'] == 'true';
-        $pages_approved_comments                = isset( $_POST['pages_approved_comments'] ) && $_POST['pages_approved_comments'] == 'true';
-        $media                                  = isset( $_POST['media'] ) && $_POST['media'] == 'true';
-        $media_approved_comments                = isset( $_POST['media_approved_comments'] ) && $_POST['media_approved_comments'] == 'true';
-        $woocommerce_products                   = isset( $_POST['woocommerce_products'] ) && $_POST['woocommerce_products'] == 'true';
-        $woocommerce_products_approved_comments = isset( $_POST['woocommerce_products_approved_comments'] ) && $_POST['woocommerce_products_approved_comments'] == 'true';
-        $woocommerce_products_outofstock        = isset( $_POST['woocommerce_products_outofstock'] ) && $_POST['woocommerce_products_outofstock'] == 'true';
-        $woocommerce_products_sku               = isset( $_POST['woocommerce_products_sku'] ) && $_POST['woocommerce_products_sku'] == 'true';
-        $bbpress_forum                          = isset( $_POST['bbpress_forum'] ) && $_POST['bbpress_forum'] == 'true';
-        $bbpress_topic                          = isset( $_POST['bbpress_topic'] ) && $_POST['bbpress_topic'] == 'true';
-        $bbpress_reply                          = isset( $_POST['bbpress_reply'] ) && $_POST['bbpress_reply'] == 'true';
-        $media_doc_files                        = isset( $_POST['media_doc_files'] ) && $_POST['media_doc_files'] == 'true';
-        if ( ! ( $posts || $pages || $media || $woocommerce_products || $bbpress_forum ) ) {
+        $chilisearch_wtf_settings = ! empty( $_POST['chilisearch_wtf_settings'] ) ? array_keys( $_POST['chilisearch_wtf_settings'] ) : [];
+        if ( empty( $chilisearch_wtf_settings ) ) {
             wp_send_json( [ 'status' => false, 'message' => __( 'Choose at least one option.' ) ] );
         }
+        $chilisearch_wtf_settings = array_map( 'sanitize_key', $chilisearch_wtf_settings );
+        $chilisearch_wtf_settings = array_fill_keys( $chilisearch_wtf_settings, true );
         $this->get_wts_settings();
-        $this->wts_settings['posts']                                  = $posts;
-        $this->wts_settings['posts_approved_comments']                = $posts_approved_comments;
-        $this->wts_settings['pages']                                  = $pages;
-        $this->wts_settings['pages_approved_comments']                = $pages_approved_comments;
-        $this->wts_settings['media']                                  = $media;
-        $this->wts_settings['media_doc_files']                        = $media_doc_files;
-        $this->wts_settings['media_approved_comments']                = $media_approved_comments;
-        $this->wts_settings['woocommerce_products']                   = $woocommerce_products;
-        $this->wts_settings['woocommerce_products_approved_comments'] = $woocommerce_products_approved_comments;
-        $this->wts_settings['woocommerce_products_outofstock']        = $woocommerce_products_outofstock;
-        $this->wts_settings['woocommerce_products_sku']               = $woocommerce_products_sku;
-        $this->wts_settings['bbpress_forum']                          = $bbpress_forum;
-        $this->wts_settings['bbpress_topic']                          = $bbpress_topic;
-        $this->wts_settings['bbpress_reply']                          = $bbpress_reply;
+        $this->wts_settings = $chilisearch_wtf_settings;
         $this->set_wts_settings();
         if ( empty( $this->configs['get_started_config_finished'] ) ) {
             $this->get_configs();
@@ -546,29 +489,47 @@ final class ChiliSearch {
         $this->get_settings();
         $this->settings['search_page_size']             = (int) sanitize_key( trim( $_POST['search_page_size'] ) );
         $this->settings['sayt_page_size']               = (int) sanitize_key( trim( $_POST['sayt_page_size'] ) );
-        $this->settings['auto_search_detection']        = isset( $_POST['auto_search_detection'] ) && $_POST['auto_search_detection'] == 'true';
         $this->settings['search_input_selector']        = sanitize_text_field( stripslashes( $_POST['search_input_selector'] ) );
         $this->settings['search_page_id']               = $searchPageId;
-        $this->settings['search_word_type']             = sanitize_key( trim( $_POST['search_word_type'] ) );
-        $this->settings['display_result_image']         = isset( $_POST['display_result_image'] ) && $_POST['display_result_image'] == 'true';
-        $this->settings['filter_type']                  = isset( $_POST['filter_type'] ) && $_POST['filter_type'] == 'true';
-        $this->settings['filter_category']              = isset( $_POST['filter_category'] ) && $_POST['filter_category'] == 'true';
-        $this->settings['filter_publishedat']           = isset( $_POST['filter_publishedat'] ) && $_POST['filter_publishedat'] == 'true';
-        $this->settings['filter_price']                 = isset( $_POST['filter_price'] ) && $_POST['filter_price'] == 'true';
-        $this->settings['display_result_excerpt']       = isset( $_POST['display_result_excerpt'] ) && $_POST['display_result_excerpt'] == 'true';
-        $this->settings['display_result_categories']    = isset( $_POST['display_result_categories'] ) && $_POST['display_result_categories'] == 'true';
-        $this->settings['display_result_tags']          = isset( $_POST['display_result_tags'] ) && $_POST['display_result_tags'] == 'true';
         $this->settings['voice_search_enabled']         = isset( $_POST['voice_search_enabled'] ) && $_POST['voice_search_enabled'] == 'true';
         $this->settings['fuzzy_search_enabled']         = isset( $_POST['fuzzy_search_enabled'] ) && $_POST['fuzzy_search_enabled'] == 'true';
-        if ($this->get_current_plan() === 'premium') {
-            $this->settings['sort_by']                      = sanitize_key( trim( $_POST['sort_by'] ) );
-            $this->settings['weight_title']                 = (int) sanitize_key( trim( $_POST['weight_title'] ) );
-            $this->settings['weight_excerpt']               = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
-            $this->settings['weight_body']                  = (int) sanitize_key( trim( $_POST['weight_body'] ) );
-            $this->settings['weight_tags']                  = (int) sanitize_key( trim( $_POST['weight_tags'] ) );
-            $this->settings['weight_categories']            = (int) sanitize_key( trim( $_POST['weight_categories'] ) );
-            $this->settings['display_result_product_price'] = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
-            $this->settings['display_chilisearch_brand']    = isset( $_POST['display_chilisearch_brand'] ) && $_POST['display_chilisearch_brand'] == 'true';
+        if ( $this->get_current_plan() === 'premium' ) {
+            $this->settings['search_word_type']                   = sanitize_key( trim( $_POST['search_word_type'] ) );
+            $this->settings['sort_by']                            = sanitize_key( trim( $_POST['sort_by'] ) );
+            $this->settings['weight_title']                       = (int) sanitize_key( trim( $_POST['weight_title'] ) );
+            $this->settings['weight_excerpt']                     = (int) sanitize_key( trim( $_POST['weight_excerpt'] ) );
+            $this->settings['weight_body']                        = (int) sanitize_key( trim( $_POST['weight_body'] ) );
+            $this->settings['weight_tags']                        = (int) sanitize_key( trim( $_POST['weight_tags'] ) );
+            $this->settings['weight_categories']                  = (int) sanitize_key( trim( $_POST['weight_categories'] ) );
+            $this->settings['display_result_product_price']       = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
+            $this->settings['display_result_product_add_to_cart'] = isset( $_POST['display_result_product_add_to_cart'] ) && $_POST['display_result_product_add_to_cart'] == 'true';
+            $this->settings['display_chilisearch_brand']          = isset( $_POST['display_chilisearch_brand'] ) && $_POST['display_chilisearch_brand'] == 'true';
+            $this->settings['facets'] = [];
+            if (isset( $_POST['facet_categories'] ) && $_POST['facet_categories'] == 'true') {
+                $this->settings['facets'][] = self::FACET_CATEGORIES;
+            }
+            if (isset( $_POST['facet_tags'] ) && $_POST['facet_tags'] == 'true') {
+                $this->settings['facets'][] = self::FACET_TAGS;
+            }
+            if (isset( $_POST['facet_author'] ) && $_POST['facet_author'] == 'true') {
+                $this->settings['facets'][] = self::FACET_AUTHOR;
+            }
+            if (isset( $_POST['facet_brand'] ) && $_POST['facet_brand'] == 'true') {
+                $this->settings['facets'][] = self::FACET_BRAND;
+            }
+            if (isset( $_POST['facet_type'] ) && $_POST['facet_type'] == 'true') {
+                $this->settings['facets'][] = self::FACET_TYPE;
+            }
+            if (isset( $_POST['facet_price'] ) && $_POST['facet_price'] == 'true') {
+                $this->settings['facets'][] = self::FACET_PRICE;
+            }
+            if (isset( $_POST['facet_publishedAt'] ) && $_POST['facet_publishedAt'] == 'true') {
+                $this->settings['facets'][] = self::FACET_PUBLISHED_AT;
+            }
+            if (isset( $_POST['facet_status'] ) && $_POST['facet_status'] == 'true') {
+                $this->settings['facets'][] = self::FACET_STATUS;
+            }
+            $this->settings['facets'] = array_unique( array_intersect( self::FACETS, $this->settings['facets'] ) );
         }
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
@@ -576,13 +537,18 @@ final class ChiliSearch {
 
     public function wp_ajax_admin_ajax_create_set_search_page() {
         $this->get_settings();
-        $this->settings['search_page_id'] = wp_insert_post( [
-            'post_title'   => wp_strip_all_tags( __( 'Search' ) ),
-            'post_content' => '[chilisearch_search_page]',
-            'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
-            'post_type'    => self::WP_POST_TYPE_PAGE,
-        ] );
+        $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
+        if ( ! empty( $search_page ) && $search_page->post_status === 'publish' ) {
+            $this->settings['search_page_id'] = $search_page->ID;
+        } else {
+            $this->settings['search_page_id'] = wp_insert_post( [
+                'post_title'   => wp_strip_all_tags( __( 'Search' ) ),
+                'post_content' => '[chilisearch_search_page]<p>Search by <a href="https://chilisearch.com" target="_blank">Chili Search</a></p>',
+                'post_status'  => 'publish',
+                'post_author'  => get_current_user_id(),
+                'post_type'    => self::WP_POST_TYPE_PAGE,
+            ] );
+        }
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
     }
@@ -604,49 +570,39 @@ final class ChiliSearch {
     }
 
     public function wp_ajax_admin_ajax_get_list_of_content_need_to_be_indexed() {
-        $active_post_types = $this->get_active_post_types();
-        $siteInfo = $this->get_website_info();
-        $documentCountLimit = isset($siteInfo['documentCountLimit']) ? (int)$siteInfo['documentCountLimit'] : null;
-        $posts             = $this->admin_get_active_posts( $active_post_types, $documentCountLimit );
-        $posts             = array_filter( $posts, function ( $post ) {
-            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT && ! $this->wts_settings['woocommerce_products_outofstock'] ) {
+        $active_post_types  = $this->get_active_post_types();
+        $siteInfo           = $this->get_website_info();
+        $documentCountLimit = isset( $siteInfo['documentCountLimit'] ) ? (int) $siteInfo['documentCountLimit'] : null;
+        $posts              = $this->admin_get_active_posts( $active_post_types, $documentCountLimit );
+        $posts              = array_filter( $posts, function ( $post ) {
+            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
                 $product = wc_get_product( $post->ID );
+                if ( $product->get_stock_status() === 'instock' ) {
+                    return ! empty( $this->wts_settings['product_instock'] );
+                }
 
-                return $product->get_stock_status() === 'instock';
+                return ! empty( $this->wts_settings['product_outofstock'] );
+            }
+            if ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT ) {
+                return array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS );
             }
 
             return true;
         } );
-        $documentIDs       = array_map( [ $this, 'get_document_id_from_post' ], $posts );
+        $documentIDs        = array_map( [ $this, 'get_document_id_from_post' ], $posts );
 
         wp_send_json( [ 'status' => true, 'documents' => array_values( $documentIDs ) ] );
     }
 
     protected function get_active_post_types() {
-        $active_post_types = [];
-        if ( ! empty( $this->wts_settings['posts'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_POST;
-        }
-        if ( ! empty( $this->wts_settings['pages'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_PAGE;
-        }
-        if ( ! empty( $this->wts_settings['media'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_ATTACHMENT;
-        }
-        if ( ! empty( $this->wts_settings['woocommerce_products'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_PRODUCT;
-        }
-        if ( ! empty( $this->wts_settings['bbpress_forum'] ) ) {
-            $active_post_types[] = self::WP_POST_TYPE_FORUM_FORUM;
-            if ( ! empty( $this->wts_settings['bbpress_topic'] ) ) {
-                $active_post_types[] = self::WP_POST_TYPE_FORUM_TOPIC;
-            }
-            if ( ! empty( $this->wts_settings['bbpress_reply'] ) ) {
-                $active_post_types[] = self::WP_POST_TYPE_FORUM_REPLY;
-            }
-        }
+        $wts_settings               = $this->wts_settings;
+        $wts_settings['product']    = ! empty( $wts_settings['product_instock'] ) || ! empty( $wts_settings['product_outofstock'] );
+        $wts_settings['attachment'] = ! empty( $wts_settings['media_doc_files'] );
 
-        return $active_post_types;
+        $wts_settings['product_instock'] = $wts_settings['product_outofstock'] = $wts_settings['media_doc_files'] = false;
+        $wts_settings = array_filter( $wts_settings, 'boolval' );
+
+        return array_keys( $wts_settings );
     }
 
     protected function admin_get_active_posts( $active_post_types, $posts_per_page = null ) {
@@ -661,7 +617,7 @@ final class ChiliSearch {
         return array_filter( $query->posts, function ( $post ) {
             if ( $post->post_status === 'inherit' ) {
                 $post_parent = get_post( $post->post_parent );
-                if ( $post_parent === null || $post_parent->post_status !== 'publish' ) {
+                if ( ! array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS ) && ( $post_parent === null || $post_parent->post_status !== 'publish' ) ) {
                     return false;
                 }
             }
@@ -710,9 +666,10 @@ final class ChiliSearch {
     }
 
     public function transform_post_to_document( $post ) {
-        $document = [
+        $all_post_types = get_post_types( [ 'public' => true ], false );
+        $document       = [
             'id'          => $this->get_document_id_from_post( $post ),
-            'type'        => $post->post_type,
+            'type'        => ! empty( $all_post_types[ $post->post_type ] ) ? $all_post_types[ $post->post_type ]->label : $post->post_type,
             'title'       => ! empty( $post->post_title ) ? $post->post_title : '',
             'link'        => get_permalink( $post->ID ),
             'excerpt'     => ! empty( $post->post_excerpt ) ? $post->post_excerpt : null,
@@ -725,6 +682,7 @@ final class ChiliSearch {
             'tags'        => array_map( function ( $term ) {
                 return ! empty( $term->name ) ? $term->name : null;
             }, wp_get_post_tags( $post->ID ) ),
+            'image'       => ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null,
             'publishedAt' => ! empty( $post->post_date_gmt ) ? $post->post_date_gmt : null,
         ];
         if ( empty( $document['title'] ) ) {
@@ -737,9 +695,7 @@ final class ChiliSearch {
                 $document['tags']       = wp_get_post_terms( $post->ID, 'product_tag', [ 'fields' => 'names' ] );
                 $document['excerpt']    = $product->get_short_description();
                 $document['price']      = (int) $product->get_price();
-                if ( $this->wts_settings['woocommerce_products_sku'] ) {
-                    $document['sku']        = $product->get_sku();
-                }
+                $document['sku']        = $product->get_sku();
                 $document['attributes'] = [];
                 /** @var WC_Product_Attribute $attribute */
                 foreach ( $product->get_attributes() as $attributeKey => $attribute ) {
@@ -763,22 +719,24 @@ final class ChiliSearch {
                         }
                     }
                 }
-                $document['status'] = $product->get_stock_status() === 'instock' ? 1 : 0;
-            case self::WP_POST_TYPE_POST:
-            case self::WP_POST_TYPE_PAGE:
-                $document['image'] = ! empty( $thumbnail = get_the_post_thumbnail_url( $post->ID ) ) ? $thumbnail : null;
+                if ( $product->is_on_backorder() ) {
+                    $document['status'] = __( 'On backorder', 'woocommerce' );
+                } elseif ( $product->is_in_stock() ) {
+                    $document['status'] = __( 'In stock', 'woocommerce' );
+                } else {
+                    $document['status'] = __( 'Out of stock', 'woocommerce' );
+                }
                 break;
             case self::WP_POST_TYPE_ATTACHMENT:
-                $document['type']  = 'media';
-                $document['title'] = str_replace( '-', ' ', $document['title'] );
-                if ( array_key_exists( $post->post_mime_type, self::MIME_TYPES_IMAGES ) ) {
-                    $document['image'] = ! empty( $post->guid ) ? $post->guid : null;
-                } elseif (
+                if (
                     ! empty( $this->wts_settings['media_doc_files'] ) &&
                     array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS )
                 ) {
+                    $document['title']       = str_replace( '-', ' ', $document['title'] );
                     $document['docFileType'] = self::MIME_TYPES_DOCS[ $post->post_mime_type ];
                     $document['docFileBody'] = @base64_encode( file_get_contents( get_attached_file( $post->ID ) ) );
+                } else {
+                    return null; // should be skipped
                 }
                 break;
             case self::WP_POST_TYPE_FORUM_REPLY:
@@ -790,19 +748,8 @@ final class ChiliSearch {
                 $document['link']  = get_permalink( $topic->ID ) . "#post-" . $post->ID;
             case self::WP_POST_TYPE_FORUM_FORUM:
             case self::WP_POST_TYPE_FORUM_TOPIC:
-                $document['type']    = 'forum';
                 $document['excerpt'] = substr( $document['body'], 0, 300 );
                 break;
-        }
-        if (
-            ( $post->post_type === self::WP_POST_TYPE_POST && ! empty( $this->wts_settings['posts_approved_comments'] ) ) ||
-            ( $post->post_type === self::WP_POST_TYPE_PAGE && ! empty( $this->wts_settings['pages_approved_comments'] ) ) ||
-            ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT && ! empty( $this->wts_settings['media_approved_comments'] ) ) ||
-            ( $post->post_type === self::WP_POST_TYPE_PRODUCT && ! empty( $this->wts_settings['woocommerce_products_approved_comments'] ) )
-        ) {
-            $document['comments'] = array_map( function ( $comment ) {
-                return (string) $comment->comment_content;
-            }, get_comments( [ 'post_id' => $post->ID ] ) );
         }
 
         return $document;
@@ -813,46 +760,28 @@ final class ChiliSearch {
     }
 
     public function wp_ajax_admin_ajax_get_posts_count() {
-        $post_type_count = [
-            self::WP_POST_TYPE_POST       => 0,
-            self::WP_POST_TYPE_PAGE       => 0,
-            self::WP_POST_TYPE_ATTACHMENT => 0,
-            'post_comments'               => 0,
-            'page_comments'               => 0,
-            'attachment_comments'         => 0,
-            'attachment_docs'             => 0,
+        $all_post_types         = array_keys( get_post_types( [ 'public' => true ] ) );
+        $admin_get_active_posts = $this->admin_get_active_posts( $all_post_types );
+        $post_type_count        = [
+            'media_doc_files' => 0,
+            'product_instock' => 0,
+            'product_outofstock' => 0,
         ];
-        if ( $this->is_bbpress_active() ) {
-            $post_type_count += [
-                self::WP_POST_TYPE_FORUM_FORUM => 0,
-                self::WP_POST_TYPE_FORUM_TOPIC => 0,
-                self::WP_POST_TYPE_FORUM_REPLY => 0,
-            ];
-        }
-        if ( $this->is_woocommerce_active() ) {
-            $post_type_count += [
-                self::WP_POST_TYPE_PRODUCT => 0,
-                'product_comments'         => 0,
-                'product_outofstock'       => 0,
-            ];
-        }
-        $admin_get_active_posts = $this->admin_get_active_posts( self::WP_POST_TYPES );
+        $post_type_count += array_fill_keys( $all_post_types , 0 );
         foreach ( $admin_get_active_posts as $post ) {
-            if ( $post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT ) {
-                $post_type_count[ $post->post_type ] ++;
+            if ( empty( $post_type_count[ $post->post_type ] ) ) {
+                $post_type_count[ $post->post_type ] = 0;
             }
-            if ( $post->post_type === self::WP_POST_TYPE_POST || $post->post_type === self::WP_POST_TYPE_PAGE || $post->post_type === self::WP_POST_TYPE_ATTACHMENT || $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
-                $post_type_count[ $post->post_type . '_comments' ] += wp_count_comments( $post->ID )->approved;
-            }
+            $post_type_count[ $post->post_type ] ++;
             if ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT && array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS ) ) {
-                $post_type_count['attachment_docs'] ++;
+                $post_type_count[ 'media_doc_files' ] ++;
             }
-            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
+            if ( $post->post_type === self::WP_POST_TYPE_PRODUCT && function_exists( 'wc_get_product' ) && $this->is_woocommerce_active() ) {
                 $product = wc_get_product( $post->ID );
                 if ( $product->get_stock_status() === 'instock' ) {
-                    $post_type_count[ self::WP_POST_TYPE_PRODUCT ] ++;
-                } elseif ( $product->get_stock_status() === 'outofstock' ) {
-                    $post_type_count['product_outofstock'] ++;
+                    $post_type_count[ 'product_instock' ] ++;
+                } else {
+                    $post_type_count[ 'product_outofstock' ] ++;
                 }
             }
         }
@@ -902,7 +831,14 @@ final class ChiliSearch {
     }
 
     public function default_search_page() {
-        if ( $this->settings['search_page_id'] == - 1 && ! empty( $_GET['chilisearch-query'] ) ) {
+        if ( $this->settings['search_page_id'] == - 1 && ! empty( $_GET['cs']['query'] ) ) {
+            global $wp_query;
+            $wp_query->is_search = 1;
+
+            add_filter('get_search_query', function ( $title) {
+                return $_GET['cs']['query'];
+            });
+
             require_once CHILISEARCH_DIR . '/templates/client_default_search_page.php';
             // In our template we add header and footer ourselves,
             // so we need to stop execution here to avoid re-rendering
@@ -918,10 +854,7 @@ final class ChiliSearch {
             return require CHILISEARCH_DIR . '/templates/admin_get_started_register.php';
         }
         $tab = ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'analytics';
-        if ( $tab === 'plans' ) {
-            return require CHILISEARCH_DIR . '/templates/admin_choose_plan.php';
-        }
-        if ( empty( $this->configs['get_started_config_finished'] ) && $tab !== 'where-to-search' ) {
+        if ( empty( $this->configs['get_started_config_finished'] ) && !in_array($tab, ['where-to-search', 'license']) ) {
             wp_redirect( admin_url( 'admin.php?page=chilisearch&tab=where-to-search&get-started' ) );
         }
         ?>
@@ -932,6 +865,7 @@ final class ChiliSearch {
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=where-to-search' ) ) ?>" class="nav-tab <?= $tab === 'where-to-search' ? 'nav-tab-active' : '' ?>"><?= __( 'Where to Search', 'chilisearch' ) ?></a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=demo' ) ) ?>" class="nav-tab <?= $tab === 'demo' ? 'nav-tab-active' : '' ?>"><?= __( 'Demo', 'chilisearch' ) ?></a>
             <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=messages' ) ) ?>" class="nav-tab <?= $tab === 'messages' ? 'nav-tab-active' : '' ?>"><?= __( 'Messages', 'chilisearch' ) ?></a>
+            <a href="<?= esc_url( admin_url( 'admin.php?page=chilisearch&tab=license' ) ) ?>" class="nav-tab <?= $tab === 'license' ? 'nav-tab-active' : '' ?>"><?= __( 'License', 'chilisearch' ) ?></a>
         </h2>
         <?php
         switch ( $tab ) {
@@ -943,6 +877,22 @@ final class ChiliSearch {
                 return require CHILISEARCH_DIR . '/templates/admin_tab_indexing.php';
             case 'messages':
                 return require CHILISEARCH_DIR . '/templates/admin_tab_messages.php';
+            case 'license':
+                if ( isset( $_POST['gift-code'] ) ) {
+                    list( $responseCode, $payload ) = $this->send_request( 'POST', 'website/redeem-gift-code', ['code' => $_POST['gift-code']] );
+                    if ( $responseCode === 200 ) { ?>
+                        <div class="notice notice-success is-dismissible">
+                            <p><?= __( sprintf('Gift code redeemed successfully! %d days added to your premium service.', isset($payload->addedDaysToService) ? $payload->addedDaysToService : 0), 'chilisearch' ); ?></p>
+                        </div>
+                    <?php } else { ?>
+                        <div class="notice notice-error is-dismissible">
+                            <p><?= __( 'Could not redeem this gift code!', 'chilisearch' ); ?></p>
+                            <p><?= esc_html( isset($payload->message) ? $payload->message : __('No message!', 'chilisearch') ); ?></p>
+                        </div>
+                    <?php }
+                    $this->get_website_info(true);
+                }
+                return require CHILISEARCH_DIR . '/templates/admin_tab_license.php';
             case 'demo':
                 add_filter('script_loader_tag', function ( $tag, $handle) {
                     if ( 'chilisearch-settings-js' === $handle ) {
@@ -965,20 +915,6 @@ final class ChiliSearch {
                 return require CHILISEARCH_DIR . '/templates/admin_tab_demo.php';
             case 'analytics':
             default:
-                if ( isset( $_POST['gift-code'] ) ) {
-                    list( $responseCode, $payload ) = $this->send_request( 'POST', 'website/redeem-gift-code', ['code' => $_POST['gift-code']] );
-                    if ( $responseCode === 200 ) { ?>
-                        <div class="notice notice-success is-dismissible">
-                            <p><?= __( sprintf('Gift code redeemed successfully! %d days added to your premium service.', isset($payload->addedDaysToService) ? $payload->addedDaysToService : 0), 'chilisearch' ); ?></p>
-                        </div>
-                    <?php } else { ?>
-                        <div class="notice notice-error is-dismissible">
-                            <p><?= __( 'Could not redeem this gift code!', 'chilisearch' ); ?></p>
-                            <p><?= esc_html( isset($payload->message) ? $payload->message : __('No message!', 'chilisearch') ); ?></p>
-                        </div>
-                    <?php }
-                    $this->get_website_info(true);
-                }
                 return require CHILISEARCH_DIR . '/templates/admin_tab_analytics.php';
         }
     }
@@ -1030,6 +966,20 @@ final class ChiliSearch {
         if ( ! in_array( $post->post_type, $active_post_types, true ) ) {
             return true;
         }
+        if ( $post->post_type === self::WP_POST_TYPE_PRODUCT ) {
+            $product = wc_get_product( $post->ID );
+            if ( $product->get_stock_status() === 'instock' ) {
+                if ( empty( $this->wts_settings['product_instock'] ) ) {
+                    return true;
+                }
+            } elseif ( empty( $this->wts_settings['product_outofstock'] ) ) {
+                return true;
+            }
+        }
+        if ( $post->post_type === self::WP_POST_TYPE_ATTACHMENT && ! array_key_exists( $post->post_mime_type, self::MIME_TYPES_DOCS ) ) {
+            return true;
+        }
+
         $siteInfo           = $this->get_website_info();
         $documentCount      = isset( $siteInfo['documentsCount'] ) ? (int) $siteInfo['documentsCount'] : null;
         $documentCountLimit = isset( $siteInfo['documentCountLimit'] ) ? (int) $siteInfo['documentCountLimit'] : null;
@@ -1067,18 +1017,21 @@ final class ChiliSearch {
             'apiKey'     => $this->configs['site_api_key'],
             'searchPage' => $this->get_or_create_search_page(),
             'configs'    => [
-                'extraInputSelector' => $this->settings['auto_search_detection'] ? $this->settings['search_input_selector'] : '',
+                'extraInputSelector' => ! empty( $this->settings['search_input_selector'] ) ? $this->settings['search_input_selector'] : '',
                 'searchPageSize'     => $this->settings['search_page_size'],
                 'saytPageSize'       => $this->settings['sayt_page_size'],
-                'wordType'           => $this->settings['search_word_type'],
-                'currency'           => '',
+                'wordType'           => $this->get_current_plan() === 'premium' ? $this->settings['search_word_type'] : self::SEARCH_WORD_TYPE_BOTH,
+                'currency'           => $this->is_woocommerce_active() ? html_entity_decode( get_woocommerce_currency_symbol() ) : '',
                 'sortBy'             => $this->get_current_plan() === 'premium' && ! empty( $this->settings['sort_by'] ) && array_key_exists( $this->settings['sort_by'], self::SORT_BYS ) ? self::SORT_BYS[ $this->settings['sort_by'] ] : self::SORT_BYS[ self::SORT_BY_RELEVANCY ],
+                'isRTL'              => (bool) is_rtl(),
+                'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
+                'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
+                'voiceSearchLocale'  => get_locale(),
+                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
+                'facets'             => array_values( $this->settings['facets'] ),
                 'displayInResult'    => [
-                    'thumbnail'    => (bool) $this->settings['display_result_image'],
-                    'productPrice' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
-                    'except'       => (bool) $this->settings['display_result_excerpt'],
-                    'categories'   => (bool) $this->settings['display_result_categories'],
-                    'tags'         => (bool) $this->settings['display_result_tags'],
+                    'productPrice'     => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
+                    'productAddToCart' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'],
                 ],
                 'weight'             => [
                     'title'      => $this->settings['weight_title'],
@@ -1087,124 +1040,11 @@ final class ChiliSearch {
                     'tags'       => $this->settings['weight_tags'],
                     'categories' => $this->settings['weight_categories'],
                 ],
-                'filters'            => [],
-                'isRTL'              => (bool) is_rtl(),
-                'removeBrand'        => $this->get_current_plan() === 'premium' && ! $this->settings['display_chilisearch_brand'],
-                'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
-                'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
-                'voiceSearchLocale'  => get_locale(),
             ],
             'phraseBook' => $messages,
         ];
-        if ( $this->is_woocommerce_active() ) {
-            $params['configs']['currency'] = html_entity_decode( get_woocommerce_currency_symbol() );
-        }
-        if ( $this->settings['filter_type'] ) {
-            $active_post_types = [];
-            if ( ! empty( $this->wts_settings['posts'] ) ) {
-                $active_post_types['post'] = __( 'Posts', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['pages'] ) ) {
-                $active_post_types['page'] = __( 'Pages', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['media'] ) ) {
-                $active_post_types['media'] = __( 'Media', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['woocommerce_products'] ) ) {
-                $active_post_types['product'] = __( 'Products', 'chilisearch' );
-            }
-            if ( ! empty( $this->wts_settings['bbpress_forum'] ) ) {
-                $active_post_types['forum'] = __( 'Forums', 'chilisearch' );
-            }
-            if ( count( $active_post_types ) > 1 ) {
-                $params['configs']['filters']['type'] = $active_post_types;
-            }
-        }
-        if ( $this->settings['filter_category'] ) {
-            $params['configs']['filters']['categories'] = array_map( function ( $category ) {
-                return htmlspecialchars_decode( $category->name );
-            }, get_categories( [
-                'taxonomy' => 'category',
-                'orderby'  => 'count',
-                'order'    => 'DESC'
-            ] ) );
-            if ( $this->is_woocommerce_active() ) {
-                $params['configs']['filters']['categories'] = array_merge(
-                    array_map( function ( $category ) {
-                        return htmlspecialchars_decode( $category->name );
-                    }, get_categories( [
-                        'taxonomy' => 'product_cat',
-                        'orderby'  => 'count',
-                        'order'    => 'DESC'
-                    ] ) ),
-                    $params['configs']['filters']['categories']
-                );
-            }
-        }
-        if ( $this->settings['filter_price'] && $this->is_woocommerce_active() ) {
-            $params['configs']['filters']['price'] = @$this->get_filtered_price();
-        }
-        if ( $this->settings['filter_publishedat'] ) {
-            $active_post_types = $this->get_active_post_types();
-            $min_post          = new WP_Query( [
-                'post_type'      => $active_post_types,
-                'post_status'    => 'inherit,publish',
-                'posts_per_page' => 1,
-                'orderby'        => 'post_date',
-                'order'          => 'ASC',
-            ] );
-            if ( ! empty( $min_post->post->post_date ) ) {
-                $params['configs']['filters']['publishedat']['from'] = date( 'Y-m-d', strtotime( $min_post->post->post_date ) );
-            }
-            $max_post = new WP_Query( [
-                'post_type'      => $active_post_types,
-                'post_status'    => 'inherit,publish',
-                'posts_per_page' => 1,
-                'orderby'        => 'post_date',
-                'order'          => 'DESC',
-            ] );
-            if ( ! empty( $max_post->post->post_date ) ) {
-                $params['configs']['filters']['publishedat']['to'] = date( 'Y-m-d', strtotime( $max_post->post->post_date ) );
-            }
-        }
 
         return $params;
-    }
-
-    protected function get_filtered_price() {
-        global $wpdb;
-
-        $args =  WC_Query::get_main_query();
-
-        $tax_query  = isset( $args->tax_query->queries ) ? $args->tax_query->queries : array();
-        $meta_query = isset( $args->query_vars['meta_query'] ) ? $args->query_vars['meta_query'] : array();
-
-        foreach ( $meta_query + $tax_query as $key => $query ) {
-            if ( ! empty( $query['price_filter'] ) || ! empty( $query['rating_filter'] ) ) {
-                unset( $meta_query[ $key ] );
-            }
-        }
-
-        $meta_query = new \WP_Meta_Query( $meta_query );
-        $tax_query  = new \WP_Tax_Query( $tax_query );
-
-        $meta_query_sql = $meta_query->get_sql( 'post', $wpdb->posts, 'ID' );
-        $tax_query_sql  = $tax_query->get_sql( $wpdb->posts, 'ID' );
-
-        $sql = "SELECT min( FLOOR( price_meta.meta_value ) ) as min_price, max( CEILING( price_meta.meta_value ) ) as max_price FROM {$wpdb->posts} ";
-        $sql .= " LEFT JOIN {$wpdb->postmeta} as price_meta ON {$wpdb->posts}.ID = price_meta.post_id " . $tax_query_sql['join'] . $meta_query_sql['join'];
-        $sql .= " 	WHERE {$wpdb->posts}.post_type IN ('product')
-			AND {$wpdb->posts}.post_status = 'publish'
-			AND price_meta.meta_key IN ('_price')
-			AND price_meta.meta_value > '' ";
-        $sql .= $tax_query_sql['where'] . $meta_query_sql['where'];
-
-        $prices = $wpdb->get_row( $sql );
-
-        return [
-            'min' => floor( $prices->min_price ),
-            'max' => ceil( $prices->max_price )
-        ];
     }
 }
 

@@ -2,7 +2,6 @@
 $messages = $this->get_messages();
 ?>
 <div class="wrap">
-    <h2><?= __( 'Messages', 'chilisearch' ) ?></h2>
     <form method="post" action="options.php" id="messages_config">
         <?php wp_nonce_field( 'chilisearch_messages_settings_group-options' ); ?>
         <fieldset>
@@ -41,132 +40,82 @@ $messages = $this->get_messages();
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-sayt-init-message"><?= __( 'SAYT initial message', '' ) ?>
-                    <input type="text" id="chilisearch-messages-sayt-init-message"
-                           name="chilisearch_messages_settings[sayt-init-message]" class="large-text" size="70"
-                           value="<?= $messages['sayt-init-message'] ?>">
+                <label for="chilisearch-messages-n-to-m-from-t-results"><?= __( 'Number of search results', '' ) ?>
+                    <input type="text" id="chilisearch-messages-n-to-m-from-t-results"
+                           name="chilisearch_messages_settings[n-to-m-from-t-results]" class="large-text" size="70"
+                           value="<?= $messages['n-to-m-from-t-results'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-form-submit-value"><?= __( 'Search form submit button', '' ) ?>
-                    <input type="text" id="chilisearch-messages-form-submit-value"
-                           name="chilisearch_messages_settings[form-submit-value]" class="large-text" size="70"
-                           value="<?= $messages['form-submit-value'] ?>">
+                <label for="chilisearch-messages-results"><?= __( 'Results column header', '' ) ?>
+                    <input type="text" id="chilisearch-messages-results"
+                           name="chilisearch_messages_settings[results]" class="large-text" size="70"
+                           value="<?= $messages['results'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-search-result-result-count"><?= __( 'Number of search results and time taken to find in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-search-result-result-count"
-                           name="chilisearch_messages_settings[search-result-result-count]" class="large-text" size="70"
-                           value="<?= $messages['search-result-result-count'] ?>">
+                <label for="chilisearch-messages-facet-categories"><?= __( 'Categories facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-categories"
+                           name="chilisearch_messages_settings[facet-categories]" class="large-text" size="70"
+                           value="<?= $messages['facet-categories'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-next"><?= __( 'Next button in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-next"
-                           name="chilisearch_messages_settings[next]" class="large-text" size="70"
-                           value="<?= $messages['next'] ?>">
+                <label for="chilisearch-messages-facet-tags"><?= __( 'Tags facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-tags"
+                           name="chilisearch_messages_settings[facet-tags]" class="large-text" size="70"
+                           value="<?= $messages['facet-tags'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-prev"><?= __( 'Previous button in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-prev"
-                           name="chilisearch_messages_settings[prev]" class="large-text" size="70"
-                           value="<?= $messages['prev'] ?>">
+                <label for="chilisearch-messages-facet-author"><?= __( 'Author facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-author"
+                           name="chilisearch_messages_settings[facet-author]" class="large-text" size="70"
+                           value="<?= $messages['facet-author'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-category"><?= __( 'Category filter in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-category"
-                           name="chilisearch_messages_settings[category]" class="large-text" size="70"
-                           value="<?= $messages['category'] ?>">
+                <label for="chilisearch-messages-facet-brand"><?= __( 'Brand facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-brand"
+                           name="chilisearch_messages_settings[facet-brand]" class="large-text" size="70"
+                           value="<?= $messages['facet-brand'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-price"><?= __( 'Price filter in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-price"
-                           name="chilisearch_messages_settings[price]" class="large-text" size="70"
-                           value="<?= $messages['price'] ?>">
+                <label for="chilisearch-messages-facet-type"><?= __( 'Type facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-type"
+                           name="chilisearch_messages_settings[facet-type]" class="large-text" size="70"
+                           value="<?= $messages['facet-type'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-search-between"><?= __( 'Post type filter in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-search-between"
-                           name="chilisearch_messages_settings[search-between]" class="large-text" size="70"
-                           value="<?= $messages['search-between'] ?>">
+                <label for="chilisearch-messages-facet-price"><?= __( 'Price facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-price"
+                           name="chilisearch_messages_settings[facet-price]" class="large-text" size="70"
+                           value="<?= $messages['facet-price'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-published"><?= __( 'Published date filter conjunction in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-published"
-                           name="chilisearch_messages_settings[published]" class="large-text" size="70"
-                           value="<?= $messages['published'] ?>">
+                <label for="chilisearch-messages-facet-publishedAt"><?= __( 'Published At facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-publishedAt"
+                           name="chilisearch_messages_settings[facet-publishedAt]" class="large-text" size="70"
+                           value="<?= $messages['facet-publishedAt'] ?>">
                 </label>
             </p>
 
             <p class="description">
-                <label for="chilisearch-messages-to"><?= __( 'Published date filter conjunction in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-to"
-                           name="chilisearch_messages_settings[to]" class="large-text" size="70"
-                           value="<?= $messages['to'] ?>">
-                </label>
-            </p>
-
-            <p class="description">
-                <label for="chilisearch-messages-all"><?= __( 'Search filter in search result page', '' ) ?>
-                    <input type="text" id="chilisearch-messages-all"
-                           name="chilisearch_messages_settings[all]" class="large-text" size="70"
-                           value="<?= $messages['all'] ?>">
-                </label>
-            </p>
-
-            <p class="description">
-                <label for="chilisearch-messages-show-all-n-results"><?= __( 'Show all found result link', '' ) ?>
-                    <input type="text" id="chilisearch-messages-show-all-n-results"
-                           name="chilisearch_messages_settings[show-all-n-results]" class="large-text" size="70"
-                           value="<?= $messages['show-all-n-results'] ?>">
-                </label>
-            </p>
-
-            <p class="description">
-                <label for="chilisearch-messages-voice-search-ready-to-listen"><?= __( 'Voice search ready to listen', '' ) ?>
-                    <input type="text" id="chilisearch-messages-voice-search-ready-to-listen"
-                           name="chilisearch_messages_settings[voice-search-ready-to-listen]" class="large-text"
-                           size="70"
-                           value="<?= $messages['voice-search-ready-to-listen'] ?>">
-                </label>
-            </p>
-
-            <p class="description">
-                <label for="chilisearch-messages-voice-search-error-no-result"><?= __( 'Voice search failed to understand', '' ) ?>
-                    <input type="text" id="chilisearch-messages-voice-search-error-no-result"
-                           name="chilisearch_messages_settings[voice-search-error-no-result]" class="large-text"
-                           size="70"
-                           value="<?= $messages['voice-search-error-no-result'] ?>">
-                </label>
-            </p>
-
-            <p class="description">
-                <label for="chilisearch-messages-voice-search-listening"><?= __( 'Voice search listening', '' ) ?>
-                    <input type="text" id="chilisearch-messages-voice-search-listening"
-                           name="chilisearch_messages_settings[voice-search-listening]" class="large-text" size="70"
-                           value="<?= $messages['voice-search-listening'] ?>">
-                </label>
-            </p>
-
-            <p class="description">
-                <label for="chilisearch-messages-voice-search-got-it"><?= __( 'Voice search understood', '' ) ?>
-                    <input type="text" id="chilisearch-messages-voice-search-got-it"
-                           name="chilisearch_messages_settings[voice-search-got-it]" class="large-text" size="70"
-                           value="<?= $messages['voice-search-got-it'] ?>">
+                <label for="chilisearch-messages-facet-status"><?= __( 'Status facet', '' ) ?>
+                    <input type="text" id="chilisearch-messages-facet-status"
+                           name="chilisearch_messages_settings[facet-status]" class="large-text" size="70"
+                           value="<?= $messages['facet-status'] ?>">
                 </label>
             </p>
         </fieldset>

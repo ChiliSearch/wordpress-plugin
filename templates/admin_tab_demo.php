@@ -8,8 +8,7 @@ $documentsCount = isset( $siteInfo['documentsCount'] ) ? esc_html( $siteInfo['do
         margin: 20px auto;
     }
 </style>
-<div class="wrap">
-    <h2><?= __( 'Demo', 'chilisearch' ) ?></h2>
+<div>
     <?php if ( isset( $_GET['get-started'] ) ): ?>
         <div class="notice notice-success is-dismissible" style="margin-top: 20px;">
             <p>

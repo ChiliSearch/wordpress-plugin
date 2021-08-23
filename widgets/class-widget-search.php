@@ -47,17 +47,9 @@ class Widget_Search extends \WP_Widget {
             echo $args['before_title'] . $title . $args['after_title'];
         }
         ?>
-        <form action="<?= $chilisearch->get_or_create_search_page() ?>" method="GET" role="search"
-              class="chilisearch-search_form" style="<?= $font ? "font-family:{$font};" : '' ?>">
-            <div class="chlisrch-f-sb">
-                <label class="chilisearch-search_form_label">
-                    <input type="search" placeholder="<?= $search_input_placeholder ?>" name="chilisearch-query"
-                           autocomplete="off"
-                           data-result-count="<?= $sayt_result_number ?>" <?= $display_thumbnail ? '' : 'data-no-thumbnail="1"' ?> <?= $display_excerpt ? '' : 'data-no-excerpt="1"' ?> <?= $display_categories ? '' : 'data-no-categories="1"' ?> <?= $display_tags ? '' : 'data-no-tags="1"' ?> <?= $voice_search_enabled ? '' : 'data-no-voice-search="1"' ?>>
-                </label>
-                <input class="chilisearch-search_form_submit" type="submit" value="<?= $submit_button_text ?>"
-                       style="<?= $display_submit_button ? '' : 'display:none;' ?>background:<?= $submit_button_background_color ?>;color:<?= $submit_button_color ?>">
-            </div>
+        <form action="<?= $chilisearch->get_or_create_search_page() ?>" method="GET" role="search" class="cs-search-form <?= is_rtl() ? 'cs-search-form--rtl' : '' ?>" style="<?= $font ? "font-family:{$font};" : '' ?>">
+            <input type="search" placeholder="<?= $search_input_placeholder ?>" name="cs[query]" autocomplete="off" data-result-count="<?= $sayt_result_number ?>" <?= $display_thumbnail ? '' : 'data-no-thumbnail="1"' ?> <?= $display_excerpt ? '' : 'data-no-excerpt="1"' ?> <?= $display_categories ? '' : 'data-no-categories="1"' ?> <?= $display_tags ? '' : 'data-no-tags="1"' ?> <?= $voice_search_enabled ? '' : 'data-no-voice-search="1"' ?>>
+            <input class="cs-search-form__submit-button" type="submit" value="<?= $submit_button_text ?>" style="<?= $display_submit_button ? '' : 'display:none;' ?>background:<?= $submit_button_background_color ?>;color:<?= $submit_button_color ?>">
         </form>
         <?php
         echo $args['after_widget'];
