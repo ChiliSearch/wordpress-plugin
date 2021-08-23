@@ -4,7 +4,7 @@ Donate link: https://chilisearch.com/wp-plugin
 Contributors: chilisearch
 Tags: search, woocommerce search, elementor search, product search, autocomplete search, ajax search, woocommerce, search as you type, fuzzy search
 Requires at least: 4.0
-Tested up to: 5.7.1
+Tested up to: 5.8
 Requires PHP: 5.6
 Stable tag: 3.0.0
 License: GPLv2 or later
