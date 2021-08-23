@@ -382,6 +382,9 @@ final class ChiliSearch {
         $this->settings['display_result_product_price']       = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'];
         $this->settings['display_result_product_add_to_cart'] = $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'];
         $this->settings['display_chilisearch_brand']          = $this->get_current_plan() !== 'premium' || $this->settings['display_chilisearch_brand'];
+        if ( $this->get_current_plan() !== 'premium' ) {
+            $this->settings['facets'] = self::FACETS;
+        }
         update_option( 'chilisearch_settings', $this->settings );
     }
 
@@ -501,6 +504,32 @@ final class ChiliSearch {
             $this->settings['display_result_product_price']       = isset( $_POST['display_result_product_price'] ) && $_POST['display_result_product_price'] == 'true';
             $this->settings['display_result_product_add_to_cart'] = isset( $_POST['display_result_product_add_to_cart'] ) && $_POST['display_result_product_add_to_cart'] == 'true';
             $this->settings['display_chilisearch_brand']          = isset( $_POST['display_chilisearch_brand'] ) && $_POST['display_chilisearch_brand'] == 'true';
+            $this->settings['facets'] = [];
+            if (isset( $_POST['facet_categories'] ) && $_POST['facet_categories'] == 'true') {
+                $this->settings['facets'][] = self::FACET_CATEGORIES;
+            }
+            if (isset( $_POST['facet_tags'] ) && $_POST['facet_tags'] == 'true') {
+                $this->settings['facets'][] = self::FACET_TAGS;
+            }
+            if (isset( $_POST['facet_author'] ) && $_POST['facet_author'] == 'true') {
+                $this->settings['facets'][] = self::FACET_AUTHOR;
+            }
+            if (isset( $_POST['facet_brand'] ) && $_POST['facet_brand'] == 'true') {
+                $this->settings['facets'][] = self::FACET_BRAND;
+            }
+            if (isset( $_POST['facet_type'] ) && $_POST['facet_type'] == 'true') {
+                $this->settings['facets'][] = self::FACET_TYPE;
+            }
+            if (isset( $_POST['facet_price'] ) && $_POST['facet_price'] == 'true') {
+                $this->settings['facets'][] = self::FACET_PRICE;
+            }
+            if (isset( $_POST['facet_publishedAt'] ) && $_POST['facet_publishedAt'] == 'true') {
+                $this->settings['facets'][] = self::FACET_PUBLISHED_AT;
+            }
+            if (isset( $_POST['facet_status'] ) && $_POST['facet_status'] == 'true') {
+                $this->settings['facets'][] = self::FACET_STATUS;
+            }
+            $this->settings['facets'] = array_unique( array_intersect( self::FACETS, $this->settings['facets'] ) );
         }
         $this->set_settings();
         wp_send_json( [ 'status' => true ] );
@@ -999,7 +1028,7 @@ final class ChiliSearch {
                 'voiceSearchEnable'  => (bool) $this->settings['voice_search_enabled'],
                 'voiceSearchLocale'  => get_locale(),
                 'fuzziness'          => $this->settings['fuzzy_search_enabled'] ? 'AUTO' : '0',
-                'facets'             => $this->settings['facets'],
+                'facets'             => array_values( $this->settings['facets'] ),
                 'displayInResult'    => [
                     'productPrice'     => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_price'],
                     'productAddToCart' => $this->get_current_plan() === 'premium' && $this->settings['display_result_product_add_to_cart'],

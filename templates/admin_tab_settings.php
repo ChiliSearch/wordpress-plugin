@@ -109,8 +109,46 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                     </td>
                 </tr>
                 <tr valign="top">
+                    <th scope="row"><label><?= __( 'Facets', 'chilisearch' ) ?></label></th>
+                    <td id="facets" class="sub-labels">
+                        <label for="facet_categories">
+                            <span><?= __( 'Categories', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_categories]" id="facet_categories" class="regular-text" value="true" <?= in_array( self::FACET_CATEGORIES, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_tags">
+                            <span><?= __( 'Tags', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_tags]" id="facet_tags" class="regular-text" value="true" <?= in_array( self::FACET_TAGS, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_author">
+                            <span><?= __( 'Author', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_author]" id="facet_author" class="regular-text" value="true" <?= in_array( self::FACET_AUTHOR, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_brand">
+                            <span><?= __( 'Brand', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_brand]" id="facet_brand" class="regular-text" value="true" <?= in_array( self::FACET_BRAND, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_type">
+                            <span><?= __( 'Type', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_type]" id="facet_type" class="regular-text" value="true" <?= in_array( self::FACET_TYPE, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_price">
+                            <span><?= __( 'Price', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_price]" id="facet_price" class="regular-text" value="true" <?= $this->is_woocommerce_active() && in_array( self::FACET_PRICE, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_publishedAt">
+                            <span><?= __( 'Published At', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_publishedAt]" id="facet_publishedAt" class="regular-text" value="true" <?= in_array( self::FACET_PUBLISHED_AT, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <label for="facet_status">
+                            <span><?= __( 'Status', 'chilisearch' ) ?>: </span>
+                            <input type="checkbox" name="chilisearch_settings[facet_status]" id="facet_status" class="regular-text" value="true" <?= $this->is_woocommerce_active() && in_array( self::FACET_STATUS, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                        </label>
+                        <p class="description"><?= __( 'Define active search filters.', 'chilisearch' ) ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
                     <th scope="row"><label><?= __( 'Field weights', 'chilisearch' ) ?></label></th>
-                    <td id="weights">
+                    <td id="weights" class="sub-labels">
                         <label for="weight_title">
                             <span><?= __( 'Title', 'chilisearch' ) ?>: </span>
                             <input type="number" name="chilisearch_settings[weight_title]" id="weight_title" class="regular-text" min="1" max="10" value="<?= $this->settings['weight_title'] ?>" <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
@@ -204,6 +242,14 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                     'weight_body': jQuery('#site_config_update #weight_body').val(),
                     'weight_tags': jQuery('#site_config_update #weight_tags').val(),
                     'weight_categories': jQuery('#site_config_update #weight_categories').val(),
+                    'facet_categories': jQuery('#site_config_update #facet_categories').is(":checked"),
+                    'facet_tags': jQuery('#site_config_update #facet_tags').is(":checked"),
+                    'facet_author': jQuery('#site_config_update #facet_author').is(":checked"),
+                    'facet_brand': jQuery('#site_config_update #facet_brand').is(":checked"),
+                    'facet_type': jQuery('#site_config_update #facet_type').is(":checked"),
+                    'facet_price': jQuery('#site_config_update #facet_price').is(":checked"),
+                    'facet_publishedAt': jQuery('#site_config_update #facet_publishedAt').is(":checked"),
+                    'facet_status': jQuery('#site_config_update #facet_status').is(":checked"),
                 },
                 function (response) {
                     spinner.hide();

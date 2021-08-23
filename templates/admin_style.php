@@ -15,11 +15,11 @@
         margin-left: 0;
     }
 
-    #site_config_update #weights label {
+    #site_config_update .sub-labels label {
         display: block;
         margin: 5px;
     }
-    #site_config_update #weights label span {
+    #site_config_update .sub-labels label span {
         width: 100px;
         display: inline-block;
     }
