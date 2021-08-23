@@ -36,7 +36,7 @@ unset( $post_types['product'], $post_types['attachment'] );
             <tr valign="top">
                 <th scope="row"><label><?= __( 'Search between', 'chilisearch' ) ?>:</label></th>
                 <td>
-                    <? foreach ( $post_types as $post_type): ?>
+                    <?php foreach ( $post_types as $post_type): ?>
                         <div class="form-group">
                             <label for="<?= $post_type->name ?>">
                                 <input type="checkbox" name="chilisearch_wtf_settings[<?= $post_type->name ?>]" id="<?= $post_type->name ?>" <?= ! empty( $this->wts_settings[ $post_type->name ] ) ? 'checked' : '' ?>>
@@ -44,7 +44,7 @@ unset( $post_types['product'], $post_types['attachment'] );
                                 <small><a href="<?= ! empty( $post_type->link ) ? $post_type->link : esc_url( admin_url( 'edit.php?post_status=publish&post_type=' . $post_type->name ) ) ?>" target="_blank"></a></small>
                             </label>
                         </div>
-                    <? endforeach; ?>
+                    <?php endforeach; ?>
                     <div class="form-group">
                         <label for="media_doc_files">
                             <input type="checkbox" name="chilisearch_wtf_settings[media_doc_files]" id="media_doc_files" <?= $this->wts_settings['media_doc_files'] ? 'checked' : '' ?> <?php if ($plan !== 'premium'): ?>disabled="disabled"<?php endif; ?>>
