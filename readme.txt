@@ -6,7 +6,7 @@ Tags: search, woocommerce search, elementor search, product search, autocomplete
 Requires at least: 4.0
 Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 2.0.8
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 == Upgrade Notice ==
 
+= 3.0.0 =
+* Upgrade for latest changes
+
 = 2.0.8 =
 * Upgrade for latest changes
 
@@ -151,6 +154,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 3.0.0 =
+* rewrite the search client
 
 = 2.0.8 =
 * add fuzzy search
