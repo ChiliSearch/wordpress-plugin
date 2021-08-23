@@ -133,7 +133,7 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                         </label>
                         <label for="facet_price">
                             <span><?= __( 'Price', 'chilisearch' ) ?>: </span>
-                            <input type="checkbox" name="chilisearch_settings[facet_price]" id="facet_price" class="regular-text" value="true" <?= $this->is_woocommerce_active() && in_array( self::FACET_PRICE, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                            <input type="checkbox" name="chilisearch_settings[facet_price]" id="facet_price" class="regular-text" value="true" <?= in_array( self::FACET_PRICE, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= !$this->is_woocommerce_active() || $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
                         </label>
                         <label for="facet_publishedAt">
                             <span><?= __( 'Published At', 'chilisearch' ) ?>: </span>
@@ -141,7 +141,7 @@ $search_page = get_page_by_title(wp_strip_all_tags( __( 'Search' ) ));
                         </label>
                         <label for="facet_status">
                             <span><?= __( 'Status', 'chilisearch' ) ?>: </span>
-                            <input type="checkbox" name="chilisearch_settings[facet_status]" id="facet_status" class="regular-text" value="true" <?= $this->is_woocommerce_active() && in_array( self::FACET_STATUS, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
+                            <input type="checkbox" name="chilisearch_settings[facet_status]" id="facet_status" class="regular-text" value="true" <?= in_array( self::FACET_STATUS, $this->settings['facets'], true ) ? 'checked="checked"' : '' ?> <?= !$this->is_woocommerce_active() || $plan !== 'premium' ? 'disabled="disabled"' : '' ?>/>
                         </label>
                         <p class="description"><?= __( 'Define active search filters.', 'chilisearch' ) ?></p>
                     </td>
