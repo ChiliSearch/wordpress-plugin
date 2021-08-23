@@ -48,7 +48,7 @@ define(
 
 final class ChiliSearch {
     const CHILISEARCH_BOB_BASE_URI = 'https://api.chilisearch.com/bob/v1/';
-    const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v1/';
+    const CHILISEARCH_CDN_BASE_URI = 'https://cdn.chilisearch.com/alice/v2/';
     const CHILISEARCH_APP_BASE_URI = 'https://app.chilisearch.com/';
 
     const MIME_TYPES_DOCS = [
