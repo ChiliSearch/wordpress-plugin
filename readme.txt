@@ -2,7 +2,7 @@
 Plugin URI: https://chilisearch.com
 Donate link: https://chilisearch.com/wp-plugin
 Contributors: chilisearch
-Tags: search, woocommerce search, elementor search, product search, autocomplete search, ajax search, woocommerce, search as you type, fuzzy search
+Tags: search, custom search, custom post search, custom post type search, woocommerce search, elementor search, product search, ajax search, search as you type
 Requires at least: 4.0
 Tested up to: 5.8
 Requires PHP: 5.6
