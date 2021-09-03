@@ -98,10 +98,13 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 == Screenshots ==
 
 1. Search As You Type box
-2. Search result page
-3. Wordpress Setting Page
-4. Wordpress Indexing Page
-5. Statistics and Analytics Page
+2. Search As You Type box
+3. Search Result Page
+4. Wordpress Setting Page
+5. Wordpress Indexing Page
+6. Statistics and Analytics Page
+7. Elementor Widget
+8. WordPress Widget
 
 == Upgrade Notice ==
 
