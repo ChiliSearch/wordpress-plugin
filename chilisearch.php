@@ -12,8 +12,8 @@
  * Plugin Name:       Chili Search
  * Plugin URI:        https://chilisearch.com
  * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
- * Version:           3.0.0
- * Author:            ChiliSearch
+ * Version:           3.0.1
+ * Author:            Jafarili
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
  * Text Domain:       chilisearch
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-define( 'CHILISEARCH_VERSION', '3.0.0' );
+define( 'CHILISEARCH_VERSION', '3.0.1' );
 define( 'CHILISEARCH_DIR', __DIR__ );
 define( 'CHILISEARCH_PHP_MINIMUM', '5.6.0' );
 define(
@@ -122,7 +122,7 @@ final class ChiliSearch {
         'weight_tags'                        => 5,
         'weight_categories'                  => 3,
         'search_input_selector'              => 'input[name="s"]',
-        'voice_search_enabled'               => true,
+        'voice_search_enabled'               => false,
         'fuzzy_search_enabled'               => true,
         'facets'                             => self::FACETS,
     ];

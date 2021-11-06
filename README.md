@@ -91,6 +91,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 ## Changelog
 
+### 3.0.1
+* minor refactor
+
 ### 3.0.0
 * rewrite the search client
 
