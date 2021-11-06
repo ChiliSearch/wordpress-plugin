@@ -6,7 +6,7 @@ Tags: search, custom search, custom post search, custom post type search, woocom
 Requires at least: 4.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 
 == Upgrade Notice ==
 
+= 3.0.1 =
+* Upgrade for latest changes
+
 = 3.0.0 =
 * Upgrade for latest changes
 
@@ -159,6 +162,9 @@ For questions and answers, please see our website [chilisearch.com](https://chil
 * Upgrade for latest changes
 
 == Changelog ==
+
+= 3.0.1 =
+* minor refactor
 
 = 3.0.0 =
 * rewrite the search client
