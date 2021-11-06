@@ -1,20 +1,20 @@
-# Chili Search - The better Search for WordPress
+# Chili Search - Flexible Search & Discovery plugin
 
-Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
+Power up the search & discovery of your website using our AI-Powered Search Engine.
 
 ## Description
 
-**Chili Search** replaces the WordPress default search with a lightning fast, full-ajax, Fuzzy and accurate search.
+**Chili Search** provides your website a Fast, Smart, and Accurate search.
 
 By the use of cloud technologies and AI computations on Documents, Chili Search provides a fast, accurate and reliable search solution.
 
-Search between Posts, Pages, Media, WooCommerce products, bbPress forums and topics as soon as you start typing.
+Search between Posts, Pages, Document Files, Products, bbPress, and any WordPress custom post.
 
 Guide your website visitors, boost sales, increase conversions and help your visitors to find what they are looking for.
 
 Experience a Frictionless Search Experiences, regardless of the number of documents you have, **Chili Search** provides an incredibly fast search on your website backed by cloud servers.
 
-Enjoy global Integrations, as you can manage to make your Posts, Pages, Media, WooCommerce products, bbPress forums and topics discoverable on your search.
+Enjoy global Integrations, as you can manage to make your Posts, Pages, Document Files, Products, bbPress, and any WordPress custom post discoverable on your search.
 
 Ease searching more than ever by Voice Search, search without typing.
 
@@ -22,25 +22,23 @@ Ease searching more than ever by Voice Search, search without typing.
 
 ## Features
 
-&#9989; **Transparent Relevancy**. Take control of your relevancy rules and customize field weights.
+&#9989; **Custom Post Type**. Bring any kind of WordPress custom post type available in search results.
 
-&#9989; **Fuzzy Search**. Allow users to make mistakes while typing and still find the related results.
-
-&#9989; **Voice Search**. Ease searching more than ever by search without typing.
-
-&#9989; **Easy Integration**. Make everything you want, available on your search results.
-
-&#9989; **Elementor Compatibility**. Design the user experience of search using Elementor.
-
-&#9989; **Search Filters**. Ease visitors access to what they want by filtering on document type, price or published date.
-
-&#9989; **Phrase Match**. Match whole phrase, partial phrase or both at the sametime.
+&#9989; **Search Filters**. Ease visitors access to what they want by filtering the search results.
 
 &#9989; **WooCommerce Support**. Make your online shop products available on search.
 
 &#9989; **bbPress Support**. Enable search and discovery in forums, topics and replies.
 
-&#9989; **Media Search**. Deliver relevant media as search result on your websites.
+&#9989; **Elementor Compatibility**. Design the user experience of search using Elementor.
+
+&#9989; **Fuzzy Search**. Allow users to make mistakes while typing and still find the related results.
+
+&#9989; **Voice Search**. Ease searching more than ever by search without typing.
+
+&#9989; **Search Widget**. Get enough tools to amaze your visitors with search.
+
+&#9989; **Query Analytics**. Analyze your user search behavior, see most queried, last queried, and search per day chart.
 
 &#9989; **Document Files**. Search Inside Document files like Doc, Docx, PDF, PPTP, XLSX, ... files.
 
@@ -53,6 +51,10 @@ Ease searching more than ever by Voice Search, search without typing.
 &#9989; **Cloud Service**. Run your search on cloud servers which are accessible as long as internet is working.
 
 &#9989; **Cross Platform**. Bring the power of search to your application, regardless the platform and stack.
+
+&#9989; **Transparent Relevancy**. Take control of your relevancy rules and customize field weights.
+
+&#9989; **Phrase Match**. Match whole phrase, partial phrase or both at the sametime.
 
 ## Try the premium version
 
