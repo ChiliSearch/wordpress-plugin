@@ -13,7 +13,7 @@
  * Plugin URI:        https://chilisearch.com
  * Description:       Power up discovery of Posts, Pages, Media, WooCommerce and bbPress using our AI-Powered Search Engine.
  * Version:           3.0.0
- * Author:            ChiliSearch
+ * Author:            Jafarili
  * Author URI:        https://chilisearch.com/
  * License:           GPLv2 or later
  * Text Domain:       chilisearch
