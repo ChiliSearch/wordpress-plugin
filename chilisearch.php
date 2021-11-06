@@ -122,7 +122,7 @@ final class ChiliSearch {
         'weight_tags'                        => 5,
         'weight_categories'                  => 3,
         'search_input_selector'              => 'input[name="s"]',
-        'voice_search_enabled'               => true,
+        'voice_search_enabled'               => false,
         'fuzzy_search_enabled'               => true,
         'facets'                             => self::FACETS,
     ];
